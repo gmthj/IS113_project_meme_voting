@@ -6,7 +6,7 @@ const router = express.Router()
 
 // /account
 router.get('/', (req, res) => {
-    res.render('/login.ejs', {})
+    res.render('login', {})
 })
 
 // /account/login

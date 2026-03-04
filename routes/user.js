@@ -4,21 +4,11 @@ const router = express.Router()
 // =========================
 
 
-// /account
+// /user
 router.get('/', (req, res) => {
-    res.render('/login.ejs', {})
+    res.render('user', {})
 })
 
-// /account/login
-router.post('/login', (req, res) => {
-    // do login stuff
-})
-
-// /account/register
-router.post('/register', (req, res) => {
-    // do register/edit account stuff
-    // go to home once done
-})
 
 
 

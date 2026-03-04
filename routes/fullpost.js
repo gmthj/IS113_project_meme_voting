@@ -7,7 +7,7 @@ const router = express.Router()
 // /fullpost
 router.get('/', (req, res) => {
     // get post data from db
-    res.render('/fullpost.ejs', {})
+    res.render('fullpost', {})
 })
 
 // /fullpost/comment
