@@ -9,15 +9,28 @@ o Everyone can upvote/downvote, most popular ones float to the top.
 
 ### Setup Instructions
 1. install nodejs & npm 
-2. clone this repo ```git clone https://github.com/gmthj/IS113_project_meme_voting```
-3. run ```npm i```
-4. run ```npm run start``` or ```npm run nodemon```
+2. clone this repo
+```
+git clone https://github.com/gmthj/IS113_project_meme_voting
+```
+3. run
+```
+npm i
+```
+4. run
+```
+npm run start
+```
+or
+```
+npm run nodemon
+```
 
 TODO: db instructions
 
 
 
----
+
 ---
 
 ## STRUCTURE
@@ -99,7 +112,6 @@ TODO: db instructions
 
 **comment template**
 - (if user is author of comment) - show edit/delete comment button
-
 - author name (click go to user page)
 - comment text
 - comment age (7h / 5m / 1h / 5d / 2m / 2y ago) - based on upload_datetime
