@@ -17,7 +17,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "nodemon": "nodemon server.js"
+    "nodemon": "nodemon server.js",
+    "init-db": "node .\\scripts\\initDB.js"
   },
   "dependencies": {
     "dotenv": "^17.3.1",

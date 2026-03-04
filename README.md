@@ -1,41 +1,44 @@
 # IS113 Web Application Development 1 Project
-
 ## G5 - Group 6
 
-```
 Meme Gallery / Voting Board
-o Users upload memes (images or links)
-o Everyone can upvote/downvote, most popular ones float to the top.
-```
+- Users upload memes (images or links)
+- Everyone can upvote/downvote, most popular ones float to the top.
 
-### Setup Instructions
+---
 
-1. install nodejs & npm
+## Setup Instructions
+
+1. install [nodejs & npm](https://nodejs.org/en/download)
 2. clone this repo
-
 ```
 git clone https://github.com/gmthj/IS113_project_meme_voting
 ```
-
-3. run
-
+3. install node_modules and dependencies
 ```
 npm i
 ```
+4. Setup an account on [MongoDB Atlas](https://www.mongodb.com/products/platform)
+5. create mongodb database and copy the connection string
+6. make a `.env` file in `IS113_project_meme_voting/` with the following
+```
+MONGO_URI=<connnection string>
+```
+replace `<connnection string>` with your actual connection string from MongoDB Atlas
 
-4. run
-
+7. initialise database with sample data
+```
+npm run init-db
+```
+8. run the app
 ```
 npm run start
 ```
-
 or
-
 ```
 npm run nodemon
 ```
 
-TODO: db instructions
 
 ---
 
