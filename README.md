@@ -8,14 +8,21 @@ o Everyone can upvote/downvote, most popular ones float to the top.
 ```
 
 ### Setup Instructions
-hello
+1. install nodejs & npm 
+2. clone this repo `git clone https://github.com/gmthj/IS113_project_meme_voting`
+3. run `npm i`
+4. run `npm run start` or `npm run nodemon`
+
+TODO: db instructions
+
+
 
 ---
 ---
 
 ## STRUCTURE
 
-### name
+### zhiyu
 
 **login page**
 - login validation
@@ -31,19 +38,19 @@ hello
 
 ---
 
-### name
+### kinyu
 
 **user page**
 - show user info
-- show all user's posts
 - (if user is owner) show edit user button [go to edit user page]
-
-- show posts, sort by post upload datetime
+- show all user's posts
+-- sort by post upload datetime
     etc (lowest, oldest, most/least comments, ...)
+- show all user's comments (maybe idk uty)
 
 ---
 
-### name
+### rae
 
 **home page**
 - show loggedin user , link to login page if not logged in
@@ -56,7 +63,7 @@ hello
 
 ---
 
-### name
+### xinlei
 
 **upload / edit post page**
 - upload
@@ -67,18 +74,17 @@ hello
 
 ---
 
-### name
+### george
 
 **view post page**
-display post
+- display post
 - add comment form
 - show comments (sort by time, etc..)
-- (if user is author of comment) - show edit comment button
--- change comment to form text area, prefill with current comment, allow edit, [save edit / cancel button]
+
 
 ---
 
-## name
+## gabriel
 
 **post template**
 -- title [click go to view post page]
@@ -93,7 +99,7 @@ display post
 
 **comment template**
 - (if user is author of comment) - show edit/delete comment button
--- change comment to form text area, prefill with current comment, allow edit, [save edit / cancel button]
+
 - author name (click go to user page)
 - comment text
 - comment age (7h / 5m / 1h / 5d / 2m / 2y ago) - based on upload_datetime

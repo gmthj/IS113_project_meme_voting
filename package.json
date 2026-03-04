@@ -1,0 +1,27 @@
+{
+  "name": "is113_project_meme_voting",
+  "version": "1.0.0",
+  "description": "Meme Gallery / Voting Board",
+  "homepage": "https://github.com/gmthj/IS113_project_meme_voting#readme",
+  "bugs": {
+    "url": "https://github.com/gmthj/IS113_project_meme_voting/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gmthj/IS113_project_meme_voting.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "nodemon": "nodemon server.js"
+  },
+  "dependencies": {
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11"
+  }
+}
