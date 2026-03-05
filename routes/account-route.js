@@ -10,14 +10,18 @@ router.get('/', (req, res) => {
 })
 
 // /account/login
-router.post('/login', (req, res) => {
+router.get('/login', (req, res) => {
     // do login stuff
+    
+    res.render('login', {})
 })
 
 // /account/register
-router.post('/register', (req, res) => {
+router.get('/register', (req, res) => {
     // do register/edit account stuff
     // go to home once done
+    
+    res.render('login', {})
 })
 
 

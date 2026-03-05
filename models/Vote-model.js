@@ -24,4 +24,4 @@ VoteSchema.index({ postId: 1, userId: 1 }, { unique: true });
 // Useful for analytics / recounting
 VoteSchema.index({ postId: 1 });
 
-module.exports = mongoose.model("Vote", VoteSchema);
+module.exports = mongoose.model("Vote", VoteSchema, "votes");

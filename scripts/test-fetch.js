@@ -5,9 +5,9 @@ dotenv.config();
 const mongoose = require("mongoose");
 const { connectDB } = require("../config/db");
 
-const User = require("../models/User");
-const Post = require("../models/Post");
-const Comment = require("../models/Comment");
+const User = require("../models/User-model");
+const Post = require("../models/Post-model");
+const Comment = require("../models/Comment-model");
 
 async function main() {
   await connectDB(process.env.MONGO_URI);

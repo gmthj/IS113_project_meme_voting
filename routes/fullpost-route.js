@@ -4,13 +4,15 @@ const router = express.Router()
 // =========================
 
 
-// /vote
+// /fullpost
 router.get('/', (req, res) => {
+    // get post data from db
+    res.render('fullpost', {})
+})
 
-    // voting
-    // 
-    // go back to origin page - fullpost user home
-    res.redirect('vote')
+// /fullpost/comment
+router.get('/comment', (req, res) => {
+    // upload comment
 })
 
 

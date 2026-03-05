@@ -28,4 +28,4 @@ PostSchema.index({ userId: 1, upload_datetime: -1 });
 // Optional: for “top posts” sorting
 PostSchema.index({ vote_score: -1, upload_datetime: -1 });
 
-module.exports = mongoose.model("Post", PostSchema);
+module.exports = mongoose.model("Post", PostSchema, "posts");

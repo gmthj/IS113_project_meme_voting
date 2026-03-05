@@ -5,10 +5,10 @@ dotenv.config();
 const mongoose = require("mongoose");
 const { connectDB } = require("../config/db");
 
-const User = require("../models/User");
-const Post = require("../models/Post");
-const Comment = require("../models/Comment");
-const Vote = require("../models/Vote");
+const User = require("../models/User-model");
+const Post = require("../models/Post-model");
+const Comment = require("../models/Comment-model");
+const Vote = require("../models/Vote-model");
 
 function avatarFor(seed) {
   return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;

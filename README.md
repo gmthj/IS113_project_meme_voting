@@ -18,7 +18,7 @@ git clone https://github.com/gmthj/IS113_project_meme_voting
 ```
 npm i
 ```
-4. Setup an account on [MongoDB Atlas](https://www.mongodb.com/products/platform)
+4. Setup an account on [MongoDB Atlas](https://www.mongodb.com/products/platform/atlas-database)
 5. create mongodb database and copy the connection string
 6. make a `.env` file in `IS113_project_meme_voting/` with the following
 ```

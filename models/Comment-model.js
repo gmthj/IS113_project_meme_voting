@@ -25,4 +25,4 @@ const CommentSchema = new mongoose.Schema(
 CommentSchema.index({ postId: 1, upload_datetime: -1 });
 CommentSchema.index({ userId: 1, upload_datetime: -1 });
 
-module.exports = mongoose.model("Comment", CommentSchema);
+module.exports = mongoose.model("Comment", CommentSchema, "comments");
