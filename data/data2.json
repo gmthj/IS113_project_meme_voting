@@ -1,0 +1,203 @@
+{
+  "users": [
+    {
+      "email": "alex.tan@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Alex Tan",
+      "dob": "2004-03-15",
+      "bio": "CS junior who survives on bubble tea and memes 🧋",
+      "avatarSeed": "Alex Tan"
+    },
+    {
+      "email": "priya.nair@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Priya Nair",
+      "dob": "2003-07-22",
+      "bio": "Finance major. Spreadsheets by day, memes by night.",
+      "avatarSeed": "Priya Nair"
+    },
+    {
+      "email": "jordan.lim@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Jordan Lim",
+      "dob": "2005-11-09",
+      "bio": "Year 1. Still figuring out where the library is.",
+      "avatarSeed": "Jordan Lim"
+    },
+    {
+      "email": "mei.chen@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Mei Chen",
+      "dob": "2004-01-30",
+      "bio": "Law student. Everything is a terms & conditions joke to me.",
+      "avatarSeed": "Mei Chen"
+    },
+    {
+      "email": "ravi.s@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Ravi Suresh",
+      "dob": "2003-09-05",
+      "bio": "Econ brain. Meme supply is inelastic.",
+      "avatarSeed": "Ravi Suresh"
+    },
+    {
+      "email": "sophie.wu@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Sophie Wu",
+      "dob": "2004-06-18",
+      "bio": "Design thinker. My memes have kerning.",
+      "avatarSeed": "Sophie Wu"
+    }
+  ],
+  "posts": [
+    {
+      "authorIndex": 0,
+      "title": "When the prof says 'this won't be on the exam'",
+      "description": "And yet here we are at 2am studying it",
+      "image": "https://i.imgur.com/eGIonuA.jpeg"
+    },
+    {
+      "authorIndex": 0,
+      "title": "Group project energy",
+      "description": "One person does everything, four people put their name on it",
+      "image": "https://i.imgur.com/LkQOyAk.jpeg"
+    },
+    {
+      "authorIndex": 1,
+      "title": "Finance major starter pack",
+      "description": "Excel, Bloomberg Terminal, existential dread",
+      "image": "https://i.imgur.com/nde28P0.png"
+    },
+    {
+      "authorIndex": 1,
+      "title": "Checking Canvas at midnight",
+      "description": "New assignment dropped. Due tomorrow. Classic.",
+      "image": "https://i.imgur.com/CzkGkbg.jpeg"
+    },
+    {
+      "authorIndex": 2,
+      "title": "Year 1 orientation week vs week 4",
+      "description": "The glow-up was a lie",
+      "image": "https://i.imgur.com/dHfm1eR.jpeg"
+    },
+    {
+      "authorIndex": 2,
+      "title": "SMU shuttle bus schedule",
+      "description": "Theoretical vs actual arrival time",
+      "image": "https://i.imgur.com/W0uzlW6.jpeg"
+    },
+    {
+      "authorIndex": 3,
+      "title": "Law school reading list",
+      "description": "400 pages. Due Monday. God help us.",
+      "image": "https://i.imgur.com/vBCnAYk.jpeg"
+    },
+    {
+      "authorIndex": 4,
+      "title": "Supply and demand but make it meme",
+      "description": "The demand for sleep is perfectly inelastic during finals",
+      "image": "https://i.imgur.com/sNTna1Z.png"
+    },
+    {
+      "authorIndex": 4,
+      "title": "Internship application szn",
+      "description": "500 applications. 2 callbacks. This is fine.",
+      "image": "https://i.imgur.com/uElOXo8.jpeg"
+    },
+    {
+      "authorIndex": 5,
+      "title": "When the Figma file has 200 layers",
+      "description": "Named 'Rectangle 47' and 'Rectangle 48'",
+      "image": "https://i.imgur.com/2RP8JIx.jpeg"
+    },
+    {
+      "authorIndex": 5,
+      "title": "Presenting to the class like",
+      "description": "My hands: shaking. My voice: cracking. My slides: beautiful.",
+      "image": "https://i.imgur.com/vxgrM12.jpeg"
+    },
+    {
+      "authorIndex": 0,
+      "title": "Debugging at 3am",
+      "description": "It was a missing semicolon. It's always a missing semicolon.",
+      "image": "https://i.imgur.com/cC3iirV.png"
+    }
+  ],
+  "comments": [
+    { "postIndex": 0,  "authorIndex": 1, "text": "This is painfully accurate 😭" },
+    { "postIndex": 0,  "authorIndex": 2, "text": "Happened to me literally yesterday" },
+    { "postIndex": 0,  "authorIndex": 3, "text": "The prof said it with such confidence too" },
+    { "postIndex": 0,  "authorIndex": 4, "text": "Bro I have the notes if you need them lol" },
+    { "postIndex": 1,  "authorIndex": 1, "text": "I was the one person 💀" },
+    { "postIndex": 1,  "authorIndex": 3, "text": "Name and shame. I'll wait." },
+    { "postIndex": 1,  "authorIndex": 5, "text": "We do not talk about IS101 group project" },
+    { "postIndex": 2,  "authorIndex": 0, "text": "The Bloomberg Terminal jumpscare every morning" },
+    { "postIndex": 2,  "authorIndex": 4, "text": "Fellow finance major here. Felt this in my soul." },
+    { "postIndex": 3,  "authorIndex": 2, "text": "Why do they do this to us" },
+    { "postIndex": 3,  "authorIndex": 5, "text": "Canvas notifications are my villain origin story" },
+    { "postIndex": 4,  "authorIndex": 0, "text": "Week 3 me waking up at 6am for 8am class 😂" },
+    { "postIndex": 4,  "authorIndex": 1, "text": "The audacity of my Week 1 self" },
+    { "postIndex": 5,  "authorIndex": 3, "text": "The bus was there. Then it wasn't. Schrödinger's shuttle." },
+    { "postIndex": 5,  "authorIndex": 4, "text": "I have missed the bus exactly once per week since Year 1" },
+    { "postIndex": 6,  "authorIndex": 0, "text": "Bro 400 pages is not even the worst one" },
+    { "postIndex": 6,  "authorIndex": 2, "text": "Law school said read everything and understand nothing" },
+    { "postIndex": 7,  "authorIndex": 1, "text": "An A in this class for the meme economy reference alone" },
+    { "postIndex": 7,  "authorIndex": 5, "text": "Deadweight loss of sleep 😭" },
+    { "postIndex": 8,  "authorIndex": 2, "text": "500 applications is not an exaggeration" },
+    { "postIndex": 8,  "authorIndex": 3, "text": "Let's not talk about rejection rates during a recession" },
+    { "postIndex": 9,  "authorIndex": 0, "text": "Rectangle 47 is my nemesis" },
+    { "postIndex": 9,  "authorIndex": 2, "text": "My group members name their layers this. I cry." },
+    { "postIndex": 10, "authorIndex": 1, "text": "Voice crack during the Q&A is a rite of passage" },
+    { "postIndex": 10, "authorIndex": 4, "text": "The slides WERE beautiful though, we love Sophie" },
+    { "postIndex": 11, "authorIndex": 1, "text": "A SEMICOLON. I LOST 4 HOURS." },
+    { "postIndex": 11, "authorIndex": 3, "text": "It was a comma for me. Different vibe, same pain." },
+    { "postIndex": 11, "authorIndex": 5, "text": "This is why I switched to design 💀" }
+  ],
+  "votes": [
+    { "postIndex": 0,  "authorIndex": 2, "value": true },
+    { "postIndex": 0,  "authorIndex": 3, "value": true },
+    { "postIndex": 0,  "authorIndex": 4, "value": true },
+    { "postIndex": 0,  "authorIndex": 5, "value": true },
+    { "postIndex": 1,  "authorIndex": 0, "value": true },
+    { "postIndex": 1,  "authorIndex": 1, "value": true },
+    { "postIndex": 1,  "authorIndex": 2, "value": true },
+    { "postIndex": 1,  "authorIndex": 3, "value": true },
+    { "postIndex": 1,  "authorIndex": 5, "value": false },
+    { "postIndex": 2,  "authorIndex": 0, "value": true },
+    { "postIndex": 2,  "authorIndex": 1, "value": true },
+    { "postIndex": 2,  "authorIndex": 4, "value": true },
+    { "postIndex": 3,  "authorIndex": 0, "value": true },
+    { "postIndex": 3,  "authorIndex": 1, "value": true },
+    { "postIndex": 3,  "authorIndex": 2, "value": false },
+    { "postIndex": 3,  "authorIndex": 5, "value": true },
+    { "postIndex": 4,  "authorIndex": 0, "value": true },
+    { "postIndex": 4,  "authorIndex": 1, "value": true },
+    { "postIndex": 4,  "authorIndex": 2, "value": true },
+    { "postIndex": 4,  "authorIndex": 3, "value": false },
+    { "postIndex": 5,  "authorIndex": 2, "value": true },
+    { "postIndex": 5,  "authorIndex": 3, "value": true },
+    { "postIndex": 5,  "authorIndex": 4, "value": true },
+    { "postIndex": 7,  "authorIndex": 1, "value": true },
+    { "postIndex": 7,  "authorIndex": 2, "value": true },
+    { "postIndex": 7,  "authorIndex": 4, "value": true },
+    { "postIndex": 7,  "authorIndex": 5, "value": true },
+    { "postIndex": 8,  "authorIndex": 2, "value": true },
+    { "postIndex": 8,  "authorIndex": 3, "value": true },
+    { "postIndex": 8,  "authorIndex": 4, "value": true },
+    { "postIndex": 8,  "authorIndex": 5, "value": false },
+    { "postIndex": 9,  "authorIndex": 0, "value": true },
+    { "postIndex": 9,  "authorIndex": 2, "value": false },
+    { "postIndex": 9,  "authorIndex": 4, "value": true },
+    { "postIndex": 9,  "authorIndex": 5, "value": true },
+    { "postIndex": 10, "authorIndex": 1, "value": true },
+    { "postIndex": 10, "authorIndex": 2, "value": true },
+    { "postIndex": 10, "authorIndex": 4, "value": true },
+    { "postIndex": 10, "authorIndex": 5, "value": true },
+    { "postIndex": 11, "authorIndex": 0, "value": true },
+    { "postIndex": 11, "authorIndex": 1, "value": true },
+    { "postIndex": 11, "authorIndex": 2, "value": true },
+    { "postIndex": 11, "authorIndex": 3, "value": true },
+    { "postIndex": 11, "authorIndex": 4, "value": true },
+    { "postIndex": 11, "authorIndex": 5, "value": true }
+  ]
+}
