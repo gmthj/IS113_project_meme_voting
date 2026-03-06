@@ -3,33 +3,45 @@ const router = express.Router()
 
 // =========================
 
-const { getUserByEmail } = require("../services/userService");
+const Post = require("../models/Post-model");
+const Vote = require("../models/Vote-model");
 
 // /vote
-router.get('/', async (req, res) => {
-    
-    // getUserByEmail("seesd@smu.edu.sg")
-    // .then((user) => {
-    //     console.log(user)
-    // })
-    // .catch((error) => {
-    //     console.log("helo", error)
-    // });
-    try{
-        const user = await getUserByEmail("seed@smu.edu.sg");
-        
-        console.log(user)
-    }
-    catch (error) {
+router.post('/', async (req, res) => {
+    console.log(req.body)
 
-        console.log(error)
+    const voteDirection = req.body.vote
+    const userId = req.body.userId
+    const postId = req.body.postId
+    const voteValue = req.body.voteValue
+
+
+    if (voteDirection === "up") {
+        if (voteValue === undefined){
+            await Vote.create({ postId, userId, value: true });
+        }
+        else {
+            await Vote.updateOne({ postId, userId}, {value: true });
+        }
+        await Post.updateOne({ _id: postId }, { $inc: { vote_score: 1 } });
+    }
+    if (voteDirection === "down") {
+        if (voteValue === undefined){
+            await Vote.create({ postId, userId, value: false });
+        }
+        else {
+            await Vote.updateOne({ postId, userId}, {value: false });
+        }
+        await Post.updateOne({ _id: postId }, { $inc: { vote_score: -1 } });
     }
 
-    
+
     // voting
     // 
     // go back to origin page - fullpost user home
-    res.redirect('/home')
+
+    const backURL = req.get('Referrer') || '/';
+    res.redirect(`${backURL}#post-${postId}`)
 
 })
 
