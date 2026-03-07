@@ -15,28 +15,30 @@ async function connectDB(uri = process.env.MONGO_URI) {
 }
 
 function timeAgo(datetime) {
-    const seconds = Math.floor((new Date() - datetime) / 1000)
+  const seconds = Math.floor((new Date() - new Date(datetime)) / 1000);
 
-    let interval = seconds / 31536000
-    if (interval > 1) return Math.floor(interval) + "y ago"
-
-    interval = seconds / 2592000
-    if (interval > 1) return Math.floor(interval) + "m ago"
-
-    interval = seconds / 86400
-    if (interval > 1) return Math.floor(interval) + "d ago"
-
-    interval = seconds / 3600
-    if (interval > 1) return Math.floor(interval) + "h ago"
-
-    interval = seconds / 60
-    if (interval > 1) return Math.floor(interval) + "m ago"
-
-    return Math.floor(seconds) + "s ago"
+  if (seconds < 60) {
+    return `${seconds}s ago`
+  }
+  if (seconds < 3600) {
+    return `${Math.floor(seconds / 60)}m ago`
+  }
+  if (seconds < 86400) {
+    return `${Math.floor(seconds / 3600)}h ago`
+  }
+  if (seconds < 7 * 86400) {
+    return `${Math.floor(seconds / 86400)}d ago`
+  }
+  if (seconds < 30 * 86400) {
+    return `${Math.floor(seconds / (7 * 86400))}w ago`
+  }
+  if (seconds < 365 * 86400) {
+    return `${Math.floor(seconds / (30 * 86400))}mo ago`
+  }
+  return `${Math.floor(seconds / (365 * 86400))}y ago`
 }
 
-
-module.exports = { 
-    connectDB,
-    timeAgo
- };
+module.exports = {
+  connectDB,
+  timeAgo
+};
