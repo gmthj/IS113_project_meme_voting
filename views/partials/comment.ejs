@@ -1,3 +1,9 @@
 <div>
-    <p>some comment</p>
+    <p>
+        <img src="<%= comment.userId.avatar %>" alt="<%= comment.userId.name %>'s avatar" style="height: 1em">
+        <strong><%= comment.userId.name %></strong> 
+        • <%= comment.upload_datetime.toDateString() %> 
+        <%= comment.upload_datetime.toTimeString() %>
+    </p>
+    <p><%= comment.text %></p>
 </div>
