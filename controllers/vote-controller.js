@@ -3,7 +3,7 @@ const Vote = require("../models/Vote-model");
 
 // /vote
 exports.handleVote = async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
 
     const voteDirection = req.body.vote
     const userId = req.body.userId
@@ -11,23 +11,24 @@ exports.handleVote = async (req, res) => {
     const voteValue = req.body.voteValue
 
 
-    if (voteDirection === "up") {
-        if (voteValue === undefined){
-            await Vote.create({ postId, userId, value: true });
-        }
-        else {
-            await Vote.updateOne({ postId, userId}, {value: true });
-        }
-        await Post.updateOne({ _id: postId }, { $inc: { vote_score: 1 } });
+    const currentVote = voteValue === "true" ? true : (voteValue === "false" ? false : null);
+    const isUpvote = (voteDirection === "up");
+
+    // remove vote
+    if (currentVote === isUpvote) {
+        await Vote.deleteOne({ postId, userId });
+        await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? -1 : 1 } });
     }
-    if (voteDirection === "down") {
-        if (voteValue === undefined){
-            await Vote.create({ postId, userId, value: false });
-        }
-        else {
-            await Vote.updateOne({ postId, userId}, {value: false });
-        }
-        await Post.updateOne({ _id: postId }, { $inc: { vote_score: -1 } });
+    // switch vote
+    else if (currentVote !== null) {
+        await Vote.updateOne({ postId, userId }, { value: isUpvote });
+        // If switching from Down (-1) to Up (+1), we need +2. Vice versa is -2.
+        await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 2 : -2 } });
+    }
+    // new vote
+    else {
+        await Vote.create({ postId, userId, value: isUpvote });
+        await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 1 : -1 } });
     }
 
 
