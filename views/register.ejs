@@ -7,7 +7,33 @@
 </head>
 <%- include('partials/header') %>
 <body>
-    registeration form
+    <h1>Register Here!</h1>
+    <form action="/login" method="post">
+        <label for="user_id">Username:</label>
+        <input type="text" id="user_id" name="user_id">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <label for="confirmation">Confirm Password:</label>
+        <input type="password" id="confirmation" name="confirmation">
+        <br>
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name">
+        <br>
+        <label for="dob">Date of Birth (DD-MM-YY)</label>
+        <input type="date" id="dob" name="dob">
+        <br>
+        <label for="bio">Bio: </label>
+        <textarea name="bio" id="bio" rows="13" cols="40"></textarea>
+        <br>
+        <button type="submit">Register</button>
+
+
+    </form>
     
 </body>
 </html>

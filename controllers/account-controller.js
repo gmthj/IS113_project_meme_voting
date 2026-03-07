@@ -5,6 +5,8 @@ exports.renderLoginRoot = (req, res) => {
 // /account/login
 exports.handleLogin = (req, res) => {
     // do login stuff
+    let username = req.body.user_id
+    let password = req.body.password
     
     res.render('login', {})
 }

@@ -7,6 +7,17 @@
 </head>
 <%- include('partials/header') %>
 <body>
-    login form 
+    <h1>Login Page</h1>
+    <form action="/home" method="post">
+        <br><br>
+        <label for="user_id">Username:</label>
+        <input type="text" id="user_id" name="user_id">
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <button type="submit">Login</button>
+    </form>
+    <h5>If no account, login here: <nav><a href="/register.ejs">Register</a></nav></h5>
+
 </body>
 </html>
