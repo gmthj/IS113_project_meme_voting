@@ -1,16 +1,14 @@
 // scripts/test-fetch.js
-const dotenv = require("dotenv");
-dotenv.config();
 
 const mongoose = require("mongoose");
-const { connectDB } = require("../config/db");
+const { connectDB } = require("../utils/utils");
 
 const User = require("../models/User-model");
 const Post = require("../models/Post-model");
 const Comment = require("../models/Comment-model");
 
 async function main() {
-  await connectDB(process.env.MONGO_URI);
+  await connectDB();
 
   // 1) Find userA (by email)
   const userA = await User.findOne({ email: "seed@smu.edu.sg" });

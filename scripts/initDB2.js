@@ -1,9 +1,7 @@
 // scripts/seedDB.js
-const dotenv = require("dotenv");
-dotenv.config();
 
 const mongoose = require("mongoose");
-const { connectDB } = require("../config/db");
+const { connectDB } = require("../utils/utils");
 
 const User = require("../models/User-model");
 const Post = require("../models/Post-model");
@@ -18,7 +16,7 @@ function avatarFor(seed) {
 
 async function main() {
   // 1) Connect
-  await connectDB(process.env.MONGO_URI);
+  await connectDB();
 
   // 2) Ensure indexes
   await User.init();

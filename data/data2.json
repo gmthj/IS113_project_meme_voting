@@ -124,6 +124,7 @@
     }
   ],
   "comments": [
+    { "postIndex": 0,  "authorIndex": 0, "text": "hello i wrote this post" },
     { "postIndex": 0,  "authorIndex": 1, "text": "This is painfully accurate 😭" },
     { "postIndex": 0,  "authorIndex": 2, "text": "Happened to me literally yesterday" },
     { "postIndex": 0,  "authorIndex": 3, "text": "The prof said it with such confidence too" },
@@ -178,9 +179,6 @@
     { "postIndex": 5,  "authorIndex": 3, "value": true },
     { "postIndex": 5,  "authorIndex": 4, "value": true },
     { "postIndex": 7,  "authorIndex": 1, "value": true },
-    { "postIndex": 7,  "authorIndex": 2, "value": true },
-    { "postIndex": 7,  "authorIndex": 4, "value": true },
-    { "postIndex": 7,  "authorIndex": 5, "value": true },
     { "postIndex": 8,  "authorIndex": 2, "value": true },
     { "postIndex": 8,  "authorIndex": 3, "value": true },
     { "postIndex": 8,  "authorIndex": 4, "value": true },
