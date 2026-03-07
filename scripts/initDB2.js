@@ -36,12 +36,12 @@ async function main() {
   const createdUsers = await Promise.all(
     seedData.users.map((u) =>
       User.create({
-        email: u.email,
+        email:        u.email,
         passwordHash: u.passwordHash,
-        name: u.name,
-        dob: new Date(u.dob),
-        bio: u.bio,
-        avatar: avatarFor(u.avatarSeed),
+        name:         u.name,
+        dob:          new Date(u.dob),
+        bio:          u.bio,
+        avatar:       avatarFor(u.avatarSeed),
       })
     )
   );
@@ -51,10 +51,12 @@ async function main() {
   const createdPosts = await Promise.all(
     seedData.posts.map((p) =>
       Post.create({
-        userId: createdUsers[p.authorIndex]._id,
-        title: p.title,
-        description: p.description,
-        image: p.image,
+        userId:           createdUsers[p.authorIndex]._id,
+        title:            p.title,
+        description:      p.description,
+        image:            p.image,
+        upload_datetime:  new Date(p.uploadedAt),
+        ...(p.editedAt && { edit_datetime: new Date(p.editedAt) }),
       })
     )
   );
@@ -66,9 +68,11 @@ async function main() {
     seedData.comments.map((c) => {
       commentCountMap[c.postIndex] = (commentCountMap[c.postIndex] || 0) + 1;
       return Comment.create({
-        postId: createdPosts[c.postIndex]._id,
-        userId: createdUsers[c.authorIndex]._id,
-        text: c.text,
+        postId:          createdPosts[c.postIndex]._id,
+        userId:          createdUsers[c.authorIndex]._id,
+        text:            c.text,
+        upload_datetime: new Date(c.uploadedAt),
+        ...(c.editedAt && { edit_datetime: new Date(c.editedAt) }),
       });
     })
   );
@@ -92,7 +96,7 @@ async function main() {
       return Vote.create({
         postId: createdPosts[v.postIndex]._id,
         userId: createdUsers[v.authorIndex]._id,
-        value: v.value,
+        value:  v.value,
       });
     })
   );
@@ -127,8 +131,6 @@ async function main() {
 
 main().catch(async (e) => {
   console.error("Seed script error:", e);
-  try {
-    await mongoose.disconnect();
-  } catch {}
+  try { await mongoose.disconnect(); } catch {}
   process.exit(1);
 });
