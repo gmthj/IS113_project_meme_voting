@@ -5,16 +5,25 @@ const { connectDB } = require("./config/db");
 
 const server = express();
 
-server.use(express.urlencoded({ extended: true }));
-server.use(express.static(path.join(__dirname, "public")));
 
 server.set("view engine", "ejs");
 
+server.use(express.urlencoded({ extended: true }));
+server.use(express.static(path.join(__dirname, "public")));
+server.use(express.json());
 
 
+server.use('/home', require('./routes/home-route'))
+server.use('/account', require('./routes/account-route'))
+server.use('/user', require('./routes/user-route'))
+server.use('/upload', require('./routes/upload-route'))
+server.use('/fullpost', require('./routes/fullpost-route'))
+server.use('/delete', require('./routes/delete-route'))
+server.use('/vote', require('./routes/vote-route'))
 
-const mainRoutes = require("./routes/main-routes");
-server.use('/', mainRoutes);
+
+server.get("/", (req, res) => res.redirect("/home"))
+
 
 
 
