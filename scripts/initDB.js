@@ -26,10 +26,8 @@ async function main() {
   // Only delete the stuff created by this test script
   await Vote.deleteMany({});
   await Comment.deleteMany({});
-  await Post.deleteMany({ title: { $regex: /^TEST:/ } });
-  await User.deleteMany({
-    email: { $in: ["seed@smu.edu.sg", "seed2@smu.edu.sg"] },
-  });
+  await Post.deleteMany({});
+  await User.deleteMany({});
   console.log("Old test data cleared ✅");
 
   // 4) Create users

@@ -9,6 +9,9 @@
 <body>
 
     home page stuff
+    <% posts.forEach(post => { %>
+        <%- include('partials/post', {post}) %>
+    <% }); %>
 
     some form to decide sorting/filtering
     posts

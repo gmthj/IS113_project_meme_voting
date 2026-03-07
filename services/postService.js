@@ -21,11 +21,7 @@ async function getPostByTitle(title) {
   return post;
 }
 
-
-
-async function getAllPosts() {
-  const posts = await Post.find().lean();
-
+async function expandPosts(posts) {
   await Promise.all(posts.map(async (post) => {
     const user = await getUserById(post.userId.toString());
     const voteValue = await getVoteValue(post._id, user._id); //this is just checking self vote only TODO: update to current user when login session done
@@ -34,8 +30,14 @@ async function getAllPosts() {
     post.author = user;
     post.voteValue = voteValue;
   }));
+  return posts
+}
 
-  return posts;
+
+async function getAllPosts() {
+  const posts = await Post.find().lean();
+
+  return  await expandPosts(posts);
 }
 
 
@@ -59,5 +61,6 @@ async function getPostById(postId) {
 module.exports = {
   getPostByTitle,
   getAllPosts,
-  getPostById
+  getPostById,
+  expandPosts
 };

@@ -7,12 +7,7 @@ const { timeAgo } = require("../utils/utils");
 
 
 
-
-async function getAllCommentsByPostId(postId) {
-  const comments = await Comment.find({postId: postId}).lean();
-
-
-
+async function expandComments(comments) {
   await Promise.all(comments.map(async (comment) => {
     const user = await getUserById(comment.userId.toString());
     
@@ -25,10 +20,19 @@ async function getAllCommentsByPostId(postId) {
 
 
 
+async function getAllCommentsByPostId(postId) {
+  const comments = await Comment.find({postId: postId}).lean();
+
+  return await expandComments(comments);
+}
+
+
+
 
 
 
 
 module.exports = {
-  getAllCommentsByPostId
+  getAllCommentsByPostId,
+  expandComments
 };
