@@ -1,28 +1,18 @@
 const express = require('express')
 const router = express.Router()
+const accountController = require('../controllers/account-controller')
 
 // =========================
 
 
 // /account
-router.get('/', (req, res) => {
-    res.render('login', {})
-})
+router.get('/', accountController.renderLoginRoot)
 
 // /account/login
-router.get('/login', (req, res) => {
-    // do login stuff
-    
-    res.render('login', {})
-})
+router.get('/login', accountController.handleLogin)
 
 // /account/register
-router.get('/register', (req, res) => {
-    // do register/edit account stuff
-    // go to home once done
-    
-    res.render('login', {})
-})
+router.get('/register', accountController.handleRegister)
 
 
 

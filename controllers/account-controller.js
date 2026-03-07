@@ -1,0 +1,18 @@
+exports.renderLoginRoot = (req, res) => {
+    res.render('login', {})
+}
+
+// /account/login
+exports.handleLogin = (req, res) => {
+    // do login stuff
+    
+    res.render('login', {})
+}
+
+// /account/register
+exports.handleRegister = (req, res) => {
+    // do register/edit account stuff
+    // go to home once done
+    
+    res.render('login', {})
+}

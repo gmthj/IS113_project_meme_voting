@@ -1,13 +1,12 @@
 const express = require('express')
 const router = express.Router()
+const uploadController = require('../controllers/upload-controller')
 
 // =========================
 
 
 // /upload
-router.get('/', (req, res) => {
-    res.render('upload', {})
-})
+router.get('/', uploadController.renderUploadPage)
 
 
 

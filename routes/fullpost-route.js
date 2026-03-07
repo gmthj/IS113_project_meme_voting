@@ -1,23 +1,14 @@
 const express = require('express')
 const router = express.Router()
+const fullpostController = require('../controllers/fullpost-controller')
 
 // =========================
 
-
 // /fullpost
-router.get('/', (req, res) => {
-    // get post data from db
-    res.render('fullpost', {})
-})
+router.get('/', fullpostController.getFullPost)
 
 // /fullpost/comment
-router.get('/comment', (req, res) => {
-    // upload comment
-})
-
-
-
-
+router.get('/comment', fullpostController.postComment)
 
 // =========================
 
