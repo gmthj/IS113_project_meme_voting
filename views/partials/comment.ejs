@@ -8,6 +8,7 @@
             </a>
             • <%= comment.commentAge %>
             <%= post.author._id.toString() == comment.author._id.toString() ? " • Author" : ""  %>
+            <%= comment.edit_datetime ? " • edited" : ""  %>
         </h4>
         
         <p><%= comment.text %></p>

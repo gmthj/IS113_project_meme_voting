@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="10;url=/home">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oopsie!</title>
+</head>
+<%- include('partials/header') %>
+
+    <body>
+
+        <h1>OH NO! Looks like some thing went wrong.</h1>
+        <p>We encountered an error while processing your request. Please try again later.</p>
+        <hr>
+
+        <% if(error) { %>
+            <strong>Error Details:</strong><br>
+            <%= error %>
+            <hr>
+        <% } %>
+        
+        <p>Returning home automatically in 10 seconds</p>
+        <a href="/home">Return Home Now</a>
+
+
+    </body>
+
+</html>
