@@ -11,35 +11,45 @@ Meme Gallery / Voting Board
 
 1. install [nodejs & npm](https://nodejs.org/en/download)
 2. clone this repo
-```
+
+```bash
 git clone https://github.com/gmthj/IS113_project_meme_voting
 ```
+
 3. install node_modules and dependencies
-```
+
+```bash
 npm i
 ```
+
 4. Setup an account on [MongoDB Atlas](https://www.mongodb.com/products/platform/atlas-database)
 5. create mongodb database and copy the connection string
 6. make a `.env` file (yes, literally named `.env`) in `IS113_project_meme_voting/` with the following
+
 ```
 MONGO_URI=<connnection string>
+SECRET=<some super long random string>
 ```
+replace `<some super long random string>` with an actual long string of random characters
 replace `<connnection string>` with your actual connection string from MongoDB Atlas. it looks like this:
+
 ```
 mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 ```
+
 note: replace `<db_password>` with the password you created for the user in your mongodb database
 
 7. initialise database with sample data
-```
+
+```bash
 npm run init-db
 ```
+
 8. run the app
-```
+
+```bash
 npm run start
-```
-or
-```
+# or
 npm run nodemon
 ```
 

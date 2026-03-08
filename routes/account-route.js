@@ -14,7 +14,8 @@ router.get('/login', accountController.handleLogin)
 // /account/register
 router.get('/register', accountController.handleRegister)
 
-
+// /account/logout
+router.get('/logout', accountController.handleLogout)
 
 
 
