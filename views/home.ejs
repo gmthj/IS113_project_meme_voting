@@ -1,19 +1,78 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Meme Gallery - Home</title>
+    <style>
+    body {
+        font-family: Arial;
+        max-width: 800px;
+        margin: auto;
+    }
+
+    table {
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
 </head>
 <%- include('partials/header') %>
 <body>
+    <header>
+        <h1>Meme Gallery 🐸</h1>
+        
+        <!-- 1. Show logged in user or login link -->
+        <div class="user-nav">
+            <% if (typeof user !== 'undefined' && user) { %>
+                <p>Logged in as: <a href="/user/<%= user._id %>"><%= user.name %></a></p>
+                <a href="/account/logout">Logout</a>
+            <% } else { %>
+                <a href="/account/login">Login / Register</a>
+            <% } %>
+        </div>
 
-    home page stuff
-    <% posts.forEach(post => { %>
-        <%- include('partials/post', {post}) %>
-    <% }); %>
+        <!-- 2. Upload Button -->
+        <div class="actions">
+            <a href="/upload" class="btn">📤 Upload New Meme</a>
+        </div>
+    </header>
 
-    some form to decide sorting/filtering
-    posts
+    <hr>
+
+    <!-- 3. Sorting Links -->
+    <section class="sorting">
+        <h3>Sort By:</h3>
+        <a href="/home?sort=highest">🔥 Highest (Votes)</a> | 
+        <a href="/home?sort=newest">🆕 Newest</a> | 
+        <a href="/home?sort=oldest">📅 Oldest</a> |
+        <a href="/home?sort=comments">💬 Most Comments</a>
+    </section>
+
+    <hr>
+
+    <!-- 4. Display Posts -->
+    <main class="post-container">
+        <% if (posts.length > 0) { %>
+            <% posts.forEach(post => { %>
+                <%- include('partials/post', {post}) %>
+            <% }); %>
+        <% } else { %>
+            <p>No memes found. Be the first to upload one!</p>
+        <% } %>
+    </main>
+
 </body>
 </html>

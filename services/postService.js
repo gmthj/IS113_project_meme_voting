@@ -34,10 +34,24 @@ async function expandPosts(posts) {
 }
 
 
-async function getAllPosts() {
-  const posts = await Post.find().lean();
+// async function getAllPosts() {
+//   const posts = await Post.find().lean();
 
-  return  await expandPosts(posts);
+//   return  await expandPosts(posts);
+// }
+
+async function getAllPosts(sortType = 'highest') {
+  let sortOption = {};
+
+  if (sortType === 'highest') sortOption = { vote_score: -1 };
+  else if (sortType === 'lowest') sortOption = { vote_score: 1 };
+  else if (sortType === 'newest') sortOption = { upload_datetime: -1 };
+  else if (sortType === 'oldest') sortOption = { upload_datetime: 1 };
+  else if (sortType === 'comments') sortOption = { comment_count: -1 };
+  else sortOption = { vote_score: -1 }; // fallback default
+
+  const posts = await Post.find().sort(sortOption).lean();
+  return await expandPosts(posts);
 }
 
 

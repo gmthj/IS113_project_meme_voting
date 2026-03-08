@@ -1,5 +1,8 @@
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
+const dotenv = require("dotenv");
+dotenv.config();
 
 const { connectDB } = require("./utils/utils");
 
@@ -12,6 +15,12 @@ server.use(express.urlencoded({ extended: true }));
 server.use(express.static(path.join(__dirname, "public")));
 server.use(express.json());
 
+const secret = process.env.SECRET;
+server.use(session({
+    secret: secret,
+    resave: false,
+    saveUninitialized: false
+}));
 
 server.use('/home', require('./routes/home-route'));
 server.use('/account', require('./routes/account-route'));
@@ -23,6 +32,7 @@ server.use('/vote', require('./routes/vote-route'));
 
 
 server.get("/", (req, res) => res.redirect("/home"));
+server.get("/index.html", (req, res) => res.redirect("/home"));
 
 
 server.all('/:a', (req, res) => res.render('error', {error: "Unknown route"}));
