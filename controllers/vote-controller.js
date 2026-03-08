@@ -22,7 +22,6 @@ exports.handleVote = async (req, res) => {
     // switch vote
     else if (currentVote !== null) {
         await Vote.updateOne({ postId, userId }, { value: isUpvote });
-        // If switching from Down (-1) to Up (+1), we need +2. Vice versa is -2.
         await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 2 : -2 } });
     }
     // new vote
