@@ -30,7 +30,7 @@ npm i
 MONGO_URI=<connnection string>
 SECRET=<some super long random string>
 ```
-replace `<some super long random string>` with an actual long string of random characters
+replace `<some super long random string>` with an actual long string of random characters <br>
 replace `<connnection string>` with your actual connection string from MongoDB Atlas. it looks like this:
 
 ```
