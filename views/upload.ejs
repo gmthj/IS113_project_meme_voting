@@ -7,7 +7,25 @@
 </head>
 <%- include('partials/header') %>
 <body>
-    upload post form
-    edit also
+
+    <form action="">
+        <div>
+            <label for="meme_title">Meme Title</label>
+            <br>
+            <input type="text" name="meme_title" id="meme_title">
+        </div>
+        <br>
+        <div>
+            <label for="image">Upload Your Meme (jpg,png)</label>
+            <br>
+            <input type="file" name="image" id="image">
+        </div>
+        <br>
+        <div>
+            <textarea name="description" id="description"></textarea>
+        </div>
+
+        <input type="submit" value="post meme">
+    </form>
 </body>
 </html>
