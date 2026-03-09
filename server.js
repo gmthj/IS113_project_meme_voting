@@ -40,8 +40,8 @@ server.all('/:a', (req, res) => res.render('error', {error: "Unknown route"}));
 
 
 connectDB().then(() => { //startServer
-  const hostname = 'localhost'
-  const port = 8000
+  const hostname = 'localhost';
+  const port = process.env.PORT || 8000;
   server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`)
     // console.log(`dirname: ${__dirname}`)
