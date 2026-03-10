@@ -1,4 +1,5 @@
 exports.handleDeletion = (req, res) => {
+    const sessionUser = req.session.sessionUser || {};
 
     // if commment del comment
     // if post del post

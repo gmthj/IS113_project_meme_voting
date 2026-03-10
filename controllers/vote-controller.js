@@ -3,6 +3,7 @@ const Vote = require("../models/Vote-model");
 
 // /vote
 exports.handleVote = async (req, res) => {
+    const sessionUser = req.session.sessionUser || {};
     // console.log(req.body)
 
     const voteDirection = req.body.vote

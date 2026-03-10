@@ -1,11 +1,14 @@
 exports.renderLoginRoot = (req, res) => {
-    res.render('login', {})
+    const sessionUser = req.session.sessionUser || {};
+    res.render('login', {sessionUser})
 }
 
 // /account/login
 
 exports.handleLogin = async (req, res) => {
     // do login stuff
+
+    const sessionUser = req.session.sessionUser || {};
     
     const User = require("../models/User-model");
     await connectDB();
@@ -45,10 +48,11 @@ exports.handleLogin = async (req, res) => {
 
 // /account/register
 exports.handleRegister = (req, res) => {
+    const sessionUser = req.session.sessionUser || {};
     // do register/edit account stuff
     // go to home once done
     
-    res.render('login', {})
+    res.render('login', {sessionUser})
 }
 
 

@@ -31,11 +31,28 @@ server.use('/delete', require('./routes/delete-route'));
 server.use('/vote', require('./routes/vote-route'));
 
 
-server.get("/", (req, res) => res.redirect("/home"));
+// #################################
+// TODO: remove after login implemented
+const { getUserByEmail } = require("./services/userService");
+server.get("/testlogin/:userEmail", async (req, res) => {
+  const userEmail = req.params.userEmail;
+  const sessionUser = await getUserByEmail(userEmail);
+  req.session.sessionUser = sessionUser;
+  res.redirect("/home")
+});
+// #################################
+
+
+server.get("/", (req, res) => {
+  // console.log("/home - sessionUser:", req.session)
+  res.redirect("/home")
+});
 server.get("/index.html", (req, res) => res.redirect("/home"));
 
 
-server.all('/:a', (req, res) => res.render('error', {error: "Unknown route"}));
+server.all('/:a', (req, res) => {
+  const sessionUser = req.session.sessionUser || {};
+  res.render('error', {error: "Unknown route", sessionUser})});
 
 
 

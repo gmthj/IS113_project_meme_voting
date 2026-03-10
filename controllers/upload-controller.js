@@ -2,13 +2,15 @@ const POST_SCHEMA = require("../models/Post-model")
 
 // Loading of the upload page
 exports.renderUploadPage = (req, res) => {
-    res.render('upload', {error:null,success:false})
+  const sessionUser = req.session.sessionUser || {};
+  res.render('upload', { error: null, success: false, sessionUser})
 }
 
 
 // Handle Submission to Mongo DB 
 // POST upload
 exports.renderUploadPage_Mongo = async (req, res) => {
+  const sessionUser = req.session.sessionUser || {};
   try {
     const { meme_title, description, image_base64 } = req.body;
 
@@ -18,6 +20,7 @@ exports.renderUploadPage_Mongo = async (req, res) => {
       return res.render("upload", {
         error: "All fields are required",
         success: false,
+        sessionUser
       });
     }
 
@@ -33,10 +36,11 @@ exports.renderUploadPage_Mongo = async (req, res) => {
 
     await newPost.save();
 
-    
+
     return res.render("upload", {
       error: null,
       success: true,
+      sessionUser
     });
   } catch (err) {
     console.error("Upload error:", err);
@@ -44,6 +48,7 @@ exports.renderUploadPage_Mongo = async (req, res) => {
     return res.render("upload", {
       error: "Failed to upload post",
       success: false,
+      sessionUser
     });
   }
 };

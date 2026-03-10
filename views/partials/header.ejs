@@ -6,8 +6,12 @@
                     <img src="/img/logo-light.png" / style="width: 10em; height: auto;">
                 </a>
             </td>
-            <td colspan="100">
+            <td colspan="7">
                 temp nav bar
+            </td>
+            <td>
+                TEST LOGIN session as: <br>
+                (npm run init-db2)
             </td>
         </tr>
         <tr>
@@ -23,6 +27,21 @@
             <td><a href="/fullpost">fullpost</a></td>
             <td><a href="/delete">delete</a></td>
             <td><a href="/vote">vote</a></td>
+
+            <td>
+                <a href="/testlogin/alex.tan@smu.edu.sg">Alex Tan</a> || 
+                <a href="/testlogin/1priya.nair@smu.edu.sg">Priya Nair</a> <br>
+                <a href="/testlogin/jordan.lim@smu.edu.sg">Jordan Lim</a> || 
+                <a href="/testlogin/mei.chen@smu.edu.sg">Mei Chen</a> <br>
+                <a href="/testlogin/ravi.s@smu.edu.sg">Ravi Suresh</a> || 
+                <a href="/testlogin/sophie.wu@smu.edu.sg">Sophie Wu</a> <br>
+                <a href="/account/logout">logout</a>
+            </td>
+            
+            <td>
+                CURRENT SESSION USER: <br>
+                <%= JSON.stringify(sessionUser, null, 2) %>
+            </td>
         </tr>
     </table>
     <hr>

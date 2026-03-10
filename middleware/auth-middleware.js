@@ -8,6 +8,21 @@ exports.isLoggedIn = (req, res, next) => {
     next();
 }
 
+
+exports.isAuthor = (req, res, next) => {
+    if (!req.session.user) {
+        console.log("User not logged in, redirecting to /login");
+        return res.redirect('/account/login');
+    }
+    if (req.session.user.userId !== req.body.authorId) {
+        console.log("unauthorised user not author");
+        
+        const backURL = req.get('Referrer') || '/';
+        return res.redirect(backURL);
+    }
+    next();
+}
+
 // exports.isAdmin = (req, res, next) => {
 //     if (!req.session.user) {
 //         console.log("User not logged in, redirecting to /login");
