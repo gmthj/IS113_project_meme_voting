@@ -41,7 +41,7 @@ exports.handleLogin = async (req, res) => {
 
 
     // res.render('login', {})
-}
+}}
 
 // /account/register
 exports.handleRegister = (req, res) => {
