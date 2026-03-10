@@ -1,50 +1,67 @@
 
-
-
-<table border="1" id="post-<%= post._id %>">
+<table border="1" id="post-<%= post._id %>" style="width: 20em;"> <!--  style="width: 30em; margin: 0 auto;" -->
     <tr><td>
 
-        <h2><%= post.title %></h2>
-        <h3><img src="<%= post.user.avatar %>" style="height: 1em">
-            <%= post.user.name %> • <%= post.postAge %></h3>
-        
-        <img src=" <%= post.image %>" alt="could not load image" referrerpolicy="no-referrer" style="height: 20em">
-    
-        <p><%= post.description %></p>
-        
-        <table>
-            <tr>
-                <td>
-                    Vote
-                </td>
-                <td>
-                    <form action="/vote" method="post">
-                        <input type="hidden" name="vote" value=<%= post.voteValue === true  ? "" : "up" %>>
-                        <input type="hidden" name="userId" value=<%= post.user._id %>>  <!-- TODO: change to current user -->
-                        <input type="hidden" name="postId" value=<%= post._id %>>
-                        <input type="hidden" name="voteValue" value=<%= post.voteValue %>>
-                        <button type="submit">
-                            <%= post.voteValue === true  ? "🔼" : "🔺" %>
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    <%= post.vote_score %>
-                </td>
-                <td>
-                    <form action="/vote" method="post">
-                        <input type="hidden" name="vote" value=<%= post.voteValue === false ? "" : "down" %>>
-                        <input type="hidden" name="userId" value=<%= post.user._id %>>  <!-- TODO: change to current user -->
-                        <input type="hidden" name="postId" value=<%= post._id %>>
-                        <input type="hidden" name="voteValue" value=<%= post.voteValue %>>
-                        <button type="submit">
-                            <%= post.voteValue === false ? "🔽" : "🔻" %>
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        </table>
+        <a href="/fullpost/<%= post._id %>" style="text-decoration:none; color: inherit;">
+            <h2><%= post.title %></h2>
+        </a>
 
+        <a href="/user/<%= post.author._id %>" style="text-decoration:none; color: inherit;">
+            <h3>
+                <img src="<%= post.author.avatar %>" style="height: 1em">
+                <%= post.author.name %>
+        </a>
+
+        <a href="/fullpost/<%= post._id %>" style="text-decoration:none; color: inherit;">
+                 • <%= post.postAge %>
+            </h3>
+
+
+            <img src=" <%= post.image %>" alt="could not load image sowwy" referrerpolicy="no-referrer" style="width: 100%">
+        
+            <p><%= post.description %></p>
+            
+            <table>
+                <tr>
+                    <!-- <td>
+                        Vote
+                    </td> -->
+                    <td>
+                        <form action="/vote" method="post">
+                            <input type="hidden" name="vote" value="up">
+                            <input type="hidden" name="userId" value=<%= post.author._id %>>  <!-- TODO: change to current user -->
+                            <input type="hidden" name="postId" value=<%= post._id %>>
+                            <input type="hidden" name="voteValue" value=<%= post.voteValue %>>
+                            <button type="submit">
+                                <%= post.voteValue === true  ? "🔼" : "🔺" %>
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <%= post.vote_score %>
+                    </td>
+                    <td>
+                        <form action="/vote" method="post">
+                            <input type="hidden" name="vote" value="down" >
+                            <input type="hidden" name="userId" value=<%= post.author._id %>>  <!-- TODO: change to current user -->
+                            <input type="hidden" name="postId" value=<%= post._id %>>
+                            <input type="hidden" name="voteValue" value=<%= post.voteValue %>>
+                            <button type="submit">
+                                <%= post.voteValue === false ? "🔽" : "🔻" %>
+                            </button>
+                        </form>
+                    </td>
+
+                    <td>
+                        &nbsp;
+                        <!-- •  -->
+                        <!-- |  -->
+                        &nbsp;
+                        💬: <%= post.comment_count %>
+                    </td>
+                </tr>
+            </table>
+        </a>
 
     </td></tr>
 </table>

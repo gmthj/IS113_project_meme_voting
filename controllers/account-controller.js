@@ -18,3 +18,11 @@ exports.handleRegister = (req, res) => {
     
     res.render('login', {})
 }
+
+
+// /account/logout
+exports.handleLogout = (req, res) => {
+    req.session.destroy(() => {
+       res.redirect('/home');
+   });
+}

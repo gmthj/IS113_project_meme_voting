@@ -6,7 +6,7 @@ const userController = require('../controllers/user-controller')
 
 
 // /user
-router.get('/', userController.renderUserProfile)
+router.get('/:userId', userController.renderUserProfile)
 
 
 

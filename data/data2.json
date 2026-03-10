@@ -51,149 +51,181 @@
   ],
   "posts": [
     {
+      "_scenario": "popular post — lots of upvotes (incl. self), lots of comments (incl. self), edited",
       "authorIndex": 0,
       "title": "When the prof says 'this won't be on the exam'",
       "description": "And yet here we are at 2am studying it",
-      "image": "https://i.imgur.com/eGIonuA.jpeg"
+      "image": "https://i.imgur.com/cC3iirV.png",
+      "uploadedAt": "2026-02-01T22:14:00.000Z",
+      "editedAt": "2026-02-01T22:45:00.000Z"
     },
     {
+      "_scenario": "good post — upvotes only (no self-vote), comments from others only (no self-comment), edited title after backlash",
       "authorIndex": 0,
-      "title": "Group project energy",
+      "title": "Group project energy (updated title: it me, I was the freeloader, sorry)",
       "description": "One person does everything, four people put their name on it",
-      "image": "https://i.imgur.com/LkQOyAk.jpeg"
+      "image": "https://i.imgur.com/vxgrM12.jpeg",
+      "uploadedAt": "2026-02-04T10:30:00.000Z",
+      "editedAt": "2026-02-05T09:00:00.000Z"
     },
     {
+      "_scenario": "mixed votes (upvotes + downvotes), comments from others, no self-vote, no self-comment",
       "authorIndex": 1,
       "title": "Finance major starter pack",
       "description": "Excel, Bloomberg Terminal, existential dread",
-      "image": "https://i.imgur.com/nde28P0.png"
+      "image": "https://i.imgur.com/2RP8JIx.jpeg",
+      "uploadedAt": "2026-02-06T08:45:00.000Z"
     },
     {
+      "_scenario": "pure downvoted post — net negative score, no comments at all, no self-vote",
       "authorIndex": 1,
       "title": "Checking Canvas at midnight",
       "description": "New assignment dropped. Due tomorrow. Classic.",
-      "image": "https://i.imgur.com/CzkGkbg.jpeg"
+      "image": "https://i.imgur.com/uElOXo8.jpeg",
+      "uploadedAt": "2026-02-09T23:58:00.000Z"
     },
     {
+      "_scenario": "zero votes (no one voted, not even author), active comment thread",
       "authorIndex": 2,
       "title": "Year 1 orientation week vs week 4",
       "description": "The glow-up was a lie",
-      "image": "https://i.imgur.com/dHfm1eR.jpeg"
+      "image": "https://i.imgur.com/sNTna1Z.png",
+      "uploadedAt": "2026-02-11T14:20:00.000Z"
     },
     {
+      "_scenario": "self-vote only (author upvoted own post), no comments whatsoever",
       "authorIndex": 2,
       "title": "SMU shuttle bus schedule",
       "description": "Theoretical vs actual arrival time",
-      "image": "https://i.imgur.com/W0uzlW6.jpeg"
+      "image": "https://i.imgur.com/vBCnAYk.jpeg",
+      "uploadedAt": "2026-02-14T07:55:00.000Z"
     },
     {
+      "_scenario": "zero votes, zero comments — ghost post, completely ignored",
       "authorIndex": 3,
       "title": "Law school reading list",
       "description": "400 pages. Due Monday. God help us.",
-      "image": "https://i.imgur.com/vBCnAYk.jpeg"
+      "image": "https://i.imgur.com/W0uzlW6.jpeg",
+      "uploadedAt": "2026-02-17T19:10:00.000Z"
     },
     {
+      "_scenario": "self-comment only (author replied to own post), no votes at all",
       "authorIndex": 4,
       "title": "Supply and demand but make it meme",
       "description": "The demand for sleep is perfectly inelastic during finals",
-      "image": "https://i.imgur.com/sNTna1Z.png"
+      "image": "https://i.imgur.com/dHfm1eR.jpeg",
+      "uploadedAt": "2026-02-19T11:05:00.000Z"
     },
     {
+      "_scenario": "high upvotes including self, one comment edited by its author, post also edited",
       "authorIndex": 4,
       "title": "Internship application szn",
       "description": "500 applications. 2 callbacks. This is fine.",
-      "image": "https://i.imgur.com/uElOXo8.jpeg"
+      "image": "https://i.imgur.com/CzkGkbg.jpeg",
+      "uploadedAt": "2026-02-22T16:33:00.000Z",
+      "editedAt": "2026-02-23T08:00:00.000Z"
     },
     {
+      "_scenario": "single downvote (from one other user), single comment, no self-interaction",
       "authorIndex": 5,
       "title": "When the Figma file has 200 layers",
       "description": "Named 'Rectangle 47' and 'Rectangle 48'",
-      "image": "https://i.imgur.com/2RP8JIx.jpeg"
+      "image": "https://i.imgur.com/nde28P0.png",
+      "uploadedAt": "2026-02-25T09:17:00.000Z"
     },
     {
+      "_scenario": "mixed: self-downvote (author regrets post), others upvote, comment thread with edited comment",
       "authorIndex": 5,
       "title": "Presenting to the class like",
       "description": "My hands: shaking. My voice: cracking. My slides: beautiful.",
-      "image": "https://i.imgur.com/vxgrM12.jpeg"
+      "image": "https://i.imgur.com/LkQOyAk.jpeg",
+      "uploadedAt": "2026-02-27T13:44:00.000Z"
     },
     {
+      "_scenario": "viral post — all users voted up including self, heavy comment thread, post not edited",
       "authorIndex": 0,
       "title": "Debugging at 3am",
       "description": "It was a missing semicolon. It's always a missing semicolon.",
-      "image": "https://i.imgur.com/cC3iirV.png"
+      "image": "https://i.imgur.com/eGIonuA.jpeg",
+      "uploadedAt": "2026-03-02T03:01:00.000Z"
     }
   ],
   "comments": [
-    { "postIndex": 0,  "authorIndex": 1, "text": "This is painfully accurate 😭" },
-    { "postIndex": 0,  "authorIndex": 2, "text": "Happened to me literally yesterday" },
-    { "postIndex": 0,  "authorIndex": 3, "text": "The prof said it with such confidence too" },
-    { "postIndex": 0,  "authorIndex": 4, "text": "Bro I have the notes if you need them lol" },
-    { "postIndex": 1,  "authorIndex": 1, "text": "I was the one person 💀" },
-    { "postIndex": 1,  "authorIndex": 3, "text": "Name and shame. I'll wait." },
-    { "postIndex": 1,  "authorIndex": 5, "text": "We do not talk about IS101 group project" },
-    { "postIndex": 2,  "authorIndex": 0, "text": "The Bloomberg Terminal jumpscare every morning" },
-    { "postIndex": 2,  "authorIndex": 4, "text": "Fellow finance major here. Felt this in my soul." },
-    { "postIndex": 3,  "authorIndex": 2, "text": "Why do they do this to us" },
-    { "postIndex": 3,  "authorIndex": 5, "text": "Canvas notifications are my villain origin story" },
-    { "postIndex": 4,  "authorIndex": 0, "text": "Week 3 me waking up at 6am for 8am class 😂" },
-    { "postIndex": 4,  "authorIndex": 1, "text": "The audacity of my Week 1 self" },
-    { "postIndex": 5,  "authorIndex": 3, "text": "The bus was there. Then it wasn't. Schrödinger's shuttle." },
-    { "postIndex": 5,  "authorIndex": 4, "text": "I have missed the bus exactly once per week since Year 1" },
-    { "postIndex": 6,  "authorIndex": 0, "text": "Bro 400 pages is not even the worst one" },
-    { "postIndex": 6,  "authorIndex": 2, "text": "Law school said read everything and understand nothing" },
-    { "postIndex": 7,  "authorIndex": 1, "text": "An A in this class for the meme economy reference alone" },
-    { "postIndex": 7,  "authorIndex": 5, "text": "Deadweight loss of sleep 😭" },
-    { "postIndex": 8,  "authorIndex": 2, "text": "500 applications is not an exaggeration" },
-    { "postIndex": 8,  "authorIndex": 3, "text": "Let's not talk about rejection rates during a recession" },
-    { "postIndex": 9,  "authorIndex": 0, "text": "Rectangle 47 is my nemesis" },
-    { "postIndex": 9,  "authorIndex": 2, "text": "My group members name their layers this. I cry." },
-    { "postIndex": 10, "authorIndex": 1, "text": "Voice crack during the Q&A is a rite of passage" },
-    { "postIndex": 10, "authorIndex": 4, "text": "The slides WERE beautiful though, we love Sophie" },
-    { "postIndex": 11, "authorIndex": 1, "text": "A SEMICOLON. I LOST 4 HOURS." },
-    { "postIndex": 11, "authorIndex": 3, "text": "It was a comma for me. Different vibe, same pain." },
-    { "postIndex": 11, "authorIndex": 5, "text": "This is why I switched to design 💀" }
+    { "_scenario": "post0: other user, no edit",          "postIndex": 0,  "authorIndex": 1, "text": "This is painfully accurate 😭",                              "uploadedAt": "2026-02-01T22:50:00.000Z" },
+    { "_scenario": "post0: other user, no edit",          "postIndex": 0,  "authorIndex": 2, "text": "Happened to me literally yesterday",                        "uploadedAt": "2026-02-02T09:10:00.000Z" },
+    { "_scenario": "post0: self-comment by author",       "postIndex": 0,  "authorIndex": 0, "text": "update: the topic WAS on the exam. prof lied to our faces", "uploadedAt": "2026-02-03T10:00:00.000Z", "editedAt": "2026-02-04T08:15:00.000Z" },
+    { "_scenario": "post0: other user, edited comment",   "postIndex": 0,  "authorIndex": 3, "text": "The prof said it with such confidence too (edited: apparently he forgot he put it in section B)", "uploadedAt": "2026-02-02T11:30:00.000Z", "editedAt": "2026-02-04T08:15:00.000Z" },
+    { "_scenario": "post0: other user, no edit",          "postIndex": 0,  "authorIndex": 4, "text": "Bro I have the notes if you need them lol",                 "uploadedAt": "2026-02-03T14:00:00.000Z" },
+
+    { "_scenario": "post1: other users only, no self-comment", "postIndex": 1, "authorIndex": 1, "text": "I was the one person 💀",                              "uploadedAt": "2026-02-04T11:05:00.000Z" },
+    { "_scenario": "post1: edited comment",               "postIndex": 1,  "authorIndex": 3, "text": "Name and shame. I'll wait. (edit: ok it was me too, briefly)", "uploadedAt": "2026-02-04T13:22:00.000Z", "editedAt": "2026-02-06T10:00:00.000Z" },
+    { "_scenario": "post1: other user, no edit",          "postIndex": 1,  "authorIndex": 5, "text": "We do not talk about IS101 group project",                  "uploadedAt": "2026-02-05T08:50:00.000Z" },
+
+    { "_scenario": "post2: other user, no edit",          "postIndex": 2,  "authorIndex": 0, "text": "The Bloomberg Terminal jumpscare every morning",            "uploadedAt": "2026-02-06T09:15:00.000Z" },
+    { "_scenario": "post2: other user, no edit",          "postIndex": 2,  "authorIndex": 4, "text": "Fellow finance major here. Felt this in my soul.",          "uploadedAt": "2026-02-07T10:40:00.000Z" },
+
+    { "_scenario": "post4: other users, active thread, no votes on this post", "postIndex": 4, "authorIndex": 0, "text": "Week 3 me waking up at 6am for 8am class 😂", "uploadedAt": "2026-02-11T15:00:00.000Z" },
+    { "_scenario": "post4: other user",                   "postIndex": 4,  "authorIndex": 1, "text": "The audacity of my Week 1 self",                           "uploadedAt": "2026-02-12T09:45:00.000Z" },
+    { "_scenario": "post4: other user, edited",           "postIndex": 4,  "authorIndex": 3, "text": "I peaked at orientation and I will not be taking questions", "uploadedAt": "2026-02-12T14:00:00.000Z", "editedAt": "2026-02-13T07:30:00.000Z" },
+
+    { "_scenario": "post7: self-comment only, author talking to themselves", "postIndex": 7, "authorIndex": 4, "text": "I defended this meme in front of my econ prof. He gave partial credit.", "uploadedAt": "2026-02-19T12:00:00.000Z" },
+
+    { "_scenario": "post8: edited comment on edited post", "postIndex": 8, "authorIndex": 2, "text": "500 applications is not an exaggeration (edit: it's 600 now)", "uploadedAt": "2026-02-22T17:00:00.000Z", "editedAt": "2026-02-28T11:00:00.000Z" },
+    { "_scenario": "post8: other user",                   "postIndex": 8,  "authorIndex": 3, "text": "Let's not talk about rejection rates during a recession",   "uploadedAt": "2026-02-23T10:25:00.000Z" },
+    { "_scenario": "post8: self-comment, author adds context", "postIndex": 8, "authorIndex": 4, "text": "Update: got a 3rd callback. We are so back.",            "uploadedAt": "2026-02-26T09:00:00.000Z" },
+
+    { "_scenario": "post9: single comment from other, post has only a downvote", "postIndex": 9, "authorIndex": 0, "text": "Rectangle 47 is my nemesis",           "uploadedAt": "2026-02-25T10:00:00.000Z" },
+
+    { "_scenario": "post10: comment thread, post has self-downvote", "postIndex": 10, "authorIndex": 1, "text": "Voice crack during the Q&A is a rite of passage", "uploadedAt": "2026-02-27T14:10:00.000Z" },
+    { "_scenario": "post10: other user",                  "postIndex": 10, "authorIndex": 4, "text": "The slides WERE beautiful though, we love Sophie",          "uploadedAt": "2026-02-28T09:00:00.000Z" },
+    { "_scenario": "post10: self-comment, author regrets post", "postIndex": 10, "authorIndex": 5, "text": "I want this post deleted but I physically cannot",      "uploadedAt": "2026-02-28T10:30:00.000Z" },
+
+    { "_scenario": "post11: viral, heavy thread", "postIndex": 11, "authorIndex": 1, "text": "A SEMICOLON. I LOST 4 HOURS.",                                      "uploadedAt": "2026-03-02T03:30:00.000Z" },
+    { "_scenario": "post11: self-comment, author adds punchline", "postIndex": 11, "authorIndex": 0, "text": "It was also the wrong semicolon. There were two.",   "uploadedAt": "2026-03-02T04:00:00.000Z" },
+    { "_scenario": "post11: other user",                  "postIndex": 11, "authorIndex": 3, "text": "It was a comma for me. Different vibe, same pain.",          "uploadedAt": "2026-03-02T08:45:00.000Z" },
+    { "_scenario": "post11: edited comment",              "postIndex": 11, "authorIndex": 5, "text": "This is why I switched to design 💀 (edited: and I still debug CSS)", "uploadedAt": "2026-03-03T11:20:00.000Z", "editedAt": "2026-03-04T09:00:00.000Z" },
+    { "_scenario": "post11: late comment",                "postIndex": 11, "authorIndex": 2, "text": "Finding this at 3am mid-debug. The timing is poetic.",        "uploadedAt": "2026-03-05T03:12:00.000Z" }
   ],
   "votes": [
+    { "_scenario": "post0: popular — all 6 vote up incl. self", "postIndex": 0, "authorIndex": 0, "value": true },
+    { "postIndex": 0,  "authorIndex": 1, "value": true },
     { "postIndex": 0,  "authorIndex": 2, "value": true },
     { "postIndex": 0,  "authorIndex": 3, "value": true },
     { "postIndex": 0,  "authorIndex": 4, "value": true },
     { "postIndex": 0,  "authorIndex": 5, "value": true },
-    { "postIndex": 1,  "authorIndex": 0, "value": true },
-    { "postIndex": 1,  "authorIndex": 1, "value": true },
+
+    { "_scenario": "post1: others upvote, no self-vote", "postIndex": 1, "authorIndex": 1, "value": true },
     { "postIndex": 1,  "authorIndex": 2, "value": true },
     { "postIndex": 1,  "authorIndex": 3, "value": true },
     { "postIndex": 1,  "authorIndex": 5, "value": false },
-    { "postIndex": 2,  "authorIndex": 0, "value": true },
-    { "postIndex": 2,  "authorIndex": 1, "value": true },
+
+    { "_scenario": "post2: mixed — 3 up 2 down, no self-vote", "postIndex": 2, "authorIndex": 0, "value": true },
+    { "postIndex": 2,  "authorIndex": 2, "value": true },
+    { "postIndex": 2,  "authorIndex": 3, "value": false },
     { "postIndex": 2,  "authorIndex": 4, "value": true },
-    { "postIndex": 3,  "authorIndex": 0, "value": true },
-    { "postIndex": 3,  "authorIndex": 1, "value": true },
+    { "postIndex": 2,  "authorIndex": 5, "value": false },
+
+    { "_scenario": "post3: net negative — 1 up 3 down, no self-vote", "postIndex": 3, "authorIndex": 0, "value": false },
     { "postIndex": 3,  "authorIndex": 2, "value": false },
-    { "postIndex": 3,  "authorIndex": 5, "value": true },
-    { "postIndex": 4,  "authorIndex": 0, "value": true },
-    { "postIndex": 4,  "authorIndex": 1, "value": true },
-    { "postIndex": 4,  "authorIndex": 2, "value": true },
-    { "postIndex": 4,  "authorIndex": 3, "value": false },
-    { "postIndex": 5,  "authorIndex": 2, "value": true },
-    { "postIndex": 5,  "authorIndex": 3, "value": true },
-    { "postIndex": 5,  "authorIndex": 4, "value": true },
-    { "postIndex": 7,  "authorIndex": 1, "value": true },
-    { "postIndex": 7,  "authorIndex": 2, "value": true },
-    { "postIndex": 7,  "authorIndex": 4, "value": true },
-    { "postIndex": 7,  "authorIndex": 5, "value": true },
+    { "postIndex": 3,  "authorIndex": 4, "value": true },
+    { "postIndex": 3,  "authorIndex": 5, "value": false },
+
+    { "_scenario": "post5: self-vote only", "postIndex": 5, "authorIndex": 2, "value": true },
+
+    { "_scenario": "post8: high votes incl. self", "postIndex": 8, "authorIndex": 4, "value": true },
+    { "postIndex": 8,  "authorIndex": 0, "value": true },
+    { "postIndex": 8,  "authorIndex": 1, "value": true },
     { "postIndex": 8,  "authorIndex": 2, "value": true },
-    { "postIndex": 8,  "authorIndex": 3, "value": true },
-    { "postIndex": 8,  "authorIndex": 4, "value": true },
     { "postIndex": 8,  "authorIndex": 5, "value": false },
-    { "postIndex": 9,  "authorIndex": 0, "value": true },
-    { "postIndex": 9,  "authorIndex": 2, "value": false },
-    { "postIndex": 9,  "authorIndex": 4, "value": true },
-    { "postIndex": 9,  "authorIndex": 5, "value": true },
+
+    { "_scenario": "post9: single downvote from one user, no self-vote", "postIndex": 9, "authorIndex": 2, "value": false },
+
+    { "_scenario": "post10: self-downvote + others upvote", "postIndex": 10, "authorIndex": 5, "value": false },
     { "postIndex": 10, "authorIndex": 1, "value": true },
     { "postIndex": 10, "authorIndex": 2, "value": true },
     { "postIndex": 10, "authorIndex": 4, "value": true },
-    { "postIndex": 10, "authorIndex": 5, "value": true },
-    { "postIndex": 11, "authorIndex": 0, "value": true },
+
+    { "_scenario": "post11: viral — all 6 upvote incl. self", "postIndex": 11, "authorIndex": 0, "value": true },
     { "postIndex": 11, "authorIndex": 1, "value": true },
     { "postIndex": 11, "authorIndex": 2, "value": true },
     { "postIndex": 11, "authorIndex": 3, "value": true },

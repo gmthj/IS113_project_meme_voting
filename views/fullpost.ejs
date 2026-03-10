@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
 </head>
 <%- include('partials/header') %>
-<body>
-    
-    the post
-    a form for commenting
-    existing commments
-</body>
+
+    <body>
+        <section>
+            <%- include('partials/post', {post}) %>
+        </section>
+
+        <!-- TODO: comment adder -->
+
+        <section>
+            <% if (comments && comments.length> 0) { %>
+                <% comments.forEach((comment) => { %>
+                    <%- include('partials/comment', {comment}) %>
+                <% }); %>
+            <% } else { %>
+                <p>No comments yet. Be the first to comment!</p>
+            <% } %>
+        </section>
+
+    </body>
+
 </html>

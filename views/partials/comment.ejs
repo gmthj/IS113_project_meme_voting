@@ -1,3 +1,17 @@
-<div>
-    <p>some comment</p>
-</div>
+<table border="1" style="width: 20em;">
+    <tr><td>
+
+        <h4>
+            <a href="/user/<%= comment.author._id %>" style="text-decoration:none; color: inherit;">
+                <img src="<%= comment.author.avatar %>" style="height: 1em">
+                <%= comment.author.name %>
+            </a>
+            • <%= comment.commentAge %>
+            <%= post.author._id.toString() == comment.author._id.toString() ? " • Author" : ""  %>
+            <%= comment.edit_datetime ? " • edited" : ""  %>
+        </h4>
+        
+        <p><%= comment.text %></p>
+
+    </td></tr>
+</table>

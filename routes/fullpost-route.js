@@ -5,10 +5,10 @@ const fullpostController = require('../controllers/fullpost-controller')
 // =========================
 
 // /fullpost
-router.get('/', fullpostController.getFullPost)
+router.get('/:postId', fullpostController.getFullPost)
 
 // /fullpost/comment
-router.get('/comment', fullpostController.postComment)
+router.post('/comment', fullpostController.postComment)
 
 // =========================
 
