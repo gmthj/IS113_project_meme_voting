@@ -16,7 +16,7 @@ exports.getFullPost = async (req, res) => {
         }
 
         const [post, comments] = await Promise.all([
-            getPostById(postId),
+            getPostById(postId, sessionUser),
             getAllCommentsByPostId(postId)
         ]);
 

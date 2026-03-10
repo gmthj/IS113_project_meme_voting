@@ -29,7 +29,7 @@
                     <td>
                         <form action="/vote" method="post">
                             <input type="hidden" name="vote" value="up">
-                            <input type="hidden" name="userId" value=<%= post.author._id %>>  <!-- TODO: change to current user -->
+                            <input type="hidden" name="userId" value=<%= sessionUser._id %>>
                             <input type="hidden" name="postId" value=<%= post._id %>>
                             <input type="hidden" name="voteValue" value=<%= post.voteValue %>>
                             <button type="submit">
@@ -43,7 +43,7 @@
                     <td>
                         <form action="/vote" method="post">
                             <input type="hidden" name="vote" value="down" >
-                            <input type="hidden" name="userId" value=<%= post.author._id %>>  <!-- TODO: change to current user -->
+                            <input type="hidden" name="userId" value=<%= sessionUser._id %>>
                             <input type="hidden" name="postId" value=<%= post._id %>>
                             <input type="hidden" name="voteValue" value=<%= post.voteValue %>>
                             <button type="submit">

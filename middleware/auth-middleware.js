@@ -1,20 +1,24 @@
 
 
 exports.isLoggedIn = (req, res, next) => {
-    if (!req.session.user) {
+    // console.log("isloggedin")
+    // console.log(req.session)
+    if (!req.session.sessionUser) {
         console.log("User not logged in, redirecting to /login");
-        return res.redirect('/account/login');
+        // return res.redirect('/account/login');
+        return res.redirect('/home'); // TODO: switch to login when login ready
     }
     next();
 }
 
 
 exports.isAuthor = (req, res, next) => {
-    if (!req.session.user) {
+    if (!req.session.sessionUser) {
         console.log("User not logged in, redirecting to /login");
-        return res.redirect('/account/login');
+        // return res.redirect('/account/login');
+        return res.redirect('/home'); // TODO: switch to login when login ready
     }
-    if (req.session.user.userId !== req.body.authorId) {
+    if (req.session.sessionUser._id !== req.body.authorId) {
         console.log("unauthorised user not author");
         
         const backURL = req.get('Referrer') || '/';

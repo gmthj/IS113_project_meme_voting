@@ -9,10 +9,10 @@ const { timeAgo } = require("../utils/utils");
 
 async function expandComments(comments) {
   await Promise.all(comments.map(async (comment) => {
-    const user = await getUserById(comment.userId.toString());
+    const author = await getUserById(comment.userId.toString());
     
     comment.commentAge = timeAgo(comment.upload_datetime);
-    comment.author = user;
+    comment.author = author;
   }));
 
   return comments;

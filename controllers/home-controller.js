@@ -11,7 +11,7 @@ exports.renderHome = async (req, res) => {
     // sort/filter posts
     // req.session.visit_count = req.session.visit_count + 1 || 1;
     // console.log("vivist", req.session.visit_count)
-    const posts = await getAllPosts();
+    const posts = await getAllPosts(sessionUser);
     // console.log(posts)
     res.render('home', {posts, sessionUser})
 
