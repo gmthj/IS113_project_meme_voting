@@ -40,7 +40,14 @@
             
             <td>
                 CURRENT SESSION USER: <br>
-                <%= JSON.stringify(sessionUser, null, 2) %>
+                <% if (sessionUser._id) { %>
+                    <a href="/user/<%= sessionUser._id %>" style="text-decoration:none; color: inherit;">
+                        <img src="<%= sessionUser.avatar %>" style="height: 1em"> <%= sessionUser.name %> <br>
+                        <%= sessionUser.email %> <br>
+                    </a>
+                <% } else { %>
+                    No user logged in
+                <% } %>
             </td>
         </tr>
     </table>
