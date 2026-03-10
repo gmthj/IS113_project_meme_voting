@@ -10,7 +10,7 @@
 
     home page stuff
     <% posts.forEach(post => { %>
-        <%- include('partials/post', {post}) %>
+        <%- include('partials/post', {post, sessionUser}) %>
     <% }); %>
 
     some form to decide sorting/filtering

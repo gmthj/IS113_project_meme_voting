@@ -1,15 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const uploadController = require('../controllers/upload-controller')
+const authMiddleware = require('../middleware/auth-middleware')
 
 
 // =========================
 
 
 // Inital Upload Page Loads 
-router.get('/', uploadController.renderUploadPage)
+router.get('/', authMiddleware.isLoggedIn, uploadController.renderUploadPage)
 // Upload Page Handel Route
-router.post('/', uploadController.renderUploadPage_Mongo)
+router.post('/', authMiddleware.isLoggedIn, uploadController.renderUploadPage_Mongo)
 
 
 

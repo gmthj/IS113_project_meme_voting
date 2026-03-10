@@ -1,4 +1,3 @@
-// const { ca } = require("zod/locales");
 const Post = require("../models/Post-model");
 
 const { getUserById } = require("../services/userService");
@@ -22,11 +21,11 @@ async function expandPosts(posts, sessionUser = {}) {
   try {
     await Promise.all(
       posts.map(async (post) => {
-        const user = await getUserById(post.userId.toString());
-        const voteValue = await getVoteValue(post._id, sessionUser._id); //this is just checking self vote only TODO: update to current user when login session done
+        const author = await getUserById(post.userId.toString());
+        const voteValue = await getVoteValue(post._id, sessionUser._id);
 
         post.postAge = timeAgo(post.upload_datetime);
-        post.author = user;
+        post.author = author;
         post.voteValue = voteValue;
       }),
     );
@@ -51,12 +50,11 @@ async function getPostById(postId, sessionUser = {}) {
   try {
     const post = await Post.findOne({ _id: postId }).lean();
 
-    const user = await getUserById(post.userId.toString());
-    const voteValue = await getVoteValue(post._id, sessionUser._id); //this is just checking self vote only TODO: update to current user when login session done
-    // const voteValue = await getVoteValue(post._id, user._id); //this is just checking self vote only TODO: update to current user when login session done
+    const author = await getUserById(post.userId.toString());
+    const voteValue = await getVoteValue(post._id, sessionUser._id);
 
     post.postAge = timeAgo(post.upload_datetime);
-    post.author = user;
+    post.author = author;
     post.voteValue = voteValue;
 
     return post;
