@@ -1,13 +1,13 @@
-const POST_SCHEMA = require("../models/Post-model")
+const POST_SCHEMA = require("../models/Post-model");
 
 // Loading of the upload page
 exports.renderUploadPage = (req, res) => {
   const sessionUser = req.session.sessionUser || {};
-  res.render('upload', { error: null, success: false, sessionUser})
-}
+  console.log("Session User in renderUploadPage:", sessionUser);
+  res.render("upload", { error: null, success: false, sessionUser });
+};
 
-
-// Handle Submission to Mongo DB 
+// Handle Submission to Mongo DB
 // POST upload
 exports.renderUploadPage_Mongo = async (req, res) => {
   const sessionUser = req.session.sessionUser || {};
@@ -20,15 +20,20 @@ exports.renderUploadPage_Mongo = async (req, res) => {
       return res.render("upload", {
         error: "All fields are required",
         success: false,
-        sessionUser
+        sessionUser,
       });
     }
-
-    // Replace this with actual logged-in user id
-    const dummyUserId = "69a879e26f21b8fb7da30941";
+    console.log(
+      "Received data - Title:",
+      meme_title,
+      "Description:",
+      description,
+      "user:",
+      sessionUser,
+    );
 
     const newPost = new POST_SCHEMA({
-      userId: dummyUserId,
+      userId: sessionUser._id,
       title: meme_title,
       description: description,
       image: image_base64,
@@ -36,11 +41,10 @@ exports.renderUploadPage_Mongo = async (req, res) => {
 
     await newPost.save();
 
-
     return res.render("upload", {
       error: null,
       success: true,
-      sessionUser
+      sessionUser,
     });
   } catch (err) {
     console.error("Upload error:", err);
@@ -48,7 +52,7 @@ exports.renderUploadPage_Mongo = async (req, res) => {
     return res.render("upload", {
       error: "Failed to upload post",
       success: false,
-      sessionUser
+      sessionUser,
     });
   }
 };
