@@ -53,12 +53,30 @@
                     </td>
 
                     <td>
-                        &nbsp;
-                        <!-- •  -->
-                        <!-- |  -->
-                        &nbsp;
+                        &nbsp; | &nbsp;
                         💬: <%= post.comment_count %>
                     </td>
+
+                    <% if (post.author._id == sessionUser._id) { %>
+                        <td>
+                            <form action="/upload/edit" method="post">
+                                &nbsp; | &nbsp;
+                                <input type="hidden" name="authorId" value=<%= post.author._id %>>
+                                <input type="hidden" name="postId" value=<%= post._id %>>
+                                <button type="submit">Edit</button>
+                            </form>
+                        </td>
+
+                        <td>
+                            <form action="/delete" method="post">
+                                &nbsp; | &nbsp;
+                                <input type="hidden" name="authorId" value=<%= post.author._id %>>
+                                <input type="hidden" name="postId" value=<%= post._id %>>
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    <% } %>
+
                 </tr>
             </table>
         </a>

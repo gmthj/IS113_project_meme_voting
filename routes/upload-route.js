@@ -12,7 +12,8 @@ router.get('/', authMiddleware.isLoggedIn, uploadController.renderUploadPage)
 // Upload Page Handel Route
 router.post('/', authMiddleware.isLoggedIn, uploadController.renderUploadPage_Mongo)
 
-
+// /upload/edit
+router.post('/edit', authMiddleware.isAuthor, uploadController.handleUploadEdit)
 
 
 

@@ -4,7 +4,7 @@ exports.isLoggedIn = (req, res, next) => {
     // console.log("isloggedin")
     // console.log(req.session)
     if (!req.session.sessionUser) {
-        console.log("isLoggedIn - User not logged in, redirecting to /login");
+        console.log("isLoggedIn - User not logged in, redirecting to /login (temp redirect to home, unitl loginreg done)");
         // return res.redirect('/account/login');
         return res.redirect('/home'); // TODO: switch to login when login ready
     }
@@ -14,7 +14,7 @@ exports.isLoggedIn = (req, res, next) => {
 
 exports.isAuthor = (req, res, next) => {
     if (!req.session.sessionUser) {
-        console.log("isAuthor - User not logged in, redirecting to /login");
+        console.log("isAuthor - User not logged in, redirecting to /login (temp redirect to home, unitl loginreg done)");
         // return res.redirect('/account/login');
         return res.redirect('/home'); // TODO: switch to login when login ready
     }
