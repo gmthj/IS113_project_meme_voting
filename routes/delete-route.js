@@ -8,7 +8,9 @@ const authMiddleware = require('../middleware/auth-middleware')
 
 // /delete
 // router.get('/', deleteController.handleDeletion)
-router.get('/', authMiddleware.isAuthor, deleteController.handleDeletion)
+router.post('/', authMiddleware.isAuthor, deleteController.handleDeletion)
+
+router.post('/confirm', authMiddleware.isAuthor, deleteController.handleDeletionConfirm)
 
 
 
