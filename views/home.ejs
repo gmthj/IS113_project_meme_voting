@@ -11,7 +11,7 @@
 
     home page stuff
     <% posts.forEach(post => { %>
-        <%- include('partials/post', {post, sessionUser}) %>
+        <%- include('partials/post', {post, sessionUser, showControls: true}) %>
     <% }); %>
 
     some form to decide sorting/filtering
