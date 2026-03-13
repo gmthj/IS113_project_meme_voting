@@ -14,13 +14,30 @@
         </section>
 
         <!-- TODO: comment adder -->
+        <section style="white-space: nowrap;">
+            <textarea style="
+        resize: none; 
+        width: 100%; 
+        max-width: 18em; 
+        height: 4.5em; 
+        display: inline-block; 
+        vertical-align: top;
+        margin-right: -4px;
+    " name="comment" placeholder="Comment here..." id=""></textarea>
+
+            <input style="
+        width: 6em; 
+        height: 5em; 
+        display: inline-block; 
+        vertical-align: top;
+    " type="submit" value="Comment">
+        </section>
 
         <section>
             <% if (comments && comments.length> 0) { %>
-                <% comments.forEach((comment) => { %>
+                <% comments.forEach((comment)=> { %>
                     <%- include('partials/comment', {comment}) %>
-                <% }); %>
-            <% } else { %>
+            <% }); } else { %>
                 <p>No comments yet. Be the first to comment!</p>
             <% } %>
         </section>
