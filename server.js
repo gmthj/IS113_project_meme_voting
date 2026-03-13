@@ -56,9 +56,8 @@ server.all("/:a", (req, res) => {
 
 connectDB().then(() => {
   //startServer
-  const port = process.env.PORT || 8000;
-  const hostname =
-    process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+  const port = 8000;
+  const hostname = "localhost";
   server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
     // console.log(`dirname: ${__dirname}`)

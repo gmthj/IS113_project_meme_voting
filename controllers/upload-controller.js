@@ -56,3 +56,12 @@ exports.renderUploadPage_Mongo = async (req, res) => {
     });
   }
 };
+
+
+exports.handleUploadEdit = (req, res) => {
+  const sessionUser = req.session.sessionUser || {};
+
+  console.log(req.body)
+  // console.log("Session User in renderUploadPage:", sessionUser);
+  res.render("upload", { error: null, success: false, sessionUser });
+};
