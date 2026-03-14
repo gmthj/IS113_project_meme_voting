@@ -1,0 +1,494 @@
+{
+  "_checkpoint": "2026-03-14T21:50:37.865Z",
+  "users": [
+    {
+      "email": "priya.nair@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Priya Nair",
+      "dob": "2003-07-22",
+      "bio": "Finance major. Spreadsheets by day, memes by night.",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya%20Nair",
+      "avatarSeed": "Priya Nair"
+    },
+    {
+      "email": "jordan.lim@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Jordan Lim",
+      "dob": "2005-11-09",
+      "bio": "Year 1. Still figuring out where the library is.",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Jordan%20Lim",
+      "avatarSeed": "Jordan Lim"
+    },
+    {
+      "email": "alex.tan@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Alex Tan",
+      "dob": "2004-03-15",
+      "bio": "CS junior who survives on bubble tea and memes 🧋",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex%20Tan",
+      "avatarSeed": "Alex Tan"
+    },
+    {
+      "email": "mei.chen@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Mei Chen",
+      "dob": "2004-01-30",
+      "bio": "Law student. Everything is a terms & conditions joke to me.",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Mei%20Chen",
+      "avatarSeed": "Mei Chen"
+    },
+    {
+      "email": "sophie.wu@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Sophie Wu",
+      "dob": "2004-06-18",
+      "bio": "Design thinker. My memes have kerning.",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie%20Wu",
+      "avatarSeed": "Sophie Wu"
+    },
+    {
+      "email": "ravi.s@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Ravi Suresh",
+      "dob": "2003-09-05",
+      "bio": "Econ brain. Meme supply is inelastic.",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ravi%20Suresh",
+      "avatarSeed": "Ravi Suresh"
+    }
+  ],
+  "posts": [
+    {
+      "authorIndex": 2,
+      "title": "When the prof says 'this won't be on the exam'",
+      "description": "And yet here we are at 2am studying it",
+      "image": "https://i.imgur.com/cC3iirV.png",
+      "uploadedAt": "2026-02-01T22:14:00.000Z",
+      "editedAt": "2026-02-01T22:45:00.000Z"
+    },
+    {
+      "authorIndex": 2,
+      "title": "Group project energy (updated title: it me, I was the freeloader, sorry)",
+      "description": "One person does everything, four people put their name on it",
+      "image": "https://i.imgur.com/vxgrM12.jpeg",
+      "uploadedAt": "2026-02-04T10:30:00.000Z",
+      "editedAt": "2026-02-05T09:00:00.000Z"
+    },
+    {
+      "authorIndex": 0,
+      "title": "Finance major starter pack",
+      "description": "Excel, Bloomberg Terminal, existential dread",
+      "image": "https://i.imgur.com/2RP8JIx.jpeg",
+      "uploadedAt": "2026-02-06T08:45:00.000Z"
+    },
+    {
+      "authorIndex": 0,
+      "title": "Checking Canvas at midnight",
+      "description": "New assignment dropped. Due tomorrow. Classic.",
+      "image": "https://i.imgur.com/uElOXo8.jpeg",
+      "uploadedAt": "2026-02-09T23:58:00.000Z"
+    },
+    {
+      "authorIndex": 1,
+      "title": "Year 1 orientation week vs week 4",
+      "description": "The glow-up was a lie",
+      "image": "https://i.imgur.com/sNTna1Z.png",
+      "uploadedAt": "2026-02-11T14:20:00.000Z"
+    },
+    {
+      "authorIndex": 1,
+      "title": "SMU shuttle bus schedule",
+      "description": "Theoretical vs actual arrival time",
+      "image": "https://i.imgur.com/vBCnAYk.jpeg",
+      "uploadedAt": "2026-02-14T07:55:00.000Z"
+    },
+    {
+      "authorIndex": 3,
+      "title": "Law school reading list",
+      "description": "400 pages. Due Monday. God help us.",
+      "image": "https://i.imgur.com/W0uzlW6.jpeg",
+      "uploadedAt": "2026-02-17T19:10:00.000Z"
+    },
+    {
+      "authorIndex": 5,
+      "title": "Supply and demand but make it meme",
+      "description": "The demand for sleep is perfectly inelastic during finals",
+      "image": "https://i.imgur.com/dHfm1eR.jpeg",
+      "uploadedAt": "2026-02-19T11:05:00.000Z"
+    },
+    {
+      "authorIndex": 5,
+      "title": "Internship application szn",
+      "description": "500 applications. 2 callbacks. This is fine.",
+      "image": "https://i.imgur.com/CzkGkbg.jpeg",
+      "uploadedAt": "2026-02-22T16:33:00.000Z",
+      "editedAt": "2026-02-23T08:00:00.000Z"
+    },
+    {
+      "authorIndex": 4,
+      "title": "When the Figma file has 200 layers",
+      "description": "Named 'Rectangle 47' and 'Rectangle 48'",
+      "image": "https://i.imgur.com/nde28P0.png",
+      "uploadedAt": "2026-02-25T09:17:00.000Z"
+    },
+    {
+      "authorIndex": 4,
+      "title": "Presenting to the class like",
+      "description": "My hands: shaking. My voice: cracking. My slides: beautiful.",
+      "image": "https://i.imgur.com/LkQOyAk.jpeg",
+      "uploadedAt": "2026-02-27T13:44:00.000Z"
+    },
+    {
+      "authorIndex": 2,
+      "title": "Debugging at 3am",
+      "description": "It was a missing semicolon. It's always a missing semicolon.",
+      "image": "https://i.imgur.com/eGIonuA.jpeg",
+      "uploadedAt": "2026-03-02T03:01:00.000Z"
+    }
+  ],
+  "comments": [
+    {
+      "postIndex": 0,
+      "authorIndex": 0,
+      "text": "This is painfully accurate 😭",
+      "uploadedAt": "2026-02-01T22:50:00.000Z"
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 1,
+      "text": "Happened to me literally yesterday",
+      "uploadedAt": "2026-02-02T09:10:00.000Z"
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 3,
+      "text": "The prof said it with such confidence too (edited: apparently he forgot he put it in section B)",
+      "uploadedAt": "2026-02-02T11:30:00.000Z",
+      "editedAt": "2026-02-04T08:15:00.000Z"
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 2,
+      "text": "update: the topic WAS on the exam. prof lied to our faces",
+      "uploadedAt": "2026-02-03T10:00:00.000Z",
+      "editedAt": "2026-02-04T08:15:00.000Z"
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 5,
+      "text": "Bro I have the notes if you need them lol",
+      "uploadedAt": "2026-02-03T14:00:00.000Z"
+    },
+    {
+      "postIndex": 1,
+      "authorIndex": 0,
+      "text": "I was the one person 💀",
+      "uploadedAt": "2026-02-04T11:05:00.000Z"
+    },
+    {
+      "postIndex": 1,
+      "authorIndex": 3,
+      "text": "Name and shame. I'll wait. (edit: ok it was me too, briefly)",
+      "uploadedAt": "2026-02-04T13:22:00.000Z",
+      "editedAt": "2026-02-06T10:00:00.000Z"
+    },
+    {
+      "postIndex": 1,
+      "authorIndex": 4,
+      "text": "We do not talk about IS101 group project",
+      "uploadedAt": "2026-02-05T08:50:00.000Z"
+    },
+    {
+      "postIndex": 2,
+      "authorIndex": 2,
+      "text": "The Bloomberg Terminal jumpscare every morning",
+      "uploadedAt": "2026-02-06T09:15:00.000Z"
+    },
+    {
+      "postIndex": 2,
+      "authorIndex": 5,
+      "text": "Fellow finance major here. Felt this in my soul.",
+      "uploadedAt": "2026-02-07T10:40:00.000Z"
+    },
+    {
+      "postIndex": 4,
+      "authorIndex": 2,
+      "text": "Week 3 me waking up at 6am for 8am class 😂",
+      "uploadedAt": "2026-02-11T15:00:00.000Z"
+    },
+    {
+      "postIndex": 4,
+      "authorIndex": 0,
+      "text": "The audacity of my Week 1 self",
+      "uploadedAt": "2026-02-12T09:45:00.000Z"
+    },
+    {
+      "postIndex": 4,
+      "authorIndex": 3,
+      "text": "I peaked at orientation and I will not be taking questions",
+      "uploadedAt": "2026-02-12T14:00:00.000Z",
+      "editedAt": "2026-02-13T07:30:00.000Z"
+    },
+    {
+      "postIndex": 7,
+      "authorIndex": 5,
+      "text": "I defended this meme in front of my econ prof. He gave partial credit.",
+      "uploadedAt": "2026-02-19T12:00:00.000Z"
+    },
+    {
+      "postIndex": 8,
+      "authorIndex": 1,
+      "text": "500 applications is not an exaggeration (edit: it's 600 now)",
+      "uploadedAt": "2026-02-22T17:00:00.000Z",
+      "editedAt": "2026-02-28T11:00:00.000Z"
+    },
+    {
+      "postIndex": 8,
+      "authorIndex": 3,
+      "text": "Let's not talk about rejection rates during a recession",
+      "uploadedAt": "2026-02-23T10:25:00.000Z"
+    },
+    {
+      "postIndex": 9,
+      "authorIndex": 2,
+      "text": "Rectangle 47 is my nemesis",
+      "uploadedAt": "2026-02-25T10:00:00.000Z"
+    },
+    {
+      "postIndex": 8,
+      "authorIndex": 5,
+      "text": "Update: got a 3rd callback. We are so back.",
+      "uploadedAt": "2026-02-26T09:00:00.000Z"
+    },
+    {
+      "postIndex": 10,
+      "authorIndex": 0,
+      "text": "Voice crack during the Q&A is a rite of passage",
+      "uploadedAt": "2026-02-27T14:10:00.000Z"
+    },
+    {
+      "postIndex": 10,
+      "authorIndex": 5,
+      "text": "The slides WERE beautiful though, we love Sophie",
+      "uploadedAt": "2026-02-28T09:00:00.000Z"
+    },
+    {
+      "postIndex": 10,
+      "authorIndex": 4,
+      "text": "I want this post deleted but I physically cannot",
+      "uploadedAt": "2026-02-28T10:30:00.000Z"
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 0,
+      "text": "A SEMICOLON. I LOST 4 HOURS.",
+      "uploadedAt": "2026-03-02T03:30:00.000Z"
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 2,
+      "text": "It was also the wrong semicolon. There were two.",
+      "uploadedAt": "2026-03-02T04:00:00.000Z"
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 3,
+      "text": "It was a comma for me. Different vibe, same pain.",
+      "uploadedAt": "2026-03-02T08:45:00.000Z"
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 4,
+      "text": "This is why I switched to design 💀 (edited: and I still debug CSS)",
+      "uploadedAt": "2026-03-03T11:20:00.000Z",
+      "editedAt": "2026-03-04T09:00:00.000Z"
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 1,
+      "text": "Finding this at 3am mid-debug. The timing is poetic.",
+      "uploadedAt": "2026-03-05T03:12:00.000Z"
+    }
+  ],
+  "votes": [
+    {
+      "postIndex": 0,
+      "authorIndex": 1,
+      "value": true
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 2,
+      "value": true
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 0,
+      "value": true
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 4,
+      "value": true
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 5,
+      "value": true
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 3,
+      "value": true
+    },
+    {
+      "postIndex": 1,
+      "authorIndex": 3,
+      "value": true
+    },
+    {
+      "postIndex": 1,
+      "authorIndex": 1,
+      "value": true
+    },
+    {
+      "postIndex": 1,
+      "authorIndex": 4,
+      "value": false
+    },
+    {
+      "postIndex": 1,
+      "authorIndex": 0,
+      "value": true
+    },
+    {
+      "postIndex": 2,
+      "authorIndex": 3,
+      "value": false
+    },
+    {
+      "postIndex": 2,
+      "authorIndex": 5,
+      "value": true
+    },
+    {
+      "postIndex": 2,
+      "authorIndex": 4,
+      "value": false
+    },
+    {
+      "postIndex": 3,
+      "authorIndex": 2,
+      "value": false
+    },
+    {
+      "postIndex": 3,
+      "authorIndex": 1,
+      "value": false
+    },
+    {
+      "postIndex": 3,
+      "authorIndex": 5,
+      "value": true
+    },
+    {
+      "postIndex": 3,
+      "authorIndex": 4,
+      "value": false
+    },
+    {
+      "postIndex": 5,
+      "authorIndex": 1,
+      "value": true
+    },
+    {
+      "postIndex": 8,
+      "authorIndex": 5,
+      "value": true
+    },
+    {
+      "postIndex": 8,
+      "authorIndex": 2,
+      "value": true
+    },
+    {
+      "postIndex": 8,
+      "authorIndex": 0,
+      "value": true
+    },
+    {
+      "postIndex": 8,
+      "authorIndex": 1,
+      "value": true
+    },
+    {
+      "postIndex": 8,
+      "authorIndex": 4,
+      "value": false
+    },
+    {
+      "postIndex": 9,
+      "authorIndex": 1,
+      "value": false
+    },
+    {
+      "postIndex": 10,
+      "authorIndex": 4,
+      "value": false
+    },
+    {
+      "postIndex": 10,
+      "authorIndex": 1,
+      "value": true
+    },
+    {
+      "postIndex": 10,
+      "authorIndex": 0,
+      "value": true
+    },
+    {
+      "postIndex": 10,
+      "authorIndex": 5,
+      "value": true
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 2,
+      "value": true
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 0,
+      "value": true
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 1,
+      "value": true
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 3,
+      "value": true
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 5,
+      "value": true
+    },
+    {
+      "postIndex": 11,
+      "authorIndex": 4,
+      "value": true
+    },
+    {
+      "postIndex": 2,
+      "authorIndex": 2,
+      "value": true
+    },
+    {
+      "postIndex": 2,
+      "authorIndex": 1,
+      "value": true
+    }
+  ]
+}

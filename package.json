@@ -19,6 +19,8 @@
     "start": "node server.js",
     "nodemon": "nodemon server.js",
     "dev": "nodemon server.js",
+    "clear-db": "node ./scripts/clearDB.js",
+    "export-db": "node ./scripts/exportDBtoJSON.js",
     "init-db": "node ./scripts/initDB.js",
     "init-db2": "node ./scripts/initDB2.js"
   },
