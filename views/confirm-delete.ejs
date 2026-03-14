@@ -13,22 +13,25 @@
 
         <h1>Confirm Delete?</h1>
 
-        <% if (post != {}) { %>
-            
-            <%- include('partials/post', {post, sessionUser, showControls: false}) %>
-
-        <% } else if (comment != {}) { %>
-
-            <%- include('partials/comment', {comment}) %>
-
-        <% } %>
-        
-        <br>
         <form action="/delete/confirm" method="post">
-            <input type="hidden" name="authorId" value="<%= post.author._id %>">
-            <input type="hidden" name="postId" value="<%= post._id %>">
+            
+            <% if (post) { %>
+                <input type="hidden" name="authorId" value="<%= post.author._id %>">
+                <input type="hidden" name="postId" value="<%= post._id %>">
+                
+                <%- include('partials/post', {post, sessionUser, showControls: false}) %>
+                
+            <% } else if (comment) { %>
+                <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+                <input type="hidden" name="commentId" value="<%= comment._id %>">
+                
+                <%- include('partials/comment', {comment, sessionUser, showControls: false}) %>
+                
+            <% } %>
+                    
+                    
             <input type="hidden" name="backURL" value="<%= backURL %>">
-
+            <br>
             <button type="submit" name="confirm" value="true">DELETE FOREVER</button>
             <button type="submit" name="confirm" value="false">Cancel</button>
         </form>

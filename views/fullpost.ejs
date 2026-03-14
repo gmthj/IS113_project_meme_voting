@@ -37,7 +37,7 @@
         <section>
             <% if (comments && comments.length> 0) { %>
                 <% comments.forEach((comment)=> { %>
-                    <%- include('partials/comment', {comment}) %>
+                    <%- include('partials/comment', {comment, sessionUser, showControls: true}) %>
             <% }); } else { %>
                 <p>No comments yet. Be the first to comment!</p>
             <% } %>

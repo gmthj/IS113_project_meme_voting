@@ -27,6 +27,16 @@ async function getAllCommentsByPostId(postId) {
 }
 
 
+async function deleteCommentById(commentId) {
+  try {
+    await Comment.findByIdAndDelete({ _id: commentId });
+
+    return true;
+  } catch {
+    console.log("error: deleteCommentById - failed to delete comment");
+    return false;
+  }
+}
 
 
 
@@ -34,5 +44,6 @@ async function getAllCommentsByPostId(postId) {
 
 module.exports = {
   getAllCommentsByPostId,
-  expandComments
+  expandComments,
+  deleteCommentById
 };

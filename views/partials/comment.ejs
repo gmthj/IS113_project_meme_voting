@@ -7,11 +7,37 @@
                 <%= comment.author.name %>
             </a>
             • <%= comment.commentAge %>
-            <%= post.author._id.toString() == comment.author._id.toString() ? " • Author" : ""  %>
+            <% if (post) { %>
+                <%= post.author._id.toString() == comment.author._id.toString() ? " • Author" : ""  %>
+            <% } %>
             <%= comment.edit_datetime ? " • edited" : ""  %>
         </h4>
         
         <p><%= comment.text %></p>
+
+        <% if (comment.author._id == sessionUser._id && showControls) { %>
+            <table>
+                <td>
+                     <!-- TODO: add edit comment functionality -->
+                    <form action="/editcomemnt?" method="post">
+                        <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+                        <input type="hidden" name="commentId" value="<%= comment._id %>">
+                        <button type="submit">Edit</button>
+                    </form>
+                </td>
+    
+                <td>
+                    <form action="/delete" method="post">
+                        &nbsp; | &nbsp;
+                        <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+                        <input type="hidden" name="commentId" value="<%= comment._id %>">
+                        <input type="hidden" name="comment" value="<%= JSON.stringify(comment) %>">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </table>
+        <% } %>
+
 
     </td></tr>
 </table>

@@ -64,9 +64,23 @@ async function getPostById(postId, sessionUser = {}) {
   }
 }
 
+
+async function deletePostById(postId) {
+  try {
+    await Post.findByIdAndDelete({ _id: postId });
+
+    return true;
+  } catch {
+    console.log("error: deletePostById - failed to delete post");
+    return false;
+  }
+}
+
+
 module.exports = {
   getPostByTitle,
   getAllPosts,
   getPostById,
   expandPosts,
+  deletePostById,
 };
