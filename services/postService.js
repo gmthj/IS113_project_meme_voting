@@ -4,9 +4,8 @@ const { getUserById } = require("../services/userService");
 const { getVoteValue } = require("../services/voteService");
 const { timeAgo } = require("../utils/utils");
 
-/**
- * Get post by title
- */
+
+// TODO: remove before submission if not used
 async function getPostByTitle(title) {
   const post = await Post.findOne({ title: title });
 
@@ -17,6 +16,7 @@ async function getPostByTitle(title) {
   return post;
 }
 
+// adds the post's author's User obj and other details to each Post obj
 async function expandPosts(posts, sessionUser = {}) {
   try {
     await Promise.all(
@@ -100,7 +100,7 @@ async function deletePostById(postId) {
 
 
 module.exports = {
-  getPostByTitle,
+  getPostByTitle, //TODO: remove before sub if not used
   getAllPosts,
   getAllPostsSorted,
   getPostById,
