@@ -27,16 +27,15 @@ npm i
 5. Create MongoDB database and copy the connection string
 6. Make a `.env` file (yes, literally named `.env`) in `IS113_project_meme_voting/` with the following
 
-```
+```bash
 SECRET=<some super long random string>
 MONGO_URI=<connnection string>
-SECRET=<some super long random string>
 ```
 replace `<some super long random string>` with an actual long string of random characters <br>
-replace `<connnection string>` with your actual connection string from MongoDB Atlas. it looks like this:
+replace `<connnection string>` with your actual connection string from MongoDB Atlas. It should look something like this:
 
-```
-mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+```bash
+mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/<db_name>?retryWrites=true&w=majority&appName=Cluster0
 ```
 
 note: replace `<db_password>` with the password you created for the user in your mongodb database
