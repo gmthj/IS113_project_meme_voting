@@ -59,22 +59,6 @@ exports.renderRegister = (req, res) => {
 };
  
 // /account/register
-<<<<<<< HEAD
-exports.handleRegister = (req, res) => {
-    // do register/edit account stuff
-    // go to home once done
-    
-    res.render('login', {})
-}
-
-
-// /account/logout
-exports.handleLogout = (req, res) => {
-    req.session.destroy(() => {
-       res.redirect('/home');
-   });
-}
-=======
 exports.handleRegister = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     const { email, password, confirmation, name, dob, bio } = req.body;
@@ -135,4 +119,3 @@ exports.handleLogout = (req, res) => {
         res.redirect('/home');
     });
 };
->>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8

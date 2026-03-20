@@ -65,26 +65,28 @@ async function getPostById(postId, sessionUser = {}) {
 }
 
 
-<<<<<<< HEAD
-// async function getAllPosts() {
-//   const posts = await Post.find().lean();
 
-//   return  await expandPosts(posts);
-// }
+async function getAllPostsSorted(sortType = 'highest', sessionUser = {}) {
+  try {
+    let sortOption = {};
+  
+    if (sortType === 'highest') sortOption = { vote_score: -1 };
+    else if (sortType === 'lowest') sortOption = { vote_score: 1 };
+    else if (sortType === 'newest') sortOption = { upload_datetime: -1 };
+    else if (sortType === 'oldest') sortOption = { upload_datetime: 1 };
+    else if (sortType === 'comments') sortOption = { comment_count: -1 };
+    else sortOption = { vote_score: -1 }; // fallback default
+  
+    const posts = await Post.find().sort(sortOption).lean();
+    return await expandPosts(posts, sessionUser);
+  } catch {
+    console.log("error: getAllPostsSorted - no posts received or no sessionUser");
+    return [];
+  }
+}
 
-async function getAllPosts(sortType = 'highest') {
-  let sortOption = {};
 
-  if (sortType === 'highest') sortOption = { vote_score: -1 };
-  else if (sortType === 'lowest') sortOption = { vote_score: 1 };
-  else if (sortType === 'newest') sortOption = { upload_datetime: -1 };
-  else if (sortType === 'oldest') sortOption = { upload_datetime: 1 };
-  else if (sortType === 'comments') sortOption = { comment_count: -1 };
-  else sortOption = { vote_score: -1 }; // fallback default
 
-  const posts = await Post.find().sort(sortOption).lean();
-  return await expandPosts(posts);
-=======
 async function deletePostById(postId) {
   try {
     await Post.findByIdAndDelete({ _id: postId });
@@ -94,13 +96,13 @@ async function deletePostById(postId) {
     console.log("error: deletePostById - failed to delete post");
     return false;
   }
->>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 }
 
 
 module.exports = {
   getPostByTitle,
   getAllPosts,
+  getAllPostsSorted,
   getPostById,
   expandPosts,
   deletePostById,

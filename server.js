@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-const express = require('express');
-const session = require('express-session');
-const path = require('path');
-=======
 const express = require("express");
 const session = require("express-session");
 const path = require("path");
->>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -21,14 +15,6 @@ server.use(express.static(path.join(__dirname, "public")));
 server.use(express.json());
 
 const secret = process.env.SECRET;
-<<<<<<< HEAD
-server.use(session({
-    secret: secret,
-    resave: false,
-    saveUninitialized: false
-}));
-=======
->>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
 server.use(
   session({
@@ -46,10 +32,14 @@ server.use("/fullpost", require("./routes/fullpost-route"));
 server.use("/delete", require("./routes/delete-route"));
 server.use("/vote", require("./routes/vote-route"));
 
-<<<<<<< HEAD
 server.get("/", (req, res) => res.redirect("/home"));
 server.get("/index.html", (req, res) => res.redirect("/home"));
-=======
+server.all("/:a", (req, res) => {
+  const sessionUser = req.session.sessionUser || {};
+  res.render("error", { error: "Unknown route", sessionUser });
+});
+
+
 // #################################
 // TODO: remove after login implemented
 const { getUserByEmail } = require("./services/userService");
@@ -60,18 +50,8 @@ server.get("/testlogin/:userEmail", async (req, res) => {
   res.redirect("/home");
 });
 // #################################
->>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
-server.get("/", (req, res) => {
-  // console.log("/home - sessionUser:", req.session)
-  res.redirect("/home");
-});
-server.get("/index.html", (req, res) => res.redirect("/home"));
 
-server.all("/:a", (req, res) => {
-  const sessionUser = req.session.sessionUser || {};
-  res.render("error", { error: "Unknown route", sessionUser });
-});
 
 connectDB().then(() => {
   //startServer

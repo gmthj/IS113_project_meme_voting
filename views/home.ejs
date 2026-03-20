@@ -5,34 +5,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
+    <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <title>Meme Gallery - Home</title>
     <style>
-    body {
-        font-family: Arial;
-        max-width: 800px;
-        margin: auto;
-    }
+        body {
+            font-family: Arial;
+            max-width: 800px;
+            margin: auto;
+        }
 
-    table {
-        border-collapse: collapse;
-        margin-bottom: 20px;
-        width: 100%;
-    }
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            /* width: 100%; */
+        }
 
-    td {
-        padding: 10px;
-    }
+        td {
+            padding: 10px;
+        }
 
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-</style>
-=======
-    <link rel="icon" type="image/x-icon" href="/img/icon.png">
-    <title>Home</title>
->>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <%- include('partials/header', {sessionUser}) %>
 <body>
@@ -49,7 +45,6 @@
             <% } %>
         </div>
 
-<<<<<<< HEAD
         <!-- 2. Upload Button -->
         <div class="actions">
             <a href="/upload" class="btn">📤 Upload New Meme</a>
@@ -73,18 +68,12 @@
     <main class="post-container">
         <% if (posts.length > 0) { %>
             <% posts.forEach(post => { %>
-                <%- include('partials/post', {post}) %>
+                <%- include('partials/post', {post, sessionUser, showControls: true}) %>
             <% }); %>
         <% } else { %>
             <p>No memes found. Be the first to upload one!</p>
         <% } %>
     </main>
-=======
-    home page stuff
-    <% posts.forEach(post => { %>
-        <%- include('partials/post', {post, sessionUser, showControls: true}) %>
-    <% }); %>
->>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
 </body>
 </html>
