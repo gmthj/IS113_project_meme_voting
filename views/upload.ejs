@@ -3,11 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <title>Upload</title>
 </head>
-<%- include('partials/header') %>
+
+<%- include('partials/header', {sessionUser}) %>
+
 <body>
-    upload post form
-    edit also
+<% if (success) { %>
+    <div id="successMsg" style="color:green;">
+        <h3>Post Submitted ╰(*°▽°*)╯</h3>
+    </div>
+<% } %>
+
+
+<% if (error) { %>
+    <p style="color:red"><%= error %></p>
+<% } %>
+
+
+<form action="/upload" method="POST">
+    <div>
+        <label for="meme_title">Meme Title</label>
+        <br>
+        <input type="text" name="meme_title" id="meme_title" required>
+    </div>
+
+    <br>
+
+    <div>
+        <label for="imageFile">Upload Your Meme (jpg,png)</label>
+        <br>
+        <input type="file" id="imageFile" accept="image/png, image/jpeg" required>
+    </div>
+
+    <br>
+
+    <div>
+        <img id="preview" style="display:none; max-width:300px;">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="description">Description</label>
+        <br>
+        <textarea name="description" id="description" required></textarea>
+    </div>
+
+    <input type="hidden" name="image_base64" id="image_base64">
+
+    <br>
+    <input type="submit" value="post meme">
+</form>
+
+
+
+
+<script>
+    
+    // Handles preview in browser as scripts runs at browser
+const imageInput = document.getElementById("imageFile");
+const preview = document.getElementById("preview");
+const hiddenBase64 = document.getElementById("image_base64");
+
+// Turn the image into base64 to send as JSON data later on to mongodb
+imageInput.addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (!file) {
+        preview.src = "";
+        preview.style.display = "none";
+        hiddenBase64.value = "";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const base64String = e.target.result;
+        preview.src = base64String;
+        preview.style.display = "block";
+        hiddenBase64.value = base64String;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+// Show the success message and hide it after 3s
+const successMsg = document.getElementById("successMsg");
+
+if (successMsg) {
+    setTimeout(() => {
+        successMsg.style.transition = "opacity 0.5s";
+        successMsg.style.opacity = "0";
+
+        setTimeout(() => {
+            successMsg.style.display = "none";
+        }, 500);
+
+    }, 3000);
+}
+</script>
+
 </body>
 </html>

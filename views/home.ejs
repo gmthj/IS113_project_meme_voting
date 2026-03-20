@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Meme Gallery - Home</title>
     <style>
     body {
@@ -28,8 +29,12 @@
         height: auto;
     }
 </style>
+=======
+    <link rel="icon" type="image/x-icon" href="/img/icon.png">
+    <title>Home</title>
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 </head>
-<%- include('partials/header') %>
+<%- include('partials/header', {sessionUser}) %>
 <body>
     <header>
         <h1>Meme Gallery 🐸</h1>
@@ -44,6 +49,7 @@
             <% } %>
         </div>
 
+<<<<<<< HEAD
         <!-- 2. Upload Button -->
         <div class="actions">
             <a href="/upload" class="btn">📤 Upload New Meme</a>
@@ -73,6 +79,12 @@
             <p>No memes found. Be the first to upload one!</p>
         <% } %>
     </main>
+=======
+    home page stuff
+    <% posts.forEach(post => { %>
+        <%- include('partials/post', {post, sessionUser, showControls: true}) %>
+    <% }); %>
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
 </body>
 </html>

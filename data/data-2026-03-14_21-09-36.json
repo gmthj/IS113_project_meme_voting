@@ -1,0 +1,83 @@
+{
+  "_checkpoint": "2026-03-14T21:09:36.893Z",
+  "users": [
+    {
+      "email": "seed@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Seed User A",
+      "dob": "2005-01-01",
+      "bio": "seed bio A",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Seed%20User%20A",
+      "avatarSeed": "Seed User A"
+    },
+    {
+      "email": "seed2@smu.edu.sg",
+      "passwordHash": "fakehash",
+      "name": "Seed User B",
+      "dob": "2005-02-02",
+      "bio": "seed bio B",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Seed%20User%20B",
+      "avatarSeed": "Seed User B"
+    }
+  ],
+  "posts": [
+    {
+      "authorIndex": 0,
+      "title": "TEST: Meme A1",
+      "description": "First meme by A",
+      "image": "https://example.com/meme-a1.jpg",
+      "uploadedAt": "2026-03-14T20:52:21.215Z"
+    },
+    {
+      "authorIndex": 0,
+      "title": "TEST: Meme A2",
+      "description": "Second meme by A",
+      "image": "https://example.com/meme-a2.jpg",
+      "uploadedAt": "2026-03-14T20:52:21.216Z"
+    },
+    {
+      "authorIndex": 1,
+      "title": "TEST: Meme B1",
+      "description": "First meme by B",
+      "image": "https://example.com/meme-b1.jpg",
+      "uploadedAt": "2026-03-14T20:52:21.217Z"
+    }
+  ],
+  "comments": [
+    {
+      "postIndex": 0,
+      "authorIndex": 1,
+      "text": "Nice meme A!",
+      "uploadedAt": "2026-03-14T20:52:21.218Z"
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 0,
+      "text": "Thanks!!",
+      "uploadedAt": "2026-03-14T20:52:21.219Z"
+    },
+    {
+      "postIndex": 2,
+      "authorIndex": 0,
+      "text": "B meme is solid 😂",
+      "uploadedAt": "2026-03-14T20:52:21.220Z"
+    }
+  ],
+  "votes": [
+    {
+      "postIndex": 2,
+      "authorIndex": 0,
+      "value": true
+    },
+    {
+      "postIndex": 0,
+      "authorIndex": 1,
+      "value": true
+    },
+    {
+      "postIndex": 1,
+      "authorIndex": 1,
+      "value": false
+    }
+  ]
+}

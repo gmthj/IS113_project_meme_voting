@@ -17,6 +17,7 @@
 const { getAllPosts } = require("../services/postService");
 
 exports.renderHome = async (req, res) => {
+<<<<<<< HEAD
     try {
         // Get the sort type from the URL (e.g., /home?sort=newest)
         const sortType = req.query.sort || 'highest'; 
@@ -26,6 +27,15 @@ exports.renderHome = async (req, res) => {
         
         // Get user from session (Zhiyu should be setting this during login)
         const user = req.session.user || null;
+=======
+    const sessionUser = req.session.sessionUser || {};
+    // sort/filter posts
+    // req.session.visit_count = req.session.visit_count + 1 || 1;
+    // console.log("vivist", req.session.visit_count)
+    const posts = await getAllPosts(sessionUser);
+    // console.log(posts)
+    res.render('home', {posts, sessionUser})
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
         res.render('home', { 
             posts: posts, 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/img/icon.png">
+    <title>Delete</title>
+</head>
+<%- include('partials/header', {sessionUser}) %>
+
+    <body>
+
+        <h1>Confirm Delete?</h1>
+
+        <form action="/delete/confirm" method="post">
+            
+            <% if (post) { %>
+                <input type="hidden" name="authorId" value="<%= post.author._id %>">
+                <input type="hidden" name="postId" value="<%= post._id %>">
+                
+                <%- include('partials/post', {post, sessionUser, showControls: false}) %>
+                
+            <% } else if (comment) { %>
+                <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+                <input type="hidden" name="commentId" value="<%= comment._id %>">
+                
+                <%- include('partials/comment', {comment, sessionUser, showControls: false}) %>
+                
+            <% } %>
+                    
+                    
+            <input type="hidden" name="backURL" value="<%= backURL %>">
+            <br>
+            <button type="submit" name="confirm" value="true">DELETE FOREVER</button>
+            <button type="submit" name="confirm" value="false">Cancel</button>
+        </form>
+
+        <!-- TODO: handle comment delete -->
+
+
+        
+        
+        
+        <img src="/img/areyousure.png" alt="areyousure"
+        style="position: fixed; bottom: 0px; right: 0px; width: auto; height: 50%; z-index: 1000;">
+        
+    </body>
+
+</html>

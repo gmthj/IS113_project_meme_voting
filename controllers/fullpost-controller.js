@@ -6,6 +6,7 @@ const { expandPosts, getPostById } = require('../services/postService')
 const { expandComments, getAllCommentsByPostId } = require('../services/commentService')
 
 exports.getFullPost = async (req, res) => {
+    const sessionUser = req.session.sessionUser || {};
     // get post data from db
     try {
         const postId = req.params.postId;
@@ -15,14 +16,14 @@ exports.getFullPost = async (req, res) => {
         }
 
         const [post, comments] = await Promise.all([
-            getPostById(postId),
+            getPostById(postId, sessionUser),
             getAllCommentsByPostId(postId)
         ]);
 
         // const posts = await expandPosts([rawPost]);
         // const comments = await expandComments(rawComments);
 
-        res.render('fullpost', {post, comments, currentUser: ''});
+        res.render('fullpost', {post, comments, currentUser: '', sessionUser});
 
     } catch (err) {
         console.error("Error: ", err);

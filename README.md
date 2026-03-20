@@ -9,28 +9,48 @@ Meme Gallery / Voting Board
 
 ## Setup Instructions
 
+<<<<<<< HEAD
 1. install [nodejs & npm](https://nodejs.org/en/download)
 2. clone this repo
+=======
+1. Install [nodejs & npm](https://nodejs.org/en/download)
+2. Clone this repository
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
 ```bash
 git clone https://github.com/gmthj/IS113_project_meme_voting
+cd IS113_project_meme_voting
 ```
 
+<<<<<<< HEAD
 3. install node_modules and dependencies
+=======
+3. Install dependencies
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
 ```bash
 npm i
 ```
 
 4. Setup an account on [MongoDB Atlas](https://www.mongodb.com/products/platform/atlas-database)
+<<<<<<< HEAD
 5. create mongodb database and copy the connection string
 6. make a `.env` file (yes, literally named `.env`) in `IS113_project_meme_voting/` with the following
+=======
+5. Create MongoDB database and copy the connection string
+6. Make a `.env` file (yes, literally named `.env`) in `IS113_project_meme_voting/` with the following
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
 ```
+SECRET=<some super long random string>
 MONGO_URI=<connnection string>
 SECRET=<some super long random string>
 ```
+<<<<<<< HEAD
 replace `<some super long random string>` with an actual long string of random characters
+=======
+replace `<some super long random string>` with an actual long string of random characters <br>
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 replace `<connnection string>` with your actual connection string from MongoDB Atlas. it looks like this:
 
 ```
@@ -39,13 +59,21 @@ mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/?retryWrites
 
 note: replace `<db_password>` with the password you created for the user in your mongodb database
 
+<<<<<<< HEAD
 7. initialise database with sample data
+=======
+7. Initialise database with sample data (optional)
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
 ```bash
 npm run init-db
 ```
 
+<<<<<<< HEAD
 8. run the app
+=======
+8. Start the application
+>>>>>>> 112a76e8974af3150b5001d8f1f701e962e1a5a8
 
 ```bash
 npm run start
@@ -53,6 +81,8 @@ npm run start
 npm run nodemon
 ```
 
+9. Open your browser <br>
+http://localhost:8000
 
 ---
 
@@ -152,41 +182,40 @@ npm run nodemon
 ## DATABASE
 
 **USER**
-user_id (pk)
-email (unique)
-password (hash)
-name
-dob
-bio
-creation_datetime
+- email: String (unique)
+- passwordHash: String
+- name: String
+- dob: Date
+- bio: String
+- avatar: String
 
 **VOTE**
-user_id
-post_id
-value (bool) true: upvote, false: downvote
+- postId: [ObjectId]
+- userId: [ObjectId]
+- value: Boolean (true: upvote, false: downvote)
 
 **POST**
-post_id (pk)
-user_id (fk - USER.user_id) [author of the post]
-title
-description
-image
-vote_score (default 0)
-comment_count
-upload_datetime
-edit_datetime
+- userId: [ObjectId] (author of the post)
+- title: String
+- description: String
+- image: String (URL or base64)
+- vote_score: Number (default: 0)
+- comment_count: Number (default: 0)
+- upload_datetime: Date (default: now)
+- edit_datetime: Date
 
 **COMMENT**
-comment_id (pk)
-post_id (fk - POST.post_id)
-user_id (fk - USER.user_id) [author of the comment]
-text
-upload_datetime
-edit_datetime
+- postId: [ObjectId]
+- userId: [ObjectId] (author of the comment)
+- text: String
+- upload_datetime: Date (default: now)
+- edit_datetime: Date
 
 ---
 
 _Give us A+ pls_
+
+
 
 ## File Structure
 
