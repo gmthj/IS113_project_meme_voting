@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <title>Meme Gallery - Home</title>
-    <style>
+    <!-- <style>
         body {
             font-family: Arial;
             max-width: 800px;
@@ -28,7 +28,7 @@
             max-width: 100%;
             height: auto;
         }
-    </style>
+    </style> -->
 </head>
 <%- include('partials/header', {sessionUser}) %>
 <body>
@@ -37,8 +37,8 @@
         
         <!-- 1. Show logged in user or login link -->
         <div class="user-nav">
-            <% if (typeof user !== 'undefined' && user) { %>
-                <p>Logged in as: <a href="/user/<%= user._id %>"><%= user.name %></a></p>
+            <% if (typeof sessionUser !== 'undefined' && sessionUser) { %>
+                <p>Logged in as: <a href="/user/<%= sessionUser._id %>"><%= sessionUser.name %></a></p>
                 <a href="/account/logout">Logout</a>
             <% } else { %>
                 <a href="/account/login">Login / Register</a>
