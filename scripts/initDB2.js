@@ -211,6 +211,21 @@ async function main() {
   );
   console.log(`Votes created ✅ (${seedData.votes.length})`);
 
+
+  await Promise.all(
+    seedData.bookmarks.map((b) => {
+      return Bookmark.create({
+        postId: createdPosts[b.postIndex]._id,
+        userId: createdUsers[b.authorIndex]._id,
+      });
+    })
+  );
+  console.log(`bookmarks created ✅ (${seedData.bookmarks.length})`);
+
+
+
+
+
   // 8) Summary
   const topPosts = await Post.find()
     .sort({ vote_score: -1, upload_datetime: -1 })
