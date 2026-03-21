@@ -2,19 +2,10 @@ const Post = require("../models/Post-model");
 
 const { getUserById } = require("../services/userService");
 const { getVoteValue } = require("../services/voteService");
+const { getBookmarkValue } = require("../services/bookmarkService");
 const { timeAgo } = require("../utils/utils");
 
 
-// TODO: remove before submission if not used
-async function getPostByTitle(title) {
-  const post = await Post.findOne({ title: title });
-
-  if (!post) {
-    throw new Error(`Post with title "${title}" not found`);
-  }
-
-  return post;
-}
 
 // adds the post's author's User obj and other details to each Post obj
 async function expandPosts(posts, sessionUser = {}) {
@@ -23,16 +14,33 @@ async function expandPosts(posts, sessionUser = {}) {
       posts.map(async (post) => {
         const author = await getUserById(post.userId.toString());
         const voteValue = await getVoteValue(post._id, sessionUser._id);
+        const bookmark = await getBookmarkValue(post._id, sessionUser._id)
 
         post.postAge = timeAgo(post.upload_datetime);
         post.author = author;
         post.voteValue = voteValue;
+        post.bookmark = bookmark;
       }),
     );
     return posts;
   } catch {
     console.log("error: expandPosts - no posts received or no sessionUser");
     return [];
+  }
+}
+
+
+
+
+async function getPostById(postId, sessionUser = {}) {
+  try {
+    const post = await Post.findOne({ _id: postId }).lean();
+
+    const expandedPosts = await expandPosts([post], sessionUser);
+    return expandedPosts[0];
+  } catch {
+    console.log("error: getPostById - no postId received or no sessionUser");
+    return {};
   }
 }
 
@@ -46,35 +54,17 @@ async function getAllPosts(sessionUser = {}) {
   }
 }
 
-async function getPostById(postId, sessionUser = {}) {
-  try {
-    const post = await Post.findOne({ _id: postId }).lean();
 
-    const author = await getUserById(post.userId.toString());
-    const voteValue = await getVoteValue(post._id, sessionUser._id);
-
-    post.postAge = timeAgo(post.upload_datetime);
-    post.author = author;
-    post.voteValue = voteValue;
-
-    return post;
-  } catch {
-    console.log("error: getPostById - no postId received or no sessionUser");
-    return {};
-  }
-}
-
-
-
-async function getAllPostsSorted(sortType = 'highest', sessionUser = {}) {
+async function getAllPostsSorted(sortType = 'highest-votes', sessionUser = {}) {
   try {
     let sortOption = {};
   
-    if (sortType === 'highest') sortOption = { vote_score: -1 };
-    else if (sortType === 'lowest') sortOption = { vote_score: 1 };
+    if (sortType === 'highest-votes') sortOption = { vote_score: -1 };
+    else if (sortType === 'lowest-votes') sortOption = { vote_score: 1 };
     else if (sortType === 'newest') sortOption = { upload_datetime: -1 };
     else if (sortType === 'oldest') sortOption = { upload_datetime: 1 };
-    else if (sortType === 'comments') sortOption = { comment_count: -1 };
+    else if (sortType === 'most-comments') sortOption = { comment_count: -1 };
+    else if (sortType === 'least-comments') sortOption = { comment_count: 1 };
     else sortOption = { vote_score: -1 }; // fallback default
   
     const posts = await Post.find().sort(sortOption).lean();
@@ -100,10 +90,9 @@ async function deletePostById(postId) {
 
 
 module.exports = {
-  getPostByTitle, //TODO: remove before sub if not used
+  // expandPosts,
+  getPostById,
   getAllPosts,
   getAllPostsSorted,
-  getPostById,
-  expandPosts,
   deletePostById,
 };
