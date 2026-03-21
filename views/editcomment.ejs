@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+</head>
+<%- include('partials/header', {sessionUser}) %>
+<body>
+
+    <h1>Edit your <%= post ? 'Post' : 'Comment' %></h1>
+
+    <form action="/editcomment/confirm" method="post">
+        <% if (post) { %>
+            <input type="hidden" name="authorId" value="<%= post.author._id %>">
+            <input type="hidden" name="postId" value="<%= post._id %>">
+            
+            <textarea name="updatedText" required style="width: 100%; height: 10em;"><%= post.text %></textarea>
+        <% } else if (comment) { %>
+            <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+            <input type="hidden" name="commentId" value="<%= comment._id %>">
+            
+            <textarea name="updatedText" required style="width: 100%; height: 5em;"><%= comment.text %></textarea>
+        <% } %>
+        
+        <input type="hidden" name="backURL" value="<%= backURL %>">
+        <br><br>
+
+        <button type="submit" name="cancel" value="false">Save Changes</button>
+        <button type="submit" name="cancel" value="true">Cancel</button>
+    </form>
+
+</body>
+</html>

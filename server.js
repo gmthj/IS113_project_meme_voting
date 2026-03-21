@@ -29,6 +29,7 @@ server.use("/account", require("./routes/account-route"));
 server.use("/user", require("./routes/user-route"));
 server.use("/upload", require("./routes/upload-route"));
 server.use("/fullpost", require("./routes/fullpost-route"));
+server.use("/editcomment", require("./routes/editcomment-route"));
 server.use("/delete", require("./routes/delete-route"));
 server.use("/vote", require("./routes/vote-route"));
 
