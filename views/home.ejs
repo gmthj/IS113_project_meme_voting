@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Meme Gallery - Home</title>
     <!-- <style>
         body {
@@ -65,7 +66,7 @@
     <hr>
 
     <!-- 4. Display Posts -->
-    <main class="post-container">
+    <main class="feed-container">
         <% if (posts.length > 0) { %>
             <% posts.forEach(post => { %>
                 <%- include('partials/post', {post, sessionUser, showControls: true}) %>

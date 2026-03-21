@@ -1,97 +1,89 @@
 
-<table border="1" id="post-<%= post._id %>" style="width: 30em;"> <!--  style="width: 30em; margin: 0 auto;" -->
-    <tr><td>
+<div class="neo-card" id="post-<%= post._id %>"> <!--  style="width: 30em; margin: 0 auto;" -->
 
-        <h2>
-            <a href="/fullpost/<%= post._id %>" style="text-decoration:none; color: inherit;">
-                <%= post.title %>
-            </a>
-        </h2>
 
-        <h3>
-            <a href="/user/<%= post.author._id %>" style="text-decoration:none; color: inherit;">
-                <img src="<%= post.author.avatar %>" style="height: 1em">
-                <%= post.author.name %>
-            </a>
-
-            <a href="/fullpost/<%= post._id %>" style="text-decoration:none; color: inherit;">
-                • <%= post.postAge %>
-                <%= post.edit_datetime ? " • Edited" : ""  %>
-            </a>
-        </h3>
-        
-        <a href="/fullpost/<%= post._id %>" style="text-decoration:none; color: inherit;">
-
-            <img src=" <%= post.image %>" alt="meme image" referrerpolicy="no-referrer" style="width: 100%">
-        
-            <p><%= post.description %></p>
-            
-            <% if (showControls) { %>
-                <table>
-                    <tr>
-                        <td><!-- vote controls -->
-                            <form action="/vote" method="post">
-                                <input type="hidden" name="userId" value="<%= sessionUser._id %>">
-                                <input type="hidden" name="postId" value="<%= post._id %>">
-                                <input type="hidden" name="voteValue" value="<%= post.voteValue %>">
-                                
-                                <button type="submit" name="vote" value="up">
-                                    <%= post.voteValue === true  ? "🔼" : "🔺" %>
-                                </button>
-
-                                <%= post.vote_score %>
-
-                                <button type="submit" name="vote" value="down">
-                                    <%= post.voteValue === false ? "🔽" : "🔻" %>
-                                </button>
-                            </form>
-                        </td>
-
-    
-                        <td>
-                            &nbsp; | &nbsp;
-                            💬: <%= post.comment_count %>
-                        </td>
-    
-        
-                        <% if (post.author._id == sessionUser._id) { %>
-                            <td>
-                                <form action="/upload/edit" method="post">
-                                    &nbsp; | &nbsp;
-                                    <input type="hidden" name="authorId" value="<%= post.author._id %>">
-                                    <input type="hidden" name="postId" value="<%= post._id %>">
-                                    <button type="submit">Edit</button>
-                                </form>
-                            </td>
-    
-                            <td>
-                                <form action="/delete" method="post">
-                                    &nbsp; | &nbsp;
-                                    <input type="hidden" name="authorId" value="<%= post.author._id %>">
-                                    <input type="hidden" name="postId" value="<%= post._id %>">
-                                    <input type="hidden" name="post" value="<%= JSON.stringify(post) %>">
-                                    <button type="submit">Delete</button>
-                                </form>
-                            </td>
-                        <% } %>
-                        <td>
-                            <form action="/bookmark" method="post">
-                                &nbsp; | &nbsp;
-                                <input type="hidden" name="postId" value="<%= post._id %>">
-                                <button type="submit">
-                                    <% if (post.bookmark) { %>
-                                        <img src="/img/bookmark-on.png" style="height: 1em">
-                                        <% } else { %>
-                                        <img src="/img/bookmark-off.png" style="height: 1em">
-                                    <% } %>
-                                </button>
-                            </form>
-                        </td>
-    
-                    </tr>
-                </table>
-            <% } %>
+    <div class="neo-card-header">
+        <a href="/user/<%= post.author._id %>" class="neo-author-link">
+            <img src="<%= post.author.avatar %>" style="height: 1.5em; border: 2px solid black; border-radius: 50%;">
+            <%= post.author.name %>
         </a>
+        <%= post.edit_datetime ? "Edited" : ""  %>
+        <span class="neo-badge">
+            <%= post.postAge %>
+        </span>
+    </div>
 
-    </td></tr>
-</table>
+    <a href="/fullpost/<%= post._id %>" style="text-decoration: none; color: inherit;">
+        <div class="neo-card-body">
+            <h2 class="neo-post-title"><%= post.title %></h2>
+            
+            <div class="neo-img-box">
+                <img src="<%= post.image %>" alt="meme image" referrerpolicy="no-referrer">
+            </div>
+            
+            <p style="font-weight: 700;"><%= post.description %></p>
+        </div>
+    </a>
+
+
+
+    <% if (showControls) { %>
+
+        <div class="neo-card-footer">
+            
+            <div class="vote-block">
+                <form action="/vote" method="post" style="display: contents;">
+                    <input type="hidden" name="userId" value="<%= sessionUser._id %>">
+                    <input type="hidden" name="postId" value="<%= post._id %>">
+                    <input type="hidden" name="voteValue" value="<%= post.voteValue %>">
+                    
+                    <button type="submit" name="vote" value="up" 
+                            class="vote-btn <%= post.voteValue === true ? 'up-active' : '' %>">
+                        <%= post.voteValue === true ? "🔼" : "🔺" %>
+                    </button>
+
+                    <div class="vote-score"><%= post.vote_score %></div>
+
+                    <button type="submit" name="vote" value="down" 
+                            class="vote-btn <%= post.voteValue === false ? 'down-active' : '' %>">
+                        <%= post.voteValue === false ? "🔽" : "🔻" %>
+                    </button>
+                </form>
+            </div>
+
+            <a href="/fullpost/<%= post._id %>" style="text-decoration: none; font-weight: 900; color: black;">
+                💬 <%= post.comment_count %>
+            </a>
+
+            <div style="margin-left: auto; display: flex; gap: 10px;">
+                <% if (post.author._id == sessionUser._id) { %>
+                    <form action="/upload/edit" method="post">
+                        <input type="hidden" name="authorId" value="<%= post.author._id %>">
+                        <input type="hidden" name="postId" value="<%= post._id %>">
+                        <button type="submit" class="neo-btn neo-btn-yellow" style="padding: 5px 10px; font-size: 0.8rem;">EDIT</button>
+                    </form>
+                    
+                    <form action="/delete" method="post">
+                        <input type="hidden" name="authorId" value="<%= post.author._id %>">
+                        <input type="hidden" name="postId" value="<%= post._id %>">
+                        <input type="hidden" name="post" value="<%= JSON.stringify(post) %>">
+                        <button type="submit" class="neo-btn neo-btn-red" style="padding: 5px 10px; font-size: 0.8rem;">DELETE</button>
+                    </form>
+                <% } %>
+                    
+                <form action="/bookmark" method="post">
+                    <input type="hidden" name="postId" value="<%= post._id %>">
+                    <button type="submit">
+                        <% if (post.bookmark) { %>
+                            <img src="/img/bookmark-on.png" style="height: 1em">
+                            <% } else { %>
+                            <img src="/img/bookmark-off.png" style="height: 1em">
+                        <% } %>
+                    </button>
+                </form>
+            </div>
+            
+        </div> 
+
+    <% } %>
+</div>

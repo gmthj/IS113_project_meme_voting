@@ -1,0 +1,373 @@
+/* NEO-BRUTALIST DESIGN SYSTEM 
+  Tech: Pure CSS Variables + Standard Classes
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;900&display=swap');
+
+:root {
+    /* Colors */
+    --neo-bg: #FFFDF5;     /* Cream Canvas */
+    --neo-ink: #000000;    /* Pure Black */
+    --neo-red: #FF6B6B;    /* Hot Red */
+    --neo-yellow: #FFD93D; /* Vivid Yellow */
+    --neo-violet: #C4B5FD; /* Soft Violet */
+    --neo-white: #FFFFFF;
+
+    /* Structural Tokens */
+    --border-thick: 4px solid var(--neo-ink);
+    --border-thin: 2px solid var(--neo-ink);
+    
+    /* Hard Shadows (45-degree offset, zero blur) */
+    --shadow-sm: 4px 4px 0px 0px var(--neo-ink);
+    --shadow-md: 8px 8px 0px 0px var(--neo-ink);
+    --shadow-lg: 12px 12px 0px 0px var(--neo-ink);
+}
+
+/* --- Base Styles --- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--neo-bg);
+    /* Subtle Grid Pattern */
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    color: var(--neo-ink);
+    font-family: 'Space Grotesk', sans-serif;
+    margin: 0;
+    line-height: 1.4;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 900;
+    text-transform: uppercase;
+    margin: 0;
+    letter-spacing: -1px;
+}
+
+a {
+    transition: all 0.1s ease;
+    text-decoration:none;
+    color: inherit;
+}
+
+/* --- Layout Components --- */
+
+nav {
+    background: var(--neo-yellow);
+    border-bottom: 8px solid var(--neo-ink);
+    padding: 15px 25px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+/* Quick Login Links */
+header div a {
+    text-decoration: none;
+    font-weight: 900;
+}
+
+header div a:hover {
+    text-decoration: underline;
+}
+
+
+main {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* --- Neo Components --- */
+
+/* The Main Card */
+.neo-card {
+    background: var(--neo-white);
+    border: var(--border-thick);
+    box-shadow: var(--shadow-md);
+    
+    /* This prevents the "full screen" stretch */
+    width: 100%; 
+    max-width: 500px; /* Adjust this to your preferred "meme width" */
+    
+    /* This centers the card on the screen */
+    margin: 0 auto 40px auto; 
+    
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Optional: Ensure the feed itself doesn't hug the screen edges */
+.feed-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Keeps cards centered if they are smaller than the screen */
+}
+
+.neo-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.neo-card-header {
+    background: var(--neo-violet);
+    border-bottom: var(--border-thick);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.neo-card-body {
+    padding: 20px;
+}
+
+.neo-card-footer {
+    border-top: var(--border-thick);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--neo-white);
+}
+
+/* Mechanical Buttons */
+.neo-btn {
+    border: var(--border-thick);
+    box-shadow: var(--shadow-sm);
+    color: var(--neo-ink);
+    cursor: pointer;
+    /* display: inline-block; */
+    font-weight: 900;
+    padding: 10px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.1s ease;
+    font-size: 0.9rem;
+    display: flex; align-items: center; white-space: nowrap;
+}
+
+.neo-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+
+
+.neo-btn-red { background: var(--neo-red); color: white; }
+.neo-btn-yellow { background: var(--neo-yellow); }
+.neo-btn-white { background: var(--neo-white); }
+.neo-btn-violet { background: var(--neo-violet); }
+
+/* Badges / Stickers */
+.neo-badge {
+    background: var(--neo-violet);
+    border: var(--border-thin);
+    color: var(--neo-ink);
+    font-weight: 900;
+    padding: 4px 12px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    display: inline-block;
+    transform: rotate(-2deg);
+}
+
+/* Voting Block Component */
+.vote-block {
+    display: flex;
+    border: var(--border-thick);
+    box-shadow: var(--shadow-sm);
+    background: var(--neo-white);
+    overflow: hidden;
+}
+
+.vote-btn {
+    background: var(--neo-white);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    transition: all 0.1s ease;
+}
+
+.vote-icon {
+    width: 20px;
+    height: 20px;
+    fill: var(--neo-ink);
+}
+
+.vote-score {
+    align-items: center;
+    background: var(--neo-white);
+    border-left: var(--border-thick);
+    border-right: var(--border-thick);
+    display: flex;
+    font-weight: 900;
+    font-size: 1.1rem;
+    padding: 0 15px;
+}
+
+/* Active Voting States */
+.vote-btn.up-active { background: var(--neo-red); }
+.vote-btn.up-active .vote-icon { fill: var(--neo-white); }
+
+.vote-btn.down-active { background: var(--neo-violet); }
+.vote-btn.down-active .vote-icon { fill: var(--neo-ink); }
+
+/* Image Box */
+.neo-img-box {
+    background: var(--neo-ink);
+    border: var(--border-thick);
+    line-height: 0;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.neo-img-box img {
+    width: 100%;
+    filter: contrast(1.05);
+}
+
+/* Forms & Inputs */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+textarea {
+    background: var(--neo-white);
+    border: var(--border-thick);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 12px;
+    width: 100%;
+}
+
+input:focus, textarea:focus {
+    background: var(--neo-yellow);
+    outline: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.meta-text {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--neo-ink);
+}
+
+
+/* ====================================== */
+
+/* --- Header & Nav Specifics --- */
+
+/* Update your .nav-logo class */
+.nav-logo {
+    width: 8em;
+    height: auto;
+    display: block;
+}
+
+.nav-logo-container {
+    display: flex; align-items: center; gap: 20px;
+}
+
+/* NEW: A sticker container for the logo */
+.logo-sticker {
+    background: white;
+    border: var(--border-thick);
+    padding: 5px 10px;
+    box-shadow: var(--shadow-sm);
+    display: inline-block;
+    line-height: 0;
+    transition: transform 0.2s ease-out;
+}
+
+.logo-sticker:hover {
+    transform: rotate(-2deg); /* Fun sticker wiggle */
+}
+
+
+.nav-actions {
+    display: flex;
+    gap: 20px;
+    align-items: stretch; /* Forces button and badge to same height */
+}
+
+.nav-user-badge {
+    margin: 0;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    background: var(--neo-white);
+    box-shadow: var(--shadow-sm);
+    border: var(--border-thick);
+}
+
+.nav-avatar {
+    height: 1.8em;
+    border: var(--border-thin);
+    border-radius: 50%;
+    background: var(--neo-bg);
+}
+
+.nav-username {
+    font-weight: 900;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    white-space: nowrap; /* Prevents text from scrunching */
+}
+
+.nav-logout-link {
+    color: var(--neo-red);
+    font-weight: 900;
+    font-size: 0.75rem;
+    text-decoration: none;
+    border-left: 2px solid var(--neo-ink);
+    padding-left: 12px;
+    margin-left: 4px;
+}
+
+.nav-logout-link:hover {
+    text-decoration: underline;
+}
+
+/* Bypass/Test Login Bar */
+.test-login-bar {
+    background: var(--neo-ink);
+    color: var(--neo-white);
+    padding: 10px;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.test-login-bar a {
+    color: var(--neo-yellow);
+    text-decoration: none;
+    font-weight: 900;
+}
