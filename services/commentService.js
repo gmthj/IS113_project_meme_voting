@@ -18,14 +18,25 @@ async function expandComments(comments) {
   return comments;
 }
 
-
-
 async function getAllCommentsByPostId(postId) {
   const comments = await Comment.find({postId: postId}).lean();
 
   return await expandComments(comments);
 }
 
+async function updateCommentById(commentId, updatedText) {
+  try {
+    await Comment.findByIdAndUpdate(commentId, { 
+      text: updatedText,
+      edit_datetime: Date.now()
+    });
+
+    return true;
+  } catch (err) {
+    console.log("error: updateCommentById - failed to update comment", err);
+    return false;
+  }
+}
 
 async function deleteCommentById(commentId) {
   try {
@@ -39,11 +50,9 @@ async function deleteCommentById(commentId) {
 }
 
 
-
-
-
 module.exports = {
   getAllCommentsByPostId,
   expandComments,
+  updateCommentById,
   deleteCommentById
 };
