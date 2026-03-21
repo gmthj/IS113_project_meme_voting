@@ -17,12 +17,11 @@ const CommentSchema = new mongoose.Schema(
 
     upload_datetime: { type: Date, default: Date.now },
     edit_datetime: { type: Date, default: null },
-  },
-  { versionKey: false },
+  }
 );
 
 // For viewing comments on a post (sorted)
 CommentSchema.index({ postId: 1, upload_datetime: -1 });
 CommentSchema.index({ userId: 1, upload_datetime: -1 });
 
-module.exports = mongoose.model("Comment", CommentSchema, "comments");
+module.exports = mongoose.model("Comment", CommentSchema);

@@ -6,10 +6,13 @@ const readline = require("readline");
 const mongoose = require("mongoose");
 const { connectDB } = require("../utils/utils");
 
-const User    = require("../models/User-model");
-const Post    = require("../models/Post-model");
+const User = require("../models/User-model");
+const Post = require("../models/Post-model");
 const Comment = require("../models/Comment-model");
-const Vote    = require("../models/Vote-model");
+const Vote = require("../models/Vote-model");
+const PostPreference = require("../models/Post-Preference-model");
+const CommentPreference = require("../models/Comment-Preference-model");
+const Bookmark = require("../models/Bookmark-model");
 
 // ── Data file selection ───────────────────────────────────────────────────
 //
@@ -114,6 +117,9 @@ async function main() {
   await Post.init();
   await Comment.init();
   await Vote.init();
+  await PostPreference.init()
+  await CommentPreference.init()
+  await Bookmark.init()
   console.log("Indexes ensured ✅");
 
   // 3) Nuke everything
@@ -121,6 +127,9 @@ async function main() {
   await Comment.deleteMany({});
   await Post.deleteMany({});
   await User.deleteMany({});
+  await PostPreference.deleteMany({});
+  await CommentPreference.deleteMany({});
+  await Bookmark.deleteMany({});
   console.log("Collections cleared ✅");
 
   // 4) Create users
