@@ -76,6 +76,23 @@ http://localhost:8000
   - password/ reenter password - check equal
 - edit
   - prefill all existing info, to edit
+- delete
+  - delete User and all their comments and posts
+ 
+
+**CRUD features**
+- CREATE
+  - User (register)
+- READ
+  - User (register/login, edit user info, delete user account)
+  - Comment (delete user account)
+  - Post (delete user account)
+- UPDATE
+  - User (edit user info)
+- DELETE
+  - User (delete user account)
+  - Comment (delete user account)
+  - Post (delete user account)
 
 ---
 
@@ -88,7 +105,20 @@ http://localhost:8000
 - show all user's posts
   - sort by post upload datetime
     etc (lowest, oldest, most/least comments, ...)
-- show all user's comments (maybe idk uty)
+- show all user's comments
+ 
+
+**CRUD features**
+- CREATE
+  - hello
+- READ
+  - User (user info)
+  - Post (user's posts)
+  - Comment (user's comments)
+- UPDATE
+  - hello
+- DELETE
+  - hello
 
 ---
 
@@ -103,6 +133,17 @@ http://localhost:8000
 - newest
   - show posts, sort by post upload datetime
 - etc (lowest, oldest, most/least comments, ...)
+ 
+
+**CRUD features**
+- CREATE
+  - hello
+- READ
+  - Post (all posts)
+- UPDATE
+  - hello
+- DELETE
+  - hello
 
 ---
 
@@ -115,6 +156,18 @@ http://localhost:8000
 - edit (check user is post author)
   - prefill title, description - show image
   - allow edit title and description only
+- delete post
+ 
+
+**CRUD features**
+- CREATE
+  - Post (upload new post)
+- READ
+  - Post (edit post, delete post)
+- UPDATE
+  - Post (edit post)
+- DELETE
+  - Post (delete post)
 
 ---
 
@@ -125,6 +178,18 @@ http://localhost:8000
 - display post
 - add comment form
 - show comments (sort by time, etc..)
+- delete comment
+ 
+**CRUD features**
+- CREATE
+  - Comment (add new comment)
+- READ
+  - Post (show full post)
+  - Comment (show post's comments, edit comment, delete comment)
+- UPDATE
+  - Comment (edit comment)
+- DELETE
+  - Comment (delete comment)
 
 ---
 
@@ -132,23 +197,31 @@ http://localhost:8000
 
 **post template**
 
-- title [click go to view post page]
-- image [click go to view post page]
-- description [click go to view post page]
-- post author (click go to user page)
-- post age (7h / 5m / 1h / 5d / 2m / 2y ago) - based on upload_datetime
-- vote score
-- upvote/downvote buttons (must only be able to select 1, selecting 1 deselects the other) [update vote score]
-- comment count [click go to view post page]
-- (if user is owner) show edit/delete post button [go to edit post page]
+[click go to view fullpost page]
+- title, image, description, vote score, comment count
+- post age - based on upload_datetime
+- post author name/image (click go to user page)
+- upvote/downvote buttons
+- (if sessionUser is post author) show edit/delete post button [go to edit/delete post page]
 
 **comment template**
 
-- (if user is author of comment) - show edit/delete comment button
-- author name (click go to user page)
+- (if sessionUser is comment author) show edit/delete comment button [go to edit/delete comment page]
+- author name/image (click go to user page)
 - comment text
-- comment age (7h / 5m / 1h / 5d / 2m / 2y ago) - based on upload_datetime
-- "edited" if edit_datetime is not null/undefined
+- comment age - based on upload_datetime
+- "edited" / "author"
+ 
+
+**CRUD features**
+- CREATE
+  - Vote (new upvote/downvote)
+- READ
+  - Vote (post template)
+- UPDATE
+  - Vote (switch vote - upvote -> downvote / downvote -> upvote)
+- DELETE
+  - Vote (remove - upvote/downvote -> no vote)
 
 =====================================================================
 
