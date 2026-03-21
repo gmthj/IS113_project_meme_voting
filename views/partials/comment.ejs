@@ -19,9 +19,10 @@
             <table>
                 <td>
                      <!-- TODO: add edit comment functionality -->
-                    <form action="/editcomemnt?" method="post">
+                    <form action="/editcomment" method="post">
                         <input type="hidden" name="authorId" value="<%= comment.author._id %>">
                         <input type="hidden" name="commentId" value="<%= comment._id %>">
+                        <input type="hidden" name="comment" value="<%= JSON.stringify(comment) %>">
                         <button type="submit">Edit</button>
                     </form>
                 </td>
