@@ -32,7 +32,9 @@ server.use("/fullpost", require("./routes/fullpost-route"));
 server.use("/editcomment", require("./routes/editcomment-route"));
 server.use("/delete", require("./routes/delete-route"));
 server.use("/vote", require("./routes/vote-route"));
-server.use("/search", require("./routes/search-route"));
+server.use("/bookmark", require("./routes/bookmark-route"));
+// server.use("/preference", require("./routes/preference-route"));
+
 
 server.get("/", (req, res) => res.redirect("/home"));
 server.get("/index.html", (req, res) => res.redirect("/home"));
@@ -63,6 +65,5 @@ connectDB().then(() => {
   const hostname = "localhost";
   server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
-    // console.log(`dirname: ${__dirname}`)
   });
 });

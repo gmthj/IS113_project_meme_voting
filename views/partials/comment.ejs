@@ -1,4 +1,4 @@
-<table border="1" style="width: 20em;">
+<table border="1" style="width: 30em;">
     <tr><td>
 
         <h4>
@@ -18,7 +18,6 @@
         <% if (comment.author._id == sessionUser._id && showControls) { %>
             <table>
                 <td>
-                     <!-- TODO: add edit comment functionality -->
                     <form action="/editcomment" method="post">
                         <input type="hidden" name="authorId" value="<%= comment.author._id %>">
                         <input type="hidden" name="commentId" value="<%= comment._id %>">

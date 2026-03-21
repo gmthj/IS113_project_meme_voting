@@ -1,5 +1,5 @@
 
-<table border="1" id="post-<%= post._id %>" style="width: 20em;"> <!--  style="width: 30em; margin: 0 auto;" -->
+<table border="1" id="post-<%= post._id %>" style="width: 30em;"> <!--  style="width: 30em; margin: 0 auto;" -->
     <tr><td>
 
         <h2>
@@ -74,6 +74,19 @@
                                 </form>
                             </td>
                         <% } %>
+                        <td>
+                            <form action="/bookmark" method="post">
+                                &nbsp; | &nbsp;
+                                <input type="hidden" name="postId" value="<%= post._id %>">
+                                <button type="submit">
+                                    <% if (post.bookmark) { %>
+                                        <img src="/img/bookmark-on.png" style="height: 1em">
+                                        <% } else { %>
+                                        <img src="/img/bookmark-off.png" style="height: 1em">
+                                    <% } %>
+                                </button>
+                            </form>
+                        </td>
     
                     </tr>
                 </table>
