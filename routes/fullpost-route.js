@@ -10,8 +10,10 @@ const authMiddleware = require('../middleware/auth-middleware')
 router.get('/:postId', fullpostController.getFullPost)
 
 // /fullpost/comment
-router.post('/comment', fullpostController.postComment)
-// router.post('/comment', authMiddleware.isAuthor, fullpostController.postComment)
+router.post('/:postId/comment', authMiddleware.isLoggedIn, fullpostController.postComment)
+
+// /fullpost/comment/:commentId/edit
+// router.post('/:postId/comment', authMiddleware.isAuthor, fullpostController.postComment)
 
 // =========================
 

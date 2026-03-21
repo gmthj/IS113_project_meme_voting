@@ -31,6 +31,38 @@ exports.getFullPost = async (req, res) => {
     }
 }
 
-exports.postComment = (req, res) => {
+exports.postComment = async (req, res) => {
     // post comment
-}
+    const sessionUser = req.session.sessionUser || {};
+
+    try {
+        const postId = req.params.postId;
+        const { text } = req.body;
+
+        if (!sessionUser._id) {
+            return res.status(401).send("You must be logged in to comment.");
+        }
+
+        if (!text || text.trim() === "") {
+            return res.status(400).send("Comment text is required.");
+        }
+
+        const newComment = new Comment({
+            postId: postId,
+            userId: sessionUser._id,
+            text: text,
+        });
+
+        await newComment.save();
+
+        await Post.findByIdAndUpdate(postId, {
+            $inc: { comment_count: 1 }
+        });
+
+        return res.redirect(`/fullpost/${postId}`); 
+
+    } catch (err) {
+        console.error("Error posting comment: ", err);
+        return res.status(500).send("Internal Server Error");
+    }
+};
