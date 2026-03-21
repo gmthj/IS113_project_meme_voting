@@ -32,6 +32,7 @@ server.use("/fullpost", require("./routes/fullpost-route"));
 server.use("/editcomment", require("./routes/editcomment-route"));
 server.use("/delete", require("./routes/delete-route"));
 server.use("/vote", require("./routes/vote-route"));
+server.use("/search", require("./routes/search-route"));
 
 server.get("/", (req, res) => res.redirect("/home"));
 server.get("/index.html", (req, res) => res.redirect("/home"));
@@ -42,13 +43,15 @@ server.all("/:a", (req, res) => {
 
 
 // #################################
-// TODO: remove after login implemented
+// TODO: remove before submission
 const { getUserByEmail } = require("./services/userService");
 server.get("/testlogin/:userEmail", async (req, res) => {
   const userEmail = req.params.userEmail;
   const sessionUser = await getUserByEmail(userEmail);
   req.session.sessionUser = sessionUser;
-  res.redirect("/home");
+  // res.redirect("/home");
+  const backURL = req.get('Referrer') || '/';
+  res.redirect(`${backURL}`)
 });
 // #################################
 

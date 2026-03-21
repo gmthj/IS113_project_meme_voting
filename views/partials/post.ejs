@@ -16,6 +16,7 @@
 
             <a href="/fullpost/<%= post._id %>" style="text-decoration:none; color: inherit;">
                 • <%= post.postAge %>
+                <%= post.edit_datetime ? " • Edited" : ""  %>
             </a>
         </h3>
         
