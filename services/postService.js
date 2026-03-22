@@ -89,10 +89,23 @@ async function deletePostById(postId) {
 }
 
 
+// Get posts by userid
+async function getPostByUserId(userId, sessionUser) {
+  try {
+    let posts = await Post.find( {userId} ).lean()
+    return await expandPosts(posts, sessionUser)
+  } catch (error) {
+    console.log("Error finding post by userId:", error)
+  }
+}
+
+
+
 module.exports = {
   // expandPosts,
   getPostById,
   getAllPosts,
   getAllPostsSorted,
   deletePostById,
+  getPostByUserId,
 };
