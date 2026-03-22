@@ -23,12 +23,13 @@ async function addBookmark(postId, userId) {
   return newBookmark
 }
 
-
-// update bookmark
-
-
 // delete bookmark
-
+async function removeBookmark(postId, userId) {
+  const result = await Bookmark.deleteOne( { postId, userId } )
+  
+  // check if deleteCount > 0 for success
+  return result
+}
 
 module.exports = {
   getBookmarkValue,
