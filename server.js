@@ -35,14 +35,8 @@ server.use("/vote", require("./routes/vote-route"));
 server.use("/bookmark", require("./routes/bookmark-route"));
 // server.use("/preference", require("./routes/preference-route"));
 
-
 server.get("/", (req, res) => res.redirect("/home"));
 server.get("/index.html", (req, res) => res.redirect("/home"));
-server.all("/:a", (req, res) => {
-  const sessionUser = req.session.sessionUser || {};
-  res.render("error", { error: "Unknown route", sessionUser });
-});
-
 
 // #################################
 // TODO: remove before submission
@@ -51,19 +45,18 @@ server.get("/testlogin/:userEmail", async (req, res) => {
   const userEmail = req.params.userEmail;
   const sessionUser = await getUserByEmail(userEmail);
   req.session.sessionUser = sessionUser;
-  // res.redirect("/home");
   const backURL = req.get('Referrer') || '/';
   res.redirect(`${backURL}`)
 });
 // #################################
 
-
+server.all("/:a", (req, res) => {
+  const sessionUser = req.session.sessionUser || {};
+  res.render("error", { error: "Unknown route", sessionUser });
+});
 
 connectDB().then(() => {
-  //startServer
   const port = 8000;
   const hostname = "localhost";
-  server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-  });
+  server.listen(port, hostname);
 });

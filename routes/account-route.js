@@ -4,7 +4,6 @@ const accountController = require('../controllers/account-controller')
 
 // =========================
 
-
 // /account
 router.get('/', accountController.renderLoginRoot)
  
@@ -22,7 +21,9 @@ router.get('/logout', accountController.handleLogout)
 // /account/edit  (must be logged in)
 router.get('/edit', accountController.renderEdit)
 router.post('/edit', accountController.handleEdit)
- 
+router.get('/edit', (req, res) => {
+  res.send('EDIT ROUTE HIT');
+}); 
 // /account/delete  (must be logged in)
 router.post('/delete', accountController.handleDeleteAccount)
  
