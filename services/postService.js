@@ -90,7 +90,7 @@ async function deletePostById(postId) {
 
 
 // Get posts by userid
-async function getPostByUserId(userId, sessionUser) {
+async function getPostsByUserId(userId, sessionUser) {
   try {
     let posts = await Post.find( {userId} ).lean()
     return await expandPosts(posts, sessionUser)
@@ -107,5 +107,5 @@ module.exports = {
   getAllPosts,
   getAllPostsSorted,
   deletePostById,
-  getPostByUserId,
+  getPostsByUserId,
 };

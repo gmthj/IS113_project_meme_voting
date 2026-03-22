@@ -2,7 +2,7 @@
 const User = require('./../services/userService')
 
 // Import post service
-const { expandPosts, getPostById, getPostByUserId } = require('../services/postService')
+const { expandPosts, getPostById, getPostsByUserId } = require('../services/postService')
 
 exports.renderUserProfile = async (req, res) => {
 
@@ -14,7 +14,7 @@ exports.renderUserProfile = async (req, res) => {
         let userInfo = await User.getUserById(userId);
     
         // Retrieve post info
-        let userPost = await getPostByUserId(userId, sessionUser)
+        let userPost = await getPostsByUserId(userId, sessionUser)
         console.log(userPost)
     
         res.render('user', {sessionUser, userInfo, userPost})
