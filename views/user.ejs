@@ -9,8 +9,18 @@
 </head>
 <%- include('partials/header', {sessionUser}) %>
 <body>
-    some user posts and comments
-    some form to sort/filter posts/comments
-    hello i am kinyu
+    1. show user info
+    2. show user posts
+    3. show user comments
+    4. bookmarks
+
+
+    <h3> Name: <%= userInfo.name %> </h3>
+    <h3> Email: <%= userInfo.email %> </h3>
+    <h3> Date of Birth: <%= userInfo.dob %> </h3>
+    <h3> Bio: <%= userInfo.bio %> </h3>
+    <h3> Avatar: <%= userInfo.avatar %> </h3>
+
+
 </body>
 </html>
