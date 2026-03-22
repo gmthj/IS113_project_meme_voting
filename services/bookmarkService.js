@@ -15,8 +15,18 @@ async function getAllBookmarksByUserId(userId) {
 
   return bookmarks;
 }
-// new bookmark
+
+// create bookmark
+async function addBookmark(postId, userId) {
+  const newBookmark = await Bookmark.create( { userId, postId } )
+
+  return newBookmark
+}
+
+
 // update bookmark
+
+
 // delete bookmark
 
 
