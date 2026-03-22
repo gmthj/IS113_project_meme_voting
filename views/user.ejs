@@ -20,7 +20,11 @@
     <h3> Date of Birth: <%= userInfo.dob %> </h3>
     <h3> Bio: <%= userInfo.bio %> </h3>
     <h3> <img src="<%= userInfo.avatar %>" alt="avatar" height="100"></h3>
-    <h3><a href="/account/edit">Edit</a></h3>
+    
+    <!-- Ensures that person is logged in, AND is visiting their user page -->
+    <% if (sessionUser._id && sessionUser._id.toString() === userInfo._id.toString()) { %>
+        <h3><a href="/account/edit">Edit</a></h3>
+    <% } %>
 
     <hr>
     <h1> <%= userInfo.name %>'s Posts </h1>
