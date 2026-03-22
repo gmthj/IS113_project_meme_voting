@@ -10,20 +10,20 @@
 <%- include('partials/header', {sessionUser}) %>
 <body>
     1. show user info
-    2. show user posts
-    3. show user comments
+    2. show user comments
     4. bookmarks
 
 
-    Need to fix add edit button beside it
-    <h3> Name: <%= userInfo.name %> </h3>
+    Need to fix
+    <h1> <%= userInfo.name %>'s Information </h1>
     <h3> Email: <%= userInfo.email %> </h3>
     <h3> Date of Birth: <%= userInfo.dob %> </h3>
     <h3> Bio: <%= userInfo.bio %> </h3>
-    <h3> Avatar: <%= userInfo.avatar %> </h3>
+    <h3> <img src="<%= userInfo.avatar %>" alt="avatar" height="100"></h3>
+    <h3><a href="/account/edit">Edit</a></h3>
 
     <hr>
-    <h1> <%= userInfo.name %> </h1>
+    <h1> <%= userInfo.name %>'s Posts </h1>
     
     <% if (userPost.length === 0) { %>
         <p>This user has no posts yet. </p>
