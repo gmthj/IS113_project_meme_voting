@@ -25,7 +25,8 @@ exports.renderLogin = (req, res) => {
  
 exports.handleLogin = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
-    const { email, password } = req.body;
+    const email = req.body.email;
+    const password = req.body.password;
  
     if (!email || !password) {
         return res.render('login', { sessionUser, error: 'Please fill in all fields.' });
