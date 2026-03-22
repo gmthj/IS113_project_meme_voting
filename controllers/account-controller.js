@@ -1,4 +1,7 @@
 const User = require('../models/User-model');
+const Post = require('../models/Post-model');
+const Comment = require('../models/Comment-model');
+const Vote = require('../models/Vote-model');
 const bcrypt = require('bcrypt');
 const { avatarFor } = require("../utils/utils");
  
@@ -120,4 +123,85 @@ exports.handleLogout = (req, res) => {
     req.session.destroy(() => {
         res.redirect('/home');
     });
+};
+
+//delete user
+exports.handleDeleteAccount = async (req, res) => {
+    const sessionUser = req.session.sessionUser;
+
+    if (!sessionUser) {
+        return res.redirect('/account/login');
+    }
+
+    try {
+        const userPosts = await Post.find({ userId: sessionUser._id });
+
+        for (const post of userPosts) {
+            await Comment.deleteMany({ postId: post._id });
+            await Vote.deleteMany({ postId: post._id });
+            await Post.findByIdAndDelete(post._id);
+        }
+
+        await Comment.deleteMany({ userId: sessionUser._id });
+        await Vote.deleteMany({ userId: sessionUser._id });
+
+        await User.findByIdAndDelete(sessionUser._id);
+
+        req.session.destroy(() => {
+            res.redirect('/home');
+        });
+
+    } catch (err) {
+        console.error('Error deleting account:', err);
+        return res.render('error', { sessionUser, error: 'Something went wrong. Please try again.' });
+    }
+};
+
+// /account/edit
+exports.renderEdit = (req, res) => {
+    const sessionUser = req.session.sessionUser;
+ 
+    if (!sessionUser) {
+        return res.redirect('/account/login');
+    }
+ 
+    res.render('edit-account', { //prefills the form with current name and bio
+        sessionUser,
+        error: null,
+        formData: {
+            name: sessionUser.name,
+            bio: sessionUser.bio,
+        }
+    });
+};
+ 
+exports.handleEdit = async (req, res) => {
+    const sessionUser = req.session.sessionUser;
+ 
+    if (!sessionUser) {
+        return res.redirect('/account/login');
+    }
+ 
+    const name = req.body.name;
+    const bio = req.body.bio;
+    const formData = { name, bio };
+ 
+    if (!name) {
+        return res.render('edit-account', { sessionUser, error: 'Name cannot be empty.', formData });
+    }
+ 
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            sessionUser._id,
+            { name: name.trim(), bio: bio ? bio.trim() : '' },
+            { new: true }
+        );
+ 
+        req.session.sessionUser = updatedUser;
+        return res.redirect('/home');
+ 
+    } catch (err) {
+        console.error('Edit account error:', err);
+        return res.render('edit-account', { sessionUser, error: 'Something went wrong. Please try again.', formData });
+    }
 };

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/img/icon.png">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Edit Profile</title>
+</head>
+<%- include('partials/header', {sessionUser}) %>
+<body>
+    <h1>Edit Profile</h1>
+
+    <% if (error) { %>
+        <%= error %>
+    <% } %>
+
+    <form action="/account/edit" method="post">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="name" value="<%= formData.name || '' %>" required>
+        <br><br>
+
+        <label for="bio">Bio:</label>
+        <br>
+        <textarea name="bio" id="bio" rows="5" cols="40"><%= formData.bio || '' %></textarea>
+        <br><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <br>
+    <a href="/home">Cancel</a>
+
+    <hr>
+
+    <h2>Delete Account</h2>
+    <p>Warning: this will permanently delete your account and all your posts and comments.</p>
+    <form action="/account/delete" method="post">
+        <button type="submit">Delete My Account</button>
+    </form>
+
+</body>
+</html>

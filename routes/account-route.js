@@ -19,6 +19,14 @@ router.post('/register', accountController.handleRegister)
 // /account/logout
 router.get('/logout', accountController.handleLogout)
 
+// /account/edit  (must be logged in)
+router.get('/edit', accountController.renderEdit)
+router.post('/edit', accountController.handleEdit)
+ 
+// /account/delete  (must be logged in)
+router.post('/delete', accountController.handleDeleteAccount)
+ 
+
 
 
 // =========================
