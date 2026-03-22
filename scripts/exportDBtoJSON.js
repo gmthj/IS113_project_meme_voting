@@ -11,7 +11,8 @@ const { connectDB } = require("../utils/utils");
 const User    = require("../models/User-model");
 const Post    = require("../models/Post-model");
 const Comment = require("../models/Comment-model");
-const Vote    = require("../models/Vote-model");
+const Vote     = require("../models/Vote-model");
+const Bookmark = require("../models/Bookmark-model");
 
 // Output goes to /data/data-<datetime>.json
 const timestamp  = new Date().toISOString().replace(/[:.]/g, "-").replace("T", "_").slice(0, 19);
@@ -76,13 +77,22 @@ async function main() {
     value:       v.value,
   }));
 
+  // ── Bookmarks ─────────────────────────────────────────────────────────────
+  const bookmarks = await Bookmark.find().lean();
+
+  const snapshotBookmarks = bookmarks.map((b) => ({
+    postIndex:   postIndexById[b.postId.toString()],
+    authorIndex: userIndexById[b.userId.toString()],
+  }));
+
   // ── Write snapshot ────────────────────────────────────────────────────────
   const snapshot = {
     _checkpoint: new Date().toISOString(),
     users:    snapshotUsers,
     posts:    snapshotPosts,
     comments: snapshotComments,
-    votes:    snapshotVotes,
+    votes:     snapshotVotes,
+    bookmarks: snapshotBookmarks,
   };
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
@@ -92,7 +102,8 @@ async function main() {
   console.log(`  Users:    ${snapshotUsers.length}`);
   console.log(`  Posts:    ${snapshotPosts.length}`);
   console.log(`  Comments: ${snapshotComments.length}`);
-  console.log(`  Votes:    ${snapshotVotes.length}`);
+  console.log(`  Votes:     ${snapshotVotes.length}`);
+  console.log(`  Bookmarks: ${snapshotBookmarks.length}`);
   console.log(`  Output:   ${outputPath}`);
 
   await mongoose.disconnect();

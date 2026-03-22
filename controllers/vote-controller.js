@@ -1,5 +1,5 @@
-const Post = require("../models/Post-model");
-const Vote = require("../models/Vote-model");
+const { deleteVote, switchVote, newVote } = require("../services/voteService");
+
 
 // /vote
 exports.handleVote = async (req, res) => {
@@ -15,26 +15,17 @@ exports.handleVote = async (req, res) => {
     const currentVote = voteValue === "true" ? true : (voteValue === "false" ? false : null);
     const isUpvote = (voteDirection === "up");
 
-    // remove vote
+
     if (currentVote === isUpvote) {
-        await Vote.deleteOne({ postId, userId });
-        await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? -1 : 1 } });
+        await deleteVote( postId, userId, isUpvote );
     }
-    // switch vote
     else if (currentVote !== null) {
-        await Vote.updateOne({ postId, userId }, { value: isUpvote });
-        await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 2 : -2 } });
+        await switchVote( postId, userId, isUpvote );
     }
-    // new vote
     else {
-        await Vote.create({ postId, userId, value: isUpvote });
-        await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 1 : -1 } });
+        await newVote( postId, userId, isUpvote );
     }
 
-
-    // voting
-    // 
-    // go back to origin page - fullpost user home
 
     const backURL = req.get('Referrer') || '/';
     res.redirect(`${backURL}#post-${postId}`)

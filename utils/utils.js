@@ -38,7 +38,12 @@ function timeAgo(datetime) {
   return `${Math.floor(seconds / (365 * 86400))}y ago`
 }
 
+function avatarFor(seed) {
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
+}
+
 module.exports = {
   connectDB,
-  timeAgo
+  timeAgo,
+  avatarFor,
 };

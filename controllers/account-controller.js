@@ -1,5 +1,6 @@
 const User = require('../models/User-model');
 const bcrypt = require('bcrypt');
+const { avatarFor } = require("../utils/utils");
  
 const MIN_AGE = 13;
  
@@ -100,7 +101,7 @@ exports.handleRegister = async (req, res) => {
             name: name.trim(),
             dob: dobDate,
             bio: bio ? bio.trim() : '',
-            avatar: '',
+            avatar: avatarFor(email),
         });
  
         await newUser.save();

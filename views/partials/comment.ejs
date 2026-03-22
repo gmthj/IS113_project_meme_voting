@@ -1,44 +1,45 @@
-<table border="1" style="width: 20em;">
-    <tr><td>
 
-        <h4>
-            <a href="/user/<%= comment.author._id %>" style="text-decoration:none; color: inherit;">
-                <img src="<%= comment.author.avatar %>" style="height: 1em">
+
+<div class="neo-card" style="max-width: 30em; margin: 10px 0; padding: 15px; background: #fff; border-left: 10px solid var(--neo-violet);">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <a href="/user/<%= comment.author._id %>" class="neo-author-link" style="font-size: 0.9rem;">
+                <img src="<%= comment.author.avatar %>" style="height: 1.2em; border: 2px solid black; border-radius: 50%;">
                 <%= comment.author.name %>
             </a>
-            • <%= comment.commentAge %>
-            <% if (post) { %>
-                <%= post.author._id.toString() == comment.author._id.toString() ? " • Author" : ""  %>
+            
+            <span class="meta-text" style="font-size: 0.7rem;">
+                • <%= comment.commentAge %>
+            </span>
+        </div>
+
+        <div style="display: flex; gap: 5px;">
+            <% if (post && post.author._id.toString() == comment.author._id.toString()) { %>
+                <span class="neo-badge" style="background: var(--neo-yellow); font-size: 0.6rem; transform: rotate(3deg);">AUTHOR</span>
             <% } %>
-            <%= comment.edit_datetime ? " • edited" : ""  %>
-        </h4>
-        
-        <p><%= comment.text %></p>
-
-        <% if (comment.author._id == sessionUser._id && showControls) { %>
-            <table>
-                <td>
-                     <!-- TODO: add edit comment functionality -->
-                    <form action="/editcomment" method="post">
-                        <input type="hidden" name="authorId" value="<%= comment.author._id %>">
-                        <input type="hidden" name="commentId" value="<%= comment._id %>">
-                        <input type="hidden" name="comment" value="<%= JSON.stringify(comment) %>">
-                        <button type="submit">Edit</button>
-                    </form>
-                </td>
+            <% if (comment.edit_datetime) { %>
+                <span class="meta-text" style="font-size: 0.6rem;">(EDITED)</span>
+            <% } %>
+        </div>
+    </div>
     
-                <td>
-                    <form action="/delete" method="post">
-                        &nbsp; | &nbsp;
-                        <input type="hidden" name="authorId" value="<%= comment.author._id %>">
-                        <input type="hidden" name="commentId" value="<%= comment._id %>">
-                        <input type="hidden" name="comment" value="<%= JSON.stringify(comment) %>">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </table>
-        <% } %>
+    <p style="margin: 0; font-weight: 700; line-height: 1.2;"><%= comment.text %></p>
 
+    <% if (comment.author._id == sessionUser._id && showControls) { %>
+        <div style="margin-top: 15px; display: flex; gap: 10px; border-top: 2px solid #000; padding-top: 10px;">
+            <form action="/editcomment" method="post">
+                <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+                <input type="hidden" name="commentId" value="<%= comment._id %>">
+                <input type="hidden" name="comment" value="<%= JSON.stringify(comment) %>">
+                <button type="submit" class="neo-btn neo-btn-white" style="padding: 2px 8px; font-size: 0.6rem; box-shadow: 2px 2px 0px #000;">EDIT</button>
+            </form>
 
-    </td></tr>
-</table>
+            <form action="/delete" method="post">
+                <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+                <input type="hidden" name="commentId" value="<%= comment._id %>">
+                <input type="hidden" name="comment" value="<%= JSON.stringify(comment) %>">
+                <button type="submit" class="neo-btn neo-btn-red" style="padding: 2px 8px; font-size: 0.6rem; box-shadow: 2px 2px 0px #000;">DELETE</button>
+            </form>
+        </div>
+    <% } %>
+</div>

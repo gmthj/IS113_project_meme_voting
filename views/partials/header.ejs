@@ -1,55 +1,39 @@
 <header>
-    <table>
-        <tr>
-            <td rowspan="2">
-                <a href="/">
-                    <img src="/img/logo-light.png" / style="width: 10em; height: auto;">
+    <nav>
+        <div class="nav-container">
+            <div clas="nav-logo-container">
+                <a href="/" class="logo-sticker">
+                    <img src="/img/logo-light.png" class="nav-logo" width="128" height="40">
                 </a>
-            </td>
-            <td colspan="7">
-                temp nav bar
-            </td>
-            <td>
-                TEST LOGIN session as: <br>
-                (npm run init-db2)
-            </td>
-        </tr>
-        <tr>
-            <td><a href="/home">home</a></td>
-            <td>
-                <a href="/account">account</a> <br>
-                <a href="/account/login">account/login</a> <br>
-                <a href="/account/register">account/register</a> <br>
-                <a href="/account/logout">account/logout</a>
-            </td>
-            <td><a href="/user">user</a></td>
-            <td><a href="/upload">upload</a></td>
-            <td><a href="/fullpost">fullpost</a></td>
-            <td><a href="/delete">delete</a></td>
-            <td><a href="/vote">vote</a></td>
+            </div>
 
-            <td>
-                <a href="/testlogin/alex.tan@smu.edu.sg">Alex Tan</a> || 
-                <a href="/testlogin/priya.nair@smu.edu.sg">Priya Nair</a> <br>
-                <a href="/testlogin/jordan.lim@smu.edu.sg">Jordan Lim</a> || 
-                <a href="/testlogin/mei.chen@smu.edu.sg">Mei Chen</a> <br>
-                <a href="/testlogin/ravi.s@smu.edu.sg">Ravi Suresh</a> || 
-                <a href="/testlogin/sophie.wu@smu.edu.sg">Sophie Wu</a> <br>
-                <a href="/account/logout">logout</a>
-            </td>
-            
-            <td>
-                CURRENT SESSION USER: <br>
-                <% if (sessionUser._id) { %>
-                    <a href="/user/<%= sessionUser._id %>" style="text-decoration:none; color: inherit;">
-                        <img src="<%= sessionUser.avatar %>" style="height: 1em"> <%= sessionUser.name %> <br>
-                        <%= sessionUser.email %> <br>
-                    </a>
+            <div class="nav-actions">
+                <a href="/upload" class="neo-btn neo-btn-red">
+                    NEW POST
+                </a>
+                
+                <% if (sessionUser && sessionUser._id) { %>
+                    <div class="nav-user-badge">
+                        <img src="<%= sessionUser.avatar %>" class="nav-avatar">
+                        <span class="nav-username"><%= sessionUser.name %></span>
+                        <a href="/account/logout" class="nav-logout-link">LOGOUT</a>
+                    </div>
                 <% } else { %>
-                    No user logged in
+                    <a href="/account/login" class="neo-btn neo-btn-white">
+                        LOGIN
+                    </a>
                 <% } %>
-            </td>
-        </tr>
-    </table>
-    <hr>
+            </div>
+        </div>
+    </nav>
+
+    <div class="test-login-bar">
+        <span>TESTING BYPASS LOGIN:</span>
+        <a href="/testlogin/alex.tan@smu.edu.sg">ALEX</a>
+        <a href="/testlogin/priya.nair@smu.edu.sg">PRIYA</a>
+        <a href="/testlogin/jordan.lim@smu.edu.sg">JORDAN</a>
+        <a href="/testlogin/mei.chen@smu.edu.sg">MEI</a>
+        <a href="/testlogin/ravi.s@smu.edu.sg">RAVI</a>
+        <a href="/testlogin/sophie.wu@smu.edu.sg">SOPHIE</a>
+    </div>
 </header>
