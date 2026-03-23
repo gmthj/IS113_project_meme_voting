@@ -26,7 +26,18 @@
     <% if (userPost.length === 0) { %>
         <p>This user has no posts yet. </p>
     <% } %>
+    
+    i will figure this out soon
+    <section class="sorting">
+        <h3>Sort By:</h3>
+        <a href="/home?sort=highest">🔥 Highest (Votes)</a> | 
+        <a href="/home?sort=newest">🆕 Newest</a> | 
+        <a href="/home?sort=oldest">📅 Oldest</a> |
+        <a href="/home?sort=comments">💬 Most Comments</a> |
+        <a href="/home?sort=bookmarks">🔖 Bookmarks</a>
+    </section>
 
+    <hr>
 
     <% userPost.forEach(post => { %>
         <%- include("partials/post", {
