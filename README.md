@@ -43,19 +43,30 @@ note: replace `<db_password>` with the password you created for the user in your
 7. Initialise database with sample data (optional)
 
 ```bash
-npm run init-db
+npm run init-db2
 ```
 
 8. Start the application
 
 ```bash
-npm run start
+npm start
 # or
-npm run nodemon
+npm run dev
 ```
 
 9. Open your browser <br>
 http://localhost:8000
+
+## Sample Data Login Credentials
+| Email                   | Password             |
+| ----------------------- | -------------------- |
+| lkshar@smu.edu.sg       | Pass1234!            |
+| alex.tan@smu.edu.sg     | Alexl0ve5Mei!        |
+| priya.nair@smu.edu.sg   | P0oO0o109k$            |
+| jordan.lim@smu.edu.sg   | Pasdvsds1534!        |
+| mei.chen@gmail.com      | #iubPu#po            |
+| ravi.s@smu.edu.sg       | Pas676767!            |
+| sophie.wu@smu.edu.sg    | HelloPass109#        |
 
 ---
 

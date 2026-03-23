@@ -1,44 +1,39 @@
 // scripts/initDB2.js
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const fs       = require("fs");
 const path     = require("path");
 const readline = require("readline");
 const mongoose = require("mongoose");
-const { connectDB } = require("../utils/utils");
+const { connectDB, avatarFor } = require("../utils/utils");
 
-const User = require("../models/User-model");
-const Post = require("../models/Post-model");
-const Comment = require("../models/Comment-model");
-const Vote = require("../models/Vote-model");
-const PostPreference = require("../models/Post-Preference-model");
+const User              = require("../models/User-model");
+const Post              = require("../models/Post-model");
+const Comment           = require("../models/Comment-model");
+const Vote              = require("../models/Vote-model");
+const PostPreference    = require("../models/Post-Preference-model");
 const CommentPreference = require("../models/Comment-Preference-model");
-const Bookmark = require("../models/Bookmark-model");
+const Bookmark          = require("../models/Bookmark-model");
 
 // ── Data file selection ───────────────────────────────────────────────────
 //
 // Priority order:
 //   1. Interactive prompt — user picks from the list, or hits enter for default or latest
-//   2. DEFAULT_FILE — use this file is nothing is selected
+//   2. DEFAULT_FILE — use this file if nothing is selected
 //   3. Latest data-*.json in /data by filename (which sorts by datetime)
-
-
 
 const DEFAULT_FILE = null;
 // const DEFAULT_FILE = "../data/data-1.json";
 
-
-
 const DATA_DIR = path.resolve(__dirname, "../data");
-
-function avatarFor(seed) {
-  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
-}
 
 function getDataFiles() {
   return fs
     .readdirSync(DATA_DIR)
     .filter((f) => f.endsWith(".json"))
-    .sort() // ISO datetime in filename → lexicographic sort = chronological
+    .sort()
     .reverse(); // newest first
 }
 
@@ -54,7 +49,7 @@ const loadDataArt = `\n\n
 // Returns { file, explicit: true } if user typed a number, { file, explicit: false } if they just hit Enter
 function pickFileInteractive(files) {
   return new Promise((resolve) => {
-    console.log(loadDataArt)
+    console.log(loadDataArt);
     console.log("Available data files (newest first):");
     files.forEach((f, i) => console.log(`  [${i + 1}] ${f}`));
     const fallback = DEFAULT_FILE ? path.basename(DEFAULT_FILE) : files[0];
@@ -81,25 +76,25 @@ async function resolveDataFile() {
 
   // Priority 1: interactive prompt
   const { file: picked, explicit } = await pickFileInteractive(files);
-  console.log("===================================")
+  console.log("===================================");
   if (explicit) {
     const abs = path.join(DATA_DIR, picked);
     console.log(`Using selected file: ${abs}`);
-    console.log("===================================")
+    console.log("===================================");
     return abs;
   }
-  
+
   // Priority 2: default file
   if (DEFAULT_FILE) {
     const abs = path.resolve(__dirname, DEFAULT_FILE);
     console.log(`Using default file: ${abs}`);
-    console.log("===================================")
+    console.log("===================================");
     return abs;
   }
-  
+
   // Priority 3: latest file
   console.log(`Using latest file: ${files[0]}`);
-  console.log("===================================")
+  console.log("===================================");
   return path.join(DATA_DIR, files[0]);
 }
 
@@ -117,9 +112,9 @@ async function main() {
   await Post.init();
   await Comment.init();
   await Vote.init();
-  await PostPreference.init()
-  await CommentPreference.init()
-  await Bookmark.init()
+  await PostPreference.init();
+  await CommentPreference.init();
+  await Bookmark.init();
   console.log("Indexes ensured ✅");
 
   // 3) Nuke everything
@@ -211,22 +206,48 @@ async function main() {
   );
   console.log(`Votes created ✅ (${seedData.votes.length})`);
 
+  // 8) Create bookmarks
+  if (seedData.bookmarks?.length) {
+    await Promise.all(
+      seedData.bookmarks.map((b) =>
+        Bookmark.create({
+          postId: createdPosts[b.postIndex]._id,
+          userId: createdUsers[b.authorIndex]._id,
+        })
+      )
+    );
+    console.log(`Bookmarks created ✅ (${seedData.bookmarks.length})`);
+  }
 
-  await Promise.all(
-    seedData.bookmarks.map((b) => {
-      return Bookmark.create({
-        postId: createdPosts[b.postIndex]._id,
-        userId: createdUsers[b.authorIndex]._id,
-      });
-    })
-  );
-  console.log(`bookmarks created ✅ (${seedData.bookmarks.length})`);
+  // 9) Create post preferences
+  if (seedData.postPreferences?.length) {
+    await Promise.all(
+      seedData.postPreferences.map((pp) =>
+        PostPreference.create({
+          userId:   createdUsers[pp.authorIndex]._id,
+          page:     pp.page,
+          sortType: pp.sortType,
+        })
+      )
+    );
+    console.log(`Post preferences created ✅ (${seedData.postPreferences.length})`);
+  }
 
+  // 10) Create comment preferences
+  if (seedData.commentPreferences?.length) {
+    await Promise.all(
+      seedData.commentPreferences.map((cp) =>
+        CommentPreference.create({
+          userId: createdUsers[cp.authorIndex]._id,
+          postId: createdPosts[cp.postIndex]._id,
+          sortType: cp.sortType,
+        })
+      )
+    );
+    console.log(`Comment preferences created ✅ (${seedData.commentPreferences.length})`);
+  }
 
-
-
-
-  // 8) Summary
+  // 11) Summary
   const topPosts = await Post.find()
     .sort({ vote_score: -1, upload_datetime: -1 })
     .limit(20)
