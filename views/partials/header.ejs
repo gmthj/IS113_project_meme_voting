@@ -14,9 +14,12 @@
                 
                 <% if (sessionUser && sessionUser._id) { %>
                     <div class="nav-user-badge">
-                        <img src="<%= sessionUser.avatar %>" class="nav-avatar">
-                        <span class="nav-username"><%= sessionUser.name %></span>
-                        <h6><a href="/account/edit">EDIT PROFILE</a></h6>
+                        <a href="/user/<%= sessionUser._id %>" class="nav-profile-link">
+                            <img src="<%= sessionUser.avatar %>" class="nav-avatar">
+                            <span class="nav-username"><%= sessionUser.name %></span>
+                        </a>
+                        <div class="nav-utility-stack">
+                        <a href="/account/edit" class="nav-edit-link">EDIT</a>
                         <a href="/account/logout" class="nav-logout-link">LOGOUT</a>
                     </div>
                 <% } else { %>

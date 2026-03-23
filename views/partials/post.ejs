@@ -4,17 +4,21 @@
 
     <div class="neo-card-header">
         <a href="/user/<%= post.author._id %>" class="neo-author-link">
-            <img src="<%= post.author.avatar %>" style="height: 1.5em; border: 2px solid black; border-radius: 50%;">
+            <img src="<%= post.author.avatar %>" class="neo-avatar-sm">
             <%= post.author.name %>
         </a>
-        <%= post.edit_datetime ? "Edited" : ""  %>
+
+        <% if (post.edit_datetime) { %>
+            <span class="neo-edited-label">EDITED</span>
+        <% } %>
+
         <span class="neo-badge">
             <%= post.postAge %>
         </span>
     </div>
 
-    <a href="/fullpost/<%= post._id %>" style="text-decoration: none; color: inherit;">
-        <div class="neo-card-body">
+    <div class="neo-card-body">
+        <a href="/fullpost/<%= post._id %>">
             <h2 class="neo-post-title"><%= post.title %></h2>
             
             <div class="neo-img-box">
@@ -22,8 +26,8 @@
             </div>
             
             <p style="font-weight: 700;"><%= post.description %></p>
-        </div>
-    </a>
+        </a>
+    </div>
 
 
 
@@ -71,13 +75,13 @@
                     </form>
                 <% } %>
                     
-                <form action="/bookmark" method="post">
+                <form action="/bookmark" method="post" class="bookmark-form">
                     <input type="hidden" name="postId" value="<%= post._id %>">
-                    <button type="submit">
+                    <button type="submit" class="bookmark-btn <%= post.bookmark ? 'bookmark-active' : '' %>">
                         <% if (post.bookmark) { %>
-                            <img src="/img/bookmark-on.png" style="height: 1em">
+                            <img src="/img/bookmark-on.png" class="bookmark-icon">
                             <% } else { %>
-                            <img src="/img/bookmark-off.png" style="height: 1em">
+                            <img src="/img/bookmark-off.png" class="bookmark-icon">
                         <% } %>
                     </button>
                 </form>

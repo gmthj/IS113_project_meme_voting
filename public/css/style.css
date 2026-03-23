@@ -170,7 +170,10 @@ main {
     transform: translate(2px, 2px);
     box-shadow: none;
 }
-
+.neo-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px 0px var(--neo-ink);
+}
 
 
 .neo-btn-red { background: var(--neo-red); color: white; }
@@ -329,7 +332,7 @@ input:focus, textarea:focus {
 .nav-avatar {
     height: 1.8em;
     border: var(--border-thin);
-    border-radius: 50%;
+    border-radius: 25%;
     background: var(--neo-bg);
 }
 
@@ -370,4 +373,252 @@ input:focus, textarea:focus {
     color: var(--neo-yellow);
     text-decoration: none;
     font-weight: 900;
+}
+
+/* Perfect alignment for Author + Avatar */
+.neo-author-link {
+    display: flex;
+    align-items: center; /* This pulls the text up to match the image center */
+    gap: 8px;
+    text-decoration: none;
+    color: var(--neo-ink);
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+/* Small Avatar styling for headers/comments */
+.neo-avatar-sm {
+    height: 2em;
+    width: 2em; /* Ensure it stays square */
+    border: 2px solid var(--neo-ink);
+    border-radius: 25%;
+    background: var(--neo-bg);
+    object-fit: cover;
+}
+
+/* The "Edited" Sticker */
+.neo-edited-label {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    /* background: var(--neo-white); */
+    color: var(--neo-ink);
+    border: 1px solid var(--neo-ink);
+    padding: 1px 6px;
+    box-shadow: 2px 2px 0px 0px var(--neo-ink);
+    margin: 0 auto 0 10px; /* Pushes badge to the right while staying center-ish */
+}
+
+
+/* Container for logo and actions */
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertical center for the whole bar */
+}
+
+/* Profile Link (Avatar + Name) */
+.nav-profile-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--neo-ink);
+}
+
+.nav-username {
+    font-weight: 900;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    white-space: nowrap; /* Prevents name from wrapping */
+}
+
+/* Utility Links inside the badge */
+.nav-edit-link, .nav-logout-link {
+    font-weight: 900;
+    font-size: 0.7rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-left: 2px solid var(--neo-ink);
+    padding-left: 10px;
+}
+
+.nav-edit-link {
+    color: var(--neo-ink);
+    opacity: 0.6; /* Makes "Edit" less prominent than Logout */
+}
+
+.nav-edit-link:hover { opacity: 1; }
+.nav-logout-link { color: var(--neo-red); }
+
+
+
+/* Specific Comment Card Styling */
+.comment-card {
+    width: 30em;
+    margin: 10px 0;
+    padding: 15px;
+    background: var(--neo-white);
+    /* The Violet Accent Strip */
+    border-left: 10px solid var(--neo-violet);
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.comment-author-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.comment-avatar {
+    height: 2em;
+    border: 2px solid var(--neo-ink);
+    border-radius: 25%; /* Custom 25% look as requested */
+}
+
+.comment-text {
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.comment-controls {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    border-top: 2px solid var(--neo-ink);
+    padding-top: 10px;
+}
+
+/* Small Buttons for Comments */
+.btn-comment-action {
+    padding: 2px 8px;
+    font-size: 0.6rem;
+    box-shadow: 2px 2px 0px 0px var(--neo-ink);
+}
+
+
+/* Container for badges in the comment header */
+.comment-badge-group {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+/* Specific styling for the Author sticker */
+.neo-badge-author {
+    background: var(--neo-yellow) !important;
+    font-size: 0.6rem !important;
+    transform: rotate(-3deg);
+    padding: 2px 6px;
+    box-shadow: 2px 2px 0px 0px var(--neo-ink);
+}
+
+/* Subtle styling for the Edited text */
+.meta-text-edited {
+    font-size: 0.6rem !important;
+    font-weight: 700;
+    opacity: 0.8;
+    text-transform: uppercase;
+}
+
+
+
+/* --- Comment Input Layout --- */
+
+.comment-post-section {
+    /* This prevents the "full screen" stretch */
+    width: 100%; 
+    max-width: 500px; /* Adjust this to your preferred "meme width" */
+    
+    /* This centers the card on the screen */
+    margin: 0 auto 40px auto; 
+    
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.comment-post-form {
+    display: flex;
+    align-items: stretch; /* Forces button to match textarea height */
+    gap: 12px;
+}
+
+.comment-post-textarea {
+    flex: 1; /* Takes up all available space */
+    height: 5.5em; /* Matches your screenshot depth */
+    resize: none;
+    border: var(--border-thick);
+    padding: 15px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    background: var(--neo-white);
+    box-shadow: var(--shadow-sm);
+}
+
+.comment-post-textarea:focus {
+    outline: none;
+    background: var(--neo-yellow); /* Snappy feedback */
+    box-shadow: var(--shadow-sm);
+}
+
+.comment-post-btn {
+    width: 7em;
+    padding: 0; /* Let flex alignment handle the centering */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+/* --- Bookmark Button Styling --- */
+
+.bookmark-form {
+    margin-left: auto; /* Pushes the bookmark to the far right of the footer */
+    line-height: 0;
+}
+
+.bookmark-btn {
+    background: var(--neo-white);
+    border: var(--border-thin);
+    box-shadow: 2px 2px 0px 0px var(--neo-ink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    transition: all 0.1s ease;
+}
+
+.bookmark-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px 0px var(--neo-ink);
+}
+
+.bookmark-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+}
+
+/* Active State: The "Sticker" is on */
+.bookmark-btn.bookmark-active {
+    background: var(--neo-yellow);
+}
+
+.bookmark-icon {
+    height: 1.2em;
+    width: auto;
+    display: block;
 }

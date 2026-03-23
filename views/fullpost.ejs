@@ -17,24 +17,13 @@
                 <%- include('partials/post', {post, sessionUser, showControls: true}) %>
             </section>
     
-            <section style="white-space: nowrap;">
-                <form action="/fullpost/<%= post._id %>/comment" method="POST">
-                    <textarea style="
-                        resize: none; 
-                        width: 100%; 
-                        max-width: 30em; 
-                        height: 4.5em; 
-                        display: inline-block; 
-                        vertical-align: top;
-                        margin-right: -4px;
-                    " name="text" placeholder="Comment here..." id="commentText" required></textarea>
+            <section class="comment-post-section">
+                <form action="/fullpost/<%= post._id %>/comment" method="POST" class="comment-post-form">
+                    <textarea name="text" placeholder="Comment here..." id="commentText" class="comment-post-textarea" required></textarea>
     
-                    <input style="
-                        width: 6em; 
-                        height: 5em; 
-                        display: inline-block; 
-                        vertical-align: top;
-                    " type="submit" value="Comment">
+                    <button type="submit" class="neo-btn neo-btn-red comment-post-btn">
+                        COMMENT
+                    </button>
                 </form>
             </section>
     
