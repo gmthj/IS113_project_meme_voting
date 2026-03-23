@@ -58,5 +58,7 @@ server.all("/:a", (req, res) => {
 connectDB().then(() => {
   const port = 8000;
   const hostname = "localhost";
-  server.listen(port, hostname);
+  server.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}`);
+  });
 });
