@@ -34,4 +34,6 @@ async function removeBookmark(postId, userId) {
 module.exports = {
   getBookmarkValue,
   getAllBookmarksByUserId,
+  addBookmark,
+  removeBookmark
 };
