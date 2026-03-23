@@ -15,10 +15,21 @@ async function getAllBookmarksByUserId(userId) {
 
   return bookmarks;
 }
-// new bookmark
-// update bookmark
-// delete bookmark
 
+// create bookmark
+async function addBookmark(postId, userId) {
+  const newBookmark = await Bookmark.create( { userId, postId } )
+
+  return newBookmark
+}
+
+// delete bookmark
+async function removeBookmark(postId, userId) {
+  const result = await Bookmark.deleteOne( { postId, userId } )
+  
+  // check if deleteCount > 0 for success
+  return result
+}
 
 module.exports = {
   getBookmarkValue,

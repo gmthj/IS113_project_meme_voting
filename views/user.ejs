@@ -9,8 +9,38 @@
 </head>
 <%- include('partials/header', {sessionUser}) %>
 <body>
-    some user posts and comments
-    some form to sort/filter posts/comments
-    hello i am kinyu
+    1. show user info
+    2. show user comments
+    4. bookmarks
+
+
+    Need to fix
+    <h1> <%= userInfo.name %>'s Information </h1>
+    <h3> Email: <%= userInfo.email %> </h3>
+    <h3> Date of Birth: <%= userInfo.dob %> </h3>
+    <h3> Bio: <%= userInfo.bio %> </h3>
+    <h3> <img src="<%= userInfo.avatar %>" alt="avatar" height="100"></h3>
+    
+    <!-- Ensures that person is logged in, AND is visiting their user page -->
+    <% if (sessionUser._id && sessionUser._id.toString() === userInfo._id.toString()) { %>
+        <h3><a href="/account/edit">Edit</a></h3>
+    <% } %>
+
+    <hr>
+    <h1> <%= userInfo.name %>'s Posts </h1>
+    
+    <% if (userPost.length === 0) { %>
+        <p>This user has no posts yet. </p>
+    <% } %>
+
+
+    <% userPost.forEach(post => { %>
+        <%- include("partials/post", {
+            post,
+            sessionUser,
+            showControls: true
+        }) %>
+    <% }) %>
+    
 </body>
 </html>
