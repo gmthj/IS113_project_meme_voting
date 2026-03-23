@@ -121,15 +121,15 @@ http://localhost:8000
 
 **CRUD features**
 - CREATE
-  - hello
+  - Bookmarks
 - READ
   - User (user info)
   - Post (user's posts)
-  - Comment (user's comments)
+  - Comment (user's comments) NOT DONE!
 - UPDATE
-  - hello
+  - Update the user's sorting preference (for user page)
 - DELETE
-  - hello
+  - Bookmarks
 
 ---
 

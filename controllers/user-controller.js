@@ -9,7 +9,7 @@ exports.renderUserProfile = async (req, res) => {
     try {
         const sessionUser = req.session.sessionUser || {};
         const userId = req.params.userId;
-        console.log(userId)
+        // console.log(userId)
     
         // Retrieve userInfo
         let userInfo = await User.getUserById(userId);
