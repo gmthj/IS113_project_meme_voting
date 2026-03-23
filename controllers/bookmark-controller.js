@@ -1,7 +1,6 @@
 const { getBookmarkValue, addBookmark, removeBookmark } = require('../services/bookmarkService')
 
-// maybe ill call it handleBookmark
-exports.hellokinyu = async (req, res) => {
+exports.handleBookmark = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     const postId = req.body.postId
     const userId = sessionUser._id
@@ -22,6 +21,8 @@ exports.hellokinyu = async (req, res) => {
             // delete bookmark
             let result = await removeBookmark(postId, userId)
             console.log("Deletion Result:", result)
+            // check deleted count === 1, and then send a console log
+
         }
 
     } catch (error) {

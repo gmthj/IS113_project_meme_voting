@@ -7,7 +7,7 @@ const authMiddleware = require('../middleware/auth-middleware')
 
 
 // /bookamrk
-router.post('/', authMiddleware.isLoggedIn, bookmarkController.hellokinyu)
+router.post('/', authMiddleware.isLoggedIn, bookmarkController.handleBookmark)
  
 
 
