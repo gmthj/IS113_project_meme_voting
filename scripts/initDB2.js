@@ -25,16 +25,30 @@ const Bookmark          = require("../models/Bookmark-model");
 //   3. Latest data-*.json in /data by filename (which sorts by datetime)
 
 const DEFAULT_FILE = null;
-// const DEFAULT_FILE = "../data/data-1.json";
+// const DEFAULT_FILE = "../data/data-v1-2026-03-23_1430.json";
 
 const DATA_DIR = path.resolve(__dirname, "../data");
+
+// function getDataFiles() {
+//   return fs
+//     .readdirSync(DATA_DIR)
+//     .filter((f) => f.endsWith(".json"))
+//     .sort()
+//     // .reverse(); // newest first
+// }
 
 function getDataFiles() {
   return fs
     .readdirSync(DATA_DIR)
     .filter((f) => f.endsWith(".json"))
-    .sort()
-    .reverse(); // newest first
+    .sort((a, b) => {
+      const getVersion = (name) => {
+        const match = name.match(/v(\d+)/);
+        return match ? parseInt(match[1], 10) : 0;
+      };
+
+      return getVersion(a) - getVersion(b);
+    });
 }
 
 const loadDataArt = `\n\n
@@ -46,17 +60,23 @@ const loadDataArt = `\n\n
 ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
 `
 
-// Returns { file, explicit: true } if user typed a number, { file, explicit: false } if they just hit Enter
 function pickFileInteractive(files) {
   return new Promise((resolve) => {
     console.log(loadDataArt);
-    console.log("Available data files (newest first):");
+    console.log("Available data files:");
     files.forEach((f, i) => console.log(`  [${i + 1}] ${f}`));
-    const fallback = DEFAULT_FILE ? path.basename(DEFAULT_FILE) : files[0];
-    console.log(`\nPress Enter to use: ${fallback}`);
+
+
+    const uri = process.env.MONGO_URI
+    const dbName = new URL(uri).pathname.substring(1);
+    console.log(`\nWrite to: (${(uri.includes(".mongodb.net")) ? "ATLAS" : "LOCAL"}) ${dbName}`); 
+
+
+    const fallback = DEFAULT_FILE ? path.basename(DEFAULT_FILE) : files[files.length-1];
+    console.log(`                                     Default: ${fallback}`);
 
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    rl.question("Select file number (or Enter to skip): ", (answer) => {
+    rl.question("Select file number (or Enter to use default): ", (answer) => {
       rl.close();
       const trimmed = answer.trim();
       if (!trimmed) return resolve({ file: null, explicit: false });
@@ -74,7 +94,6 @@ async function resolveDataFile() {
   const files = getDataFiles();
   if (files.length === 0) throw new Error(`No .json files found in ${DATA_DIR}`);
 
-  // Priority 1: interactive prompt
   const { file: picked, explicit } = await pickFileInteractive(files);
   console.log("===================================");
   if (explicit) {
@@ -84,7 +103,6 @@ async function resolveDataFile() {
     return abs;
   }
 
-  // Priority 2: default file
   if (DEFAULT_FILE) {
     const abs = path.resolve(__dirname, DEFAULT_FILE);
     console.log(`Using default file: ${abs}`);
@@ -92,10 +110,9 @@ async function resolveDataFile() {
     return abs;
   }
 
-  // Priority 3: latest file
-  console.log(`Using latest file: ${files[0]}`);
+  console.log(`Using latest file: ${files[files.length-1]}`);
   console.log("===================================");
-  return path.join(DATA_DIR, files[0]);
+  return path.join(DATA_DIR, files[files.length-1]);
 }
 
 async function main() {
@@ -103,6 +120,7 @@ async function main() {
   const seedData = JSON.parse(fs.readFileSync(dataFilePath, "utf8"));
   console.log(`\nLoading: ${dataFilePath}`);
   if (seedData._checkpoint) console.log(`Checkpoint: ${seedData._checkpoint}`);
+  if (seedData._version)    console.log(`Version:    v${seedData._version}`);
 
   // 1) Connect
   await connectDB();
@@ -118,28 +136,48 @@ async function main() {
   console.log("Indexes ensured ✅");
 
   // 3) Nuke everything
+  await CommentPreference.deleteMany({});
+  await PostPreference.deleteMany({});
+  await Bookmark.deleteMany({});
   await Vote.deleteMany({});
   await Comment.deleteMany({});
   await Post.deleteMany({});
   await User.deleteMany({});
-  await PostPreference.deleteMany({});
-  await CommentPreference.deleteMany({});
-  await Bookmark.deleteMany({});
   console.log("Collections cleared ✅");
 
   // 4) Create users
-  const createdUsers = await Promise.all(
-    seedData.users.map((u) =>
-      User.create({
-        email:        u.email,
-        passwordHash: u.passwordHash,
-        name:         u.name,
-        dob:          new Date(u.dob),
-        bio:          u.bio,
-        avatar:       u.avatar || avatarFor(u.avatarSeed),
-      })
-    )
-  );
+  // Use insertMany with { timestamps: false } to restore original createdAt/updatedAt.
+  // Falls back to User.create() for old snapshots that don't have those fields.
+  const hasTimestamps = seedData.users.some((u) => u.createdAt);
+  let createdUsers;
+
+  if (hasTimestamps) {
+    const userDocs = seedData.users.map((u) => ({
+      email:        u.email,
+      passwordHash: u.passwordHash,
+      name:         u.name,
+      dob:          new Date(u.dob),
+      bio:          u.bio,
+      avatar:       u.avatar || avatarFor(u.avatarSeed),
+      createdAt:    new Date(u.createdAt),
+      updatedAt:    new Date(u.updatedAt ?? u.createdAt),
+    }));
+    // timestamps: false lets us write createdAt/updatedAt manually
+    createdUsers = await User.insertMany(userDocs, { timestamps: false });
+  } else {
+    createdUsers = await Promise.all(
+      seedData.users.map((u) =>
+        User.create({
+          email:        u.email,
+          passwordHash: u.passwordHash,
+          name:         u.name,
+          dob:          new Date(u.dob),
+          bio:          u.bio,
+          avatar:       u.avatar || avatarFor(u.avatarSeed),
+        })
+      )
+    );
+  }
   console.log(`Users created ✅ (${createdUsers.length})`);
 
   // 5) Create posts
@@ -238,8 +276,8 @@ async function main() {
     await Promise.all(
       seedData.commentPreferences.map((cp) =>
         CommentPreference.create({
-          userId: createdUsers[cp.authorIndex]._id,
-          postId: createdPosts[cp.postIndex]._id,
+          userId:   createdUsers[cp.authorIndex]._id,
+          postId:   createdPosts[cp.postIndex]._id,
           sortType: cp.sortType,
         })
       )

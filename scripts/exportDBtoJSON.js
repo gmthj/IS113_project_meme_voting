@@ -27,11 +27,10 @@ function getNextVersion() {
   return versions.length > 0 ? Math.max(...versions) + 1 : 1;
 }
 
-const version   = getNextVersion();
-const timestamp = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Singapore" }).slice(0, 16).replace(" ", "_").replace(":", "");
-const filename  = `data-v${version}-${timestamp}.json`;
+const version    = getNextVersion();
+const timestamp  = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Singapore" }).slice(0, 16).replace(" ", "_").replace(":", "");
+const filename   = `data-v${version}-${timestamp}.json`;
 const outputPath = path.join(DATA_DIR, filename);
-
 
 async function main() {
   await connectDB();
@@ -50,6 +49,8 @@ async function main() {
     bio:          u.bio  ?? "",
     avatar:       u.avatar ?? "",
     avatarSeed:   u.name,
+    createdAt:    u.createdAt?.toISOString() ?? null,
+    updatedAt:    u.updatedAt?.toISOString() ?? null,
   }));
 
   // ── Posts ─────────────────────────────────────────────────────────────────
