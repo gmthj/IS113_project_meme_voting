@@ -21,10 +21,10 @@ exports.renderHome = async (req, res) => {
             sortType = req.query.sort || 'highest-votes';
         }
 
-        let posts;
+        let posts = [];
         if (sortType === 'bookmarks' && sessionUser) {
             posts = await getBookmarkedPosts(sessionUser);
-        } else {
+        } else if (sessionUser) {
             posts = await getAllPostsSorted(sortType, sessionUser);
         }
 
