@@ -148,13 +148,13 @@ http://localhost:8000
 
 **CRUD features**
 - CREATE
-  - hello
+  - sortPreference
 - READ
-  - Post (all posts)
+  - Post (all posts) and sortPreference (else default)
 - UPDATE
-  - hello
+  - sortPreference
 - DELETE
-  - hello
+  - sortPreference
 
 ---
 
