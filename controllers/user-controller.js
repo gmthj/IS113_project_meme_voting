@@ -6,8 +6,8 @@ const { expandPosts, getPostById, getPostsByUserId } = require('../services/post
 
 exports.renderUserProfile = async (req, res) => {
 
+    const sessionUser = req.session.sessionUser || {};
     try {
-        const sessionUser = req.session.sessionUser || {};
         const userId = req.params.userId;
         // console.log(userId)
     
@@ -21,5 +21,6 @@ exports.renderUserProfile = async (req, res) => {
         res.render('user', {sessionUser, userInfo, userPost})
     } catch (error) {
         console.log("Error renderUserProfile:", error)
+        return res.render('error', { sessionUser, error });
     }
 }
