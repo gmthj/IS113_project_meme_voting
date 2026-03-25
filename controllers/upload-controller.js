@@ -58,10 +58,43 @@ exports.renderUploadPage_Mongo = async (req, res) => {
 };
 
 
-exports.handleUploadEdit = (req, res) => {
-  const sessionUser = req.session.sessionUser || {};
 
-  console.log(req.body)
+exports.handleUploadEdit = async (req, res) => {
+  const sessionUser = req.session.sessionUser || {};
+  const postID = req.body.postId
+
+  // Fetch post 
+
+  const postData = await POST_SCHEMA.findById(postID)
+  // console.log(postData)
+  console.log("handleUploadEdit")
+
+
+  // console.log(req.body)
   // console.log("Session User in renderUploadPage:", sessionUser);
-  res.render("upload", { error: null, success: false, sessionUser });
+ res.render("edit-post", { error: null, success: false, sessionUser, postData });
+};
+
+
+// This is a post request to handle update post data route
+exports.updateEditpost = async (req, res) => {
+  const sessionUser = req.session.sessionUser || {};
+  const postID = req.body.postId
+
+  // Fetch post 
+  console.log("Update Post Data Called")
+  const { meme_title, description, image_base64 } = req.body;
+  const postData = await POST_SCHEMA.findById(postID)
+   postData.title = meme_title;
+    postData.description = description;
+    postData.image = image_base64;
+    postData.edit_datetime = new Date();
+
+    await postData.save();
+
+
+  // console.log(req.body)
+  // console.log("Session User in renderUploadPage:", sessionUser);
+  // res.render("edit-post", { error: null, success: false, sessionUser });
+   res.redirect(`/fullpost/${postID}`);
 };

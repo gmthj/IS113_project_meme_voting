@@ -61,7 +61,7 @@
 
             <div style="margin-left: auto; display: flex; gap: 10px;">
                 <% if (post.author._id == sessionUser._id) { %>
-                    <form action="/upload/edit" method="post">
+                    <form action="/upload/edit" method="Post">
                         <input type="hidden" name="authorId" value="<%= post.author._id %>">
                         <input type="hidden" name="postId" value="<%= post._id %>">
                         <button type="submit" class="neo-btn neo-btn-yellow" style="padding: 5px 10px; font-size: 0.8rem;">EDIT</button>
