@@ -4,7 +4,7 @@ const { getUserById } = require("../services/userService");
 const { getVoteValue } = require("../services/voteService");
 const { getBookmarkValue } = require("../services/bookmarkService");
 const { timeAgo } = require("../utils/utils");
-
+const { getAllBookmarksByUserId } = require("./bookmarkService");
 
 
 // adds the post's author's User obj and other details to each Post obj
@@ -99,7 +99,17 @@ async function getPostsByUserId(userId, sessionUser) {
   }
 }
 
-
+async function getBookmarkedPosts(sessionUser) {
+    try {
+        const bookmarks = await getAllBookmarksByUserId(sessionUser._id);
+        const postIds = bookmarks.map(b => b.postId);
+        const posts = await Post.find({ _id: { $in: postIds } }).lean();
+        return await expandPosts(posts, sessionUser);
+    } catch (err) {
+        console.log("error: getBookmarkedPosts", err);
+        return [];
+    }
+}
 
 module.exports = {
   // expandPosts,
@@ -108,4 +118,5 @@ module.exports = {
   getAllPostsSorted,
   deletePostById,
   getPostsByUserId,
+  getBookmarkedPosts,  
 };

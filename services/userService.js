@@ -19,8 +19,24 @@ async function getUserById(id) {
   return user;
 }
 
+async function getSortPreference(userId) {
+    const user = await User.findById(userId).lean();
+    return user?.sortPreference || 'highest-votes';
+}
+
+async function saveSortPreference(userId, sortType) {
+    await User.findByIdAndUpdate(userId, { sortPreference: sortType });
+}
+
+async function deleteSortPreference(userId) {
+    await User.findByIdAndUpdate(userId, { $unset: { sortPreference: "" } });
+}
+
 
 module.exports = {
   getUserByEmail,
-  getUserById
+  getUserById,
+  getSortPreference,
+  saveSortPreference,
+  deleteSortPreference
 };
