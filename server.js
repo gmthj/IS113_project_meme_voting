@@ -39,18 +39,24 @@ server.get("/", (req, res) => res.redirect("/home"));
 server.get("/index.html", (req, res) => res.redirect("/home"));
 
 // #################################
-// TODO: remove before submission
+// TODO: comment out before submission - keep for demo
 const { getUserByEmail } = require("./services/userService");
 server.get("/testlogin/:userEmail", async (req, res) => {
-  const userEmail = req.params.userEmail;
-  const sessionUser = await getUserByEmail(userEmail);
-  req.session.sessionUser = sessionUser;
-  const backURL = req.get('Referrer') || '/';
-  res.redirect(`${backURL}`)
+  try {
+    const userEmail = req.params.userEmail;
+    const sessionUser = await getUserByEmail(userEmail);
+    req.session.sessionUser = sessionUser;
+    const backURL = req.get('Referrer') || '/';
+    return res.redirect(`${backURL}`)
+  }
+  catch (error) {
+    return res.render('error', { sessionUser: {}, error });
+  }
 });
 // #################################
 
-server.all("/:a", (req, res) => {
+// catch all
+server.use((req, res) => {
   const sessionUser = req.session.sessionUser || {};
   res.render("error", { error: "Unknown route", sessionUser });
 });
