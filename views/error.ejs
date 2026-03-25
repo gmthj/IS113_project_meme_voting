@@ -7,26 +7,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="/css/style.css">
-    <title>Oopsie!</title>
+    <title>ERROR!</title>
 </head>
-<%- include('partials/header', {sessionUser}) %>
 
-    <body>
+<body>
+    <%- include('partials/header', {sessionUser}) %>
 
-        <h3>OH NO! Looks like some thing went wrong.</h3>
-        <p>We encountered an error while processing your request. Please try again later.</p>
-        <hr>
+    <main class="error-main">
+        <div class="error-card">
+            <h1 class="error-badge">ERROR!</h1>
+            
+            <h3>OH NO! SOME THING WENT WRONG.</h3>
+            <p class="meta-text">WE ENCOUNTERED AN ERROR WHILE PROCESSING YOUR REQUEST.</p>
 
-        <% if(error) { %>
-            <strong>Error Details:</strong><br>
-            <%= error %>
-            <hr>
-        <% } %>
-        
-        <p>Returning home automatically in 10 seconds</p>
-        <a href="/home">Return Home Now</a>
+            <% if(error) { %>
+                <div class="error-details-box">
+                    <strong>SYSTEM MESSAGE:</strong><br>
+                    <%= error %>
+                </div>
+            <% } %>
 
+            <div style="margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                <a href="/home" class="neo-btn neo-btn-yellow">RETURN HOME NOW</a>
+                
+                <p id="countdown" class="countdown-text">
+                    REDIRECTING AUTOMATICALLY IN 10 SECONDS...
+                </p>
+                <!-- <progress value="0" max="10" id="progressBar"></progress> -->
+            </div>
+        </div>
+    </main>
 
-    </body>
-
+</body>
 </html>
+
+
+
+<script>
+// i stole this from stackoverflow fight me
+// https://stackoverflow.com/questions/31106189/create-a-simple-10-second-countdown
+var timeleft = 9;
+var countdownTimer = setInterval(function(){
+    document.getElementById("countdown").innerHTML = (timeleft > 0) ? `REDIRECTING AUTOMATICALLY IN ${timeleft} SECONDS...` : "REDIRECTING HOME...";
+    timeleft -= 1;
+}, 1000);
+</script>

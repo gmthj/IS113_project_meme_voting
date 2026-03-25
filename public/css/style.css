@@ -622,3 +622,60 @@ input:focus, textarea:focus {
     width: auto;
     display: block;
 }
+
+
+
+/* --- Error Page Styles --- */
+
+.error-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 20px;
+}
+
+.error-card {
+    background: var(--neo-white);
+    border: var(--border-thick);
+    box-shadow: var(--shadow-lg);
+    padding: 40px;
+    text-align: center;
+    max-width: 550px; /* Matches your --card-width */
+    width: 100%;
+}
+
+.error-badge {
+    background: var(--neo-red);
+    color: white;
+    padding: 10px 20px;
+    display: inline-block;
+    transform: rotate(-3deg);
+    margin-bottom: 30px;
+    border: var(--border-thin);
+    box-shadow: 4px 4px 0px 0px var(--neo-ink);
+}
+
+.error-details-box {
+    background: #f0f0f0;
+    border-left: 10px solid var(--neo-red);
+    padding: 15px;
+    margin: 20px 0;
+    text-align: left;
+    font-family: monospace;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+}
+
+.countdown-text {
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin-top: 20px;
+    color: var(--neo-ink);
+    opacity: 0.7;
+}
+
+
+
