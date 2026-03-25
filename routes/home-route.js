@@ -7,7 +7,7 @@ const homeController = require('../controllers/home-controller')
 
 // /home
 router.get('/', homeController.renderHome)
-
+router.post('/reset-sort', homeController.resetSort);
 
 
 
