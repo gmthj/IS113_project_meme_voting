@@ -15,6 +15,35 @@ function getAge(dob) {
     if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
     return age;
 }
+function isValidPassword(password) {
+    if (password.length < 8) {
+        return 'Password must be at least 8 characters.';
+    }
+
+    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    const special = '!@#$%^&*(),.?":{}|<>';
+
+    let hasUpper = false;
+    let hasLower = false;
+    let hasNumber = false;
+    let hasSpecial = false;
+
+    for (const char of password) {
+        if (uppercase.includes(char)) hasUpper = true;
+        if (lowercase.includes(char)) hasLower = true;
+        if (numbers.includes(char)) hasNumber = true;
+        if (special.includes(char)) hasSpecial = true;
+    }
+
+    if (!hasUpper) return 'Password must contain at least one uppercase letter.';
+    if (!hasLower) return 'Password must contain at least one lowercase letter.';
+    if (!hasNumber) return 'Password must contain at least one number.';
+    if (!hasSpecial) return 'Password must contain at least one special character.';
+
+    return null;
+}
  
 exports.renderLoginRoot = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
@@ -77,8 +106,9 @@ exports.handleRegister = async (req, res) => {
         return res.render('register', { sessionUser, error: 'Passwords do not match.', formData });
     }
  
-    if (password.length < 6) {
-        return res.render('register', { sessionUser, error: 'Password must be at least 6 characters.', formData });
+    const passwordError = isValidPassword(password);
+    if (passwordError) {
+        return res.render('register', { sessionUser, error: passwordError, formData });
     }
  
     const dobDate = new Date(dob);
