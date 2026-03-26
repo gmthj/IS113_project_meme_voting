@@ -29,14 +29,6 @@ const DEFAULT_FILE = null;
 
 const DATA_DIR = path.resolve(__dirname, "../data");
 
-// function getDataFiles() {
-//   return fs
-//     .readdirSync(DATA_DIR)
-//     .filter((f) => f.endsWith(".json"))
-//     .sort()
-//     // .reverse(); // newest first
-// }
-
 function getDataFiles() {
   return fs
     .readdirSync(DATA_DIR)
@@ -46,7 +38,6 @@ function getDataFiles() {
         const match = name.match(/v(\d+)/);
         return match ? parseInt(match[1], 10) : 0;
       };
-
       return getVersion(a) - getVersion(b);
     });
 }
@@ -66,13 +57,11 @@ function pickFileInteractive(files) {
     console.log("Available data files:");
     files.forEach((f, i) => console.log(`  [${i + 1}] ${f}`));
 
-
-    const uri = process.env.MONGO_URI
+    const uri = process.env.MONGO_URI;
     const dbName = new URL(uri).pathname.substring(1);
-    console.log(`\nWrite to: (${(uri.includes(".mongodb.net")) ? "ATLAS" : "LOCAL"}) ${dbName}`); 
+    console.log(`\nWrite to: (${uri.includes(".mongodb.net") ? "ATLAS" : "LOCAL"}) ${dbName}`);
 
-
-    const fallback = DEFAULT_FILE ? path.basename(DEFAULT_FILE) : files[files.length-1];
+    const fallback = DEFAULT_FILE ? path.basename(DEFAULT_FILE) : files[files.length - 1];
     console.log(`                                     Default: ${fallback}`);
 
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -110,9 +99,9 @@ async function resolveDataFile() {
     return abs;
   }
 
-  console.log(`Using latest file: ${files[files.length-1]}`);
+  console.log(`Using latest file: ${files[files.length - 1]}`);
   console.log("===================================");
-  return path.join(DATA_DIR, files[files.length-1]);
+  return path.join(DATA_DIR, files[files.length - 1]);
 }
 
 async function main() {
@@ -124,6 +113,7 @@ async function main() {
 
   // 1) Connect
   await connectDB();
+  mongoose.set('autoIndex', false);
 
   // 2) Ensure indexes
   await User.init();
@@ -162,7 +152,6 @@ async function main() {
       createdAt:    new Date(u.createdAt),
       updatedAt:    new Date(u.updatedAt ?? u.createdAt),
     }));
-    // timestamps: false lets us write createdAt/updatedAt manually
     createdUsers = await User.insertMany(userDocs, { timestamps: false });
   } else {
     createdUsers = await Promise.all(
@@ -193,11 +182,28 @@ async function main() {
       })
     )
   );
+
+  // If snapshot has pre-computed scores (exported from live DB), restore them now
+  const hasStoredScores = seedData.posts.some((p) => p.vote_score !== undefined);
+  if (hasStoredScores) {
+    await Promise.all(
+      seedData.posts.map((p, i) =>
+        Post.updateOne(
+          { _id: createdPosts[i]._id },
+          { $set: {
+            vote_score:      p.vote_score      ?? 0,
+            self_vote_score: p.self_vote_score ?? 0,
+            comment_count:   p.comment_count   ?? 0,
+          }}
+        )
+      )
+    );
+  }
   console.log(`Posts created ✅ (${createdPosts.length})`);
 
   // 6) Create comments + tally comment_count per post
   const commentCountMap = {};
-  await Promise.all(
+  const createdCommentsList = await Promise.all(
     seedData.comments.map((c) => {
       commentCountMap[c.postIndex] = (commentCountMap[c.postIndex] || 0) + 1;
       return Comment.create({
@@ -210,54 +216,179 @@ async function main() {
     })
   );
 
-  await Promise.all(
-    Object.entries(commentCountMap).map(([postIndex, count]) =>
-      Post.updateOne(
-        { _id: createdPosts[postIndex]._id },
-        { $set: { comment_count: count } }
+  if (hasStoredScores) {
+    await Promise.all(
+      seedData.comments.map((c, i) =>
+        Comment.updateOne(
+          { _id: createdCommentsList[i]._id },
+          { $set: {
+            vote_score:      c.vote_score      ?? 0,
+            self_vote_score: c.self_vote_score ?? 0,
+          }}
+        )
       )
-    )
-  );
+    );
+  } else {
+    await Promise.all(
+      Object.entries(commentCountMap).map(([postIndex, count]) =>
+        Post.updateOne(
+          { _id: createdPosts[postIndex]._id },
+          { $set: { comment_count: count } }
+        )
+      )
+    );
+  }
   console.log(`Comments created ✅ (${seedData.comments.length})`);
 
-  // 7) Create votes + tally vote_score per post
-  const voteScoreMap = {};
-  await Promise.all(
-    seedData.votes.map((v) => {
-      voteScoreMap[v.postIndex] =
-        (voteScoreMap[v.postIndex] || 0) + (v.value ? 1 : -1);
-      return Vote.create({
-        postId: createdPosts[v.postIndex]._id,
-        userId: createdUsers[v.authorIndex]._id,
-        value:  v.value,
-      });
-    })
-  );
+  // 7) Create votes
+  //
+  // Two modes:
+  //   - Snapshot (hasStoredScores): scores already restored above, just insert Vote docs
+  //   - Hand-crafted JSON: recalculate using karma-weighted voting
+  //
+  // Karma formula (from userService.js):
+  //   postKarma    = sum(post.vote_score   - post.self_vote_score)   * 2
+  //   commentKarma = sum(comment.vote_score - comment.self_vote_score)
+  //   finalKarma   = postKarma + commentKarma
+  //
+  // Weight tiers:
+  //   Troller    (score < -5)  : 0  (vote recorded but ignored)
+  //   Newcomer   (age  < 30d)  : 1
+  //   Lurker     (score < 10)  : 1
+  //   Apprentice (score < 50)  : 2
+  //   Master     (score < 100) : 3
+  //   Legend     (score >= 100): 5
 
-  await Promise.all(
-    Object.entries(voteScoreMap).map(([postIndex, score]) =>
-      Post.updateOne(
-        { _id: createdPosts[postIndex]._id },
-        { $set: { vote_score: score } }
-      )
-    )
-  );
-  console.log(`Votes created ✅ (${seedData.votes.length})`);
-
-  // 8) Create bookmarks
-  if (seedData.bookmarks?.length) {
+  if (hasStoredScores) {
     await Promise.all(
-      seedData.bookmarks.map((b) =>
-        Bookmark.create({
-          postId: createdPosts[b.postIndex]._id,
-          userId: createdUsers[b.authorIndex]._id,
+      seedData.votes.map((v) =>
+        Vote.create({
+          postId: createdPosts[v.postIndex]._id,
+          userId: createdUsers[v.authorIndex]._id,
+          value:  v.value,
         })
       )
     );
-    console.log(`Bookmarks created ✅ (${seedData.bookmarks.length})`);
+  } else {
+    function getKarmaWeight(karmaScore, accountAgeDays) {
+      if (karmaScore < -5)     return 0; // Troller
+      if (accountAgeDays < 30) return 1; // Newcomer
+      if (karmaScore < 10)     return 1; // Lurker
+      if (karmaScore < 50)     return 2; // Apprentice
+      if (karmaScore < 100)    return 3; // Master
+      return 5;                          // Legend
+    }
+
+    async function getUserKarmaWeight(userDoc) {
+      const postStats = await Post.aggregate([
+        { $match: { userId: userDoc._id } },
+        { $group: { _id: null, netScore: { $sum: { $subtract: ["$vote_score", "$self_vote_score"] } } } }
+      ]);
+      const commentStats = await Comment.aggregate([
+        { $match: { userId: userDoc._id } },
+        { $group: { _id: null, netScore: { $sum: { $subtract: ["$vote_score", "$self_vote_score"] } } } }
+      ]);
+      const postKarma    = postStats[0]?.netScore    ?? 0;
+      const commentKarma = commentStats[0]?.netScore ?? 0;
+      const finalKarma   = (postKarma * 2) + commentKarma;
+      const accountAgeDays = Math.ceil((new Date() - new Date(userDoc.createdAt)) / 86400000);
+      return getKarmaWeight(finalKarma, accountAgeDays);
+    }
+
+    for (const v of seedData.votes) {
+      const voterDoc   = createdUsers[v.authorIndex];
+      const postDoc    = createdPosts[v.postIndex];
+      const isSelfVote = voterDoc._id.toString() === postDoc.userId.toString();
+      const weight     = await getUserKarmaWeight(voterDoc);
+
+      await Vote.create({ postId: postDoc._id, userId: voterDoc._id, value: v.value });
+
+      if (weight === 0) continue; // Troller — recorded but no score impact
+
+      const delta = v.value ? weight : -weight;
+      await Post.updateOne(
+        { _id: postDoc._id },
+        { $inc: {
+          vote_score:      delta,
+          self_vote_score: isSelfVote ? delta : 0,
+        }}
+      );
+    }
+  }
+  console.log(`Votes created ✅ (${seedData.votes.length})`);
+
+  // 8) Create comment votes
+  if (seedData.commentVotes?.length) {
+    if (hasStoredScores) {
+      await Promise.all(
+        seedData.commentVotes.map((v) =>
+          Vote.create({
+            commentId: createdCommentsList[v.commentIndex]._id,
+            userId:    createdUsers[v.authorIndex]._id,
+            value:     v.value,
+          })
+        )
+      );
+    } else {
+      for (const v of seedData.commentVotes) {
+        const voterDoc      = createdUsers[v.authorIndex];
+        const commentDoc    = createdCommentsList[v.commentIndex];
+        const isSelfVote    = voterDoc._id.toString() === commentDoc.userId.toString();
+        const weight        = await getUserKarmaWeight(voterDoc);
+
+        await Vote.create({ commentId: commentDoc._id, userId: voterDoc._id, value: v.value });
+
+        if (weight === 0) continue;
+
+        const delta = v.value ? weight : -weight;
+        await Comment.updateOne(
+          { _id: commentDoc._id },
+          { $inc: {
+            vote_score:      delta,
+            self_vote_score: isSelfVote ? delta : 0,
+          }}
+        );
+      }
+    }
+    console.log(`Comment votes created ✅ (${seedData.commentVotes.length})`);
   }
 
-  // 9) Create post preferences
+  // // 9) Create bookmarks
+  // if (seedData.bookmarks?.length) {
+  //   await Promise.all(
+  //     seedData.bookmarks.map((b) =>
+  //       Bookmark.create({
+  //         postId: createdPosts[b.postIndex]._id,
+  //         userId: createdUsers[b.authorIndex]._id,
+  //       })
+  //     )
+  //   );
+  //   console.log(`Bookmarks created ✅ (${seedData.bookmarks.length})`);
+  // }
+
+    // 9) Create bookmarks (Safe Version)
+  if (seedData.bookmarks?.length) {
+      await Promise.all(
+          seedData.bookmarks.map(async (b, i) => {
+              const post = createdPosts[b.postIndex];
+              const user = createdUsers[b.authorIndex];
+
+              // VALIDATION: Check if the index actually exists
+              if (!post || !user) {
+                  console.warn(`⚠️ Skipping Bookmark at index ${i}: PostIndex ${b.postIndex} or AuthorIndex ${b.authorIndex} not found.`);
+                  return null;
+              }
+
+              return Bookmark.create({
+                  postId: post._id,
+                  userId: user._id,
+              });
+          })
+      );
+      console.log(`Bookmarks created ✅ (${seedData.bookmarks.length})`);
+  } 
+
+  // 10) Create post preferences
   if (seedData.postPreferences?.length) {
     await Promise.all(
       seedData.postPreferences.map((pp) =>
@@ -271,7 +402,7 @@ async function main() {
     console.log(`Post preferences created ✅ (${seedData.postPreferences.length})`);
   }
 
-  // 10) Create comment preferences
+  // 11) Create comment preferences
   if (seedData.commentPreferences?.length) {
     await Promise.all(
       seedData.commentPreferences.map((cp) =>
@@ -285,7 +416,7 @@ async function main() {
     console.log(`Comment preferences created ✅ (${seedData.commentPreferences.length})`);
   }
 
-  // 11) Summary
+  // 12) Summary
   const topPosts = await Post.find()
     .sort({ vote_score: -1, upload_datetime: -1 })
     .limit(20)

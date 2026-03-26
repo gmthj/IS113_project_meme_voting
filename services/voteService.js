@@ -22,30 +22,33 @@ async function getVoteValue( postId , userId ) {
 
 
 
-async function deleteVote( postId , userId, isUpvote ) {
+async function deleteVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
   try {
     await Vote.deleteOne({ postId, userId });
-    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? -1 : 1 } });
+    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? -1 * weight : 1 * weight,
+                                                self_vote_score:  isSelfVote ? (isUpvote ? -1  * weight: 1 * weight) : 0}});
   }
   catch(err) {
     console.log("error: deleteVote -", err)
   }
 }
 
-async function switchVote( postId , userId, isUpvote ) {
+async function switchVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
   try {
     await Vote.updateOne({ postId, userId }, { value: isUpvote });
-    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 2 : -2 } });
+    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 2  * weight: -2 * weight,
+                                                self_vote_score:  isSelfVote ? (isUpvote ? 2  * weight: -2 * weight) : 0}});
   }
   catch(err) {
     console.log("error: switchVote -", err)
   }
 }
 
-async function newVote( postId , userId, isUpvote ) {
+async function newVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
   try {
     await Vote.create({ postId, userId, value: isUpvote });
-    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 1 : -1 } });
+    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 1  * weight: -1 * weight,
+                                                self_vote_score:  isSelfVote ? (isUpvote ? 1  * weight: -1 * weight) : 0}});
   }
   catch(err) {
     console.log("error: newVote -", err)

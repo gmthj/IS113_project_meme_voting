@@ -14,7 +14,7 @@ const postPreferenceSchema = new mongoose.Schema(
     },
     sortType: {
       type: String,
-      enum: ['newest', 'oldest', 'highest-votes', 'lowest-votes', 'most-comments', 'least-comments'],
+      enum: ['newest', 'oldest', 'highest-votes', 'lowest-votes', 'most-comments', 'least-comments', 'bookmarks'],
       default: 'highest-votes'
     }
   }

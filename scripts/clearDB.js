@@ -14,23 +14,26 @@ const CommentPreference = require("../models/Comment-Preference-model");
 
 async function main() {
   await connectDB();
+  mongoose.set('autoIndex', false);
 
+  // 2) Ensure indexes
   await User.init();
   await Post.init();
   await Comment.init();
   await Vote.init();
-  await Bookmark.init();
   await PostPreference.init();
   await CommentPreference.init();
+  await Bookmark.init();
   console.log("Indexes ensured ✅");
 
+  // 3) Nuke everything
   await CommentPreference.deleteMany({});
   await PostPreference.deleteMany({});
   await Bookmark.deleteMany({});
   await Vote.deleteMany({});
   await Comment.deleteMany({});
   await Post.deleteMany({});
-  // await User.deleteMany({});
+  await User.deleteMany({});
   console.log("Collections cleared ✅");
 
   await mongoose.disconnect();

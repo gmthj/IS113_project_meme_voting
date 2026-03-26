@@ -60,11 +60,14 @@ async function main() {
 
   const snapshotPosts = posts.map((p) => {
     const entry = {
-      authorIndex: userIndexById[p.userId.toString()],
-      title:       p.title,
-      description: p.description ?? "",
-      image:       p.image,
-      uploadedAt:  p.upload_datetime.toISOString(),
+      authorIndex:     userIndexById[p.userId.toString()],
+      title:           p.title,
+      description:     p.description ?? "",
+      image:           p.image,
+      uploadedAt:      p.upload_datetime.toISOString(),
+      vote_score:      p.vote_score      ?? 0,
+      self_vote_score: p.self_vote_score ?? 0,
+      comment_count:   p.comment_count   ?? 0,
     };
     if (p.edit_datetime) entry.editedAt = p.edit_datetime.toISOString();
     return entry;
@@ -75,10 +78,12 @@ async function main() {
 
   const snapshotComments = comments.map((c) => {
     const entry = {
-      postIndex:   postIndexById[c.postId.toString()],
-      authorIndex: userIndexById[c.userId.toString()],
-      text:        c.text,
-      uploadedAt:  c.upload_datetime.toISOString(),
+      postIndex:       postIndexById[c.postId.toString()],
+      authorIndex:     userIndexById[c.userId.toString()],
+      text:            c.text,
+      uploadedAt:      c.upload_datetime.toISOString(),
+      vote_score:      c.vote_score      ?? 0,
+      self_vote_score: c.self_vote_score ?? 0,
     };
     if (c.edit_datetime) entry.editedAt = c.edit_datetime.toISOString();
     return entry;

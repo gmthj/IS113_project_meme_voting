@@ -15,6 +15,9 @@ const CommentSchema = new mongoose.Schema(
 
     text: { type: String, required: true, trim: true },
 
+    vote_score: { type: Number, default: 0 },
+    self_vote_score: { type: Number, default: 0 },
+
     upload_datetime: { type: Date, default: Date.now },
     edit_datetime: { type: Date, default: null },
   }

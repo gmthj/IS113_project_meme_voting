@@ -7,23 +7,26 @@ exports.handleVote = async (req, res) => {
     // console.log(req.body)
 
     const voteDirection = req.body.vote
-    const userId = req.body.userId
+    const authorId = req.body.authorId
+    const userId = req.body.userId //voter
     const postId = req.body.postId
-    const voteValue = req.body.voteValue
+    const voteValue = req.body.voteValue // "true" / "false"
 
 
     const currentVote = voteValue === "true" ? true : (voteValue === "false" ? false : null);
     const isUpvote = (voteDirection === "up");
+    const isSelfVote = (authorId == userId);
+    // console.log("selfvote ", isSelfVote)
 
 
     if (currentVote === isUpvote) {
-        await deleteVote( postId, userId, isUpvote );
+        await deleteVote( postId, userId, isUpvote, isSelfVote );
     }
     else if (currentVote !== null) {
-        await switchVote( postId, userId, isUpvote );
+        await switchVote( postId, userId, isUpvote, isSelfVote );
     }
     else {
-        await newVote( postId, userId, isUpvote );
+        await newVote( postId, userId, isUpvote, isSelfVote );
     }
 
 
