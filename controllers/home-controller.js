@@ -1,5 +1,7 @@
+const PostPreference = require("../models/Post-Preference-model");
+
 const { getAllPostsSorted, getBookmarkedPosts } = require("../services/postService");
-const { getSortPreference, saveSortPreference, deleteSortPreference} = require("../services/userService");
+const { getPostSortType, createPostSortType, updatePostSortType, deletePostSortType } = require("../services/postPreferenceService");
 
 exports.renderHome = async (req, res) => {
     const sessionUser = req.session.sessionUser || null;
@@ -9,15 +11,25 @@ exports.renderHome = async (req, res) => {
 
         if (sessionUser && sessionUser._id) {
             if (req.query.sort) {
-                // When user clicked a sort link, it will CREATE or UPDATE preference in DB
                 sortType = req.query.sort;
-                await saveSortPreference(sessionUser._id, sortType);
+
+                // Check if there is already a sortPreference
+                const existing = await PostPreference.findOne({ 
+                    userId: sessionUser._id, 
+                    page: 'home' 
+                }).lean();
+
+                if (existing) {
+                    await updatePostSortType(sessionUser._id, 'home', sortType); // UPDATE the preference
+                } else {
+                    await createPostSortType(sessionUser._id, 'home', sortType); // CREATE a preference
+                }
+                return res.redirect('/home');
             } else {
-                // No sort in URL then it READ their saved preference from DB
-                sortType = await getSortPreference(sessionUser._id);
+                // READ the saved preference
+                sortType = await getPostSortType(sessionUser._id, 'home');
             }
         } else {
-            // default
             sortType = req.query.sort || 'highest-votes';
         }
 
@@ -28,27 +40,26 @@ exports.renderHome = async (req, res) => {
             posts = await getAllPostsSorted(sortType, sessionUser);
         }
 
-        res.render('home', {
-            posts,
-            currentSort: sortType,
-            sessionUser
-        });
+        res.render('home', { posts, currentSort: sortType, sessionUser });
+
     } catch (error) {
         console.error("Error rendering home:", error);
         res.status(500).render('error', { error: "Could not load posts" });
+        sessionUser;
     }
 };
 
-// DELETE sort preference
+// DELETE the sort preference
 exports.resetSort = async (req, res) => {
     const sessionUser = req.session.sessionUser || null;
     try {
         if (sessionUser && sessionUser._id) {
-            await deleteSortPreference(sessionUser._id); // DELETE from DB
+            await deletePostSortType(sessionUser._id, 'home'); 
         }
         res.redirect('/home');
     } catch (error) {
         console.error("Error resetting sort:", error);
         res.status(500).render('error', { error: "Could not reset sort preference" });
+        sessionUser;
     }
 };

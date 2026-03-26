@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
     dob: { type: Date, required: true },
     bio: { type: String, default: "" },
     avatar: { type: String, default: "" },
-    sortPreference: { type: String, default: "highest" },
+    sortPreference: { type: String, default: "highest-votes" },
   },
   { timestamps: true },
 );
