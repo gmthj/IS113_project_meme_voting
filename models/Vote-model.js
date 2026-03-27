@@ -9,12 +9,12 @@ const VoteSchema = new mongoose.Schema({
   postId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Post",
-    default: null
+    // default: null
   },
   commentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Comment",
-    default: null
+    // default: null
   },
   value: { type: Boolean, required: true },
 });
@@ -29,8 +29,16 @@ VoteSchema.pre("validate", function () {
 });
 
 
-VoteSchema.index({ postId: 1, userId: 1 }, { unique: true, sparse: true });
-VoteSchema.index({ commentId: 1, userId: 1 }, { unique: true, sparse: true });
+// VoteSchema.index({ postId: 1, userId: 1 }, { unique: true, sparse: true });
+// VoteSchema.index({ commentId: 1, userId: 1 }, { unique: true, sparse: true });
+VoteSchema.index(
+  { postId: 1, userId: 1 }, 
+  { unique: true, partialFilterExpression: { postId: { $exists: true, $ne: null } } }
+);
 
+VoteSchema.index(
+  { commentId: 1, userId: 1 }, 
+  { unique: true, partialFilterExpression: { commentId: { $exists: true, $ne: null } } }
+);
 
 module.exports = mongoose.model("Vote", VoteSchema);

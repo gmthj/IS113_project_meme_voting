@@ -1,27 +1,30 @@
 const Comment = require("../models/Comment-model");
 
-
 const { getUserById } = require("../services/userService");
-
 const { timeAgo } = require("../utils/utils");
 
 
+const { getCommentVoteValue } = require("../services/voteService"); 
 
-async function expandComments(comments) {
+async function expandComments(comments, sessionUser = {}) {
   await Promise.all(comments.map(async (comment) => {
     const author = await getUserById(comment.userId.toString());
     
+    const voteValue = await getCommentVoteValue(comment._id, sessionUser._id);
+
     comment.commentAge = timeAgo(comment.upload_datetime);
     comment.author = author;
+    
+    comment.voteValue = voteValue; 
   }));
 
   return comments;
 }
 
-async function getAllCommentsByPostId(postId) {
+async function getAllCommentsByPostId(postId, sessionUser = {}) {
   const comments = await Comment.find({postId: postId}).lean();
 
-  return await expandComments(comments);
+  return await expandComments(comments, sessionUser);
 }
 
 async function updateCommentById(commentId, updatedText) {
@@ -48,7 +51,6 @@ async function deleteCommentById(commentId) {
     return false;
   }
 }
-
 
 module.exports = {
   getAllCommentsByPostId,

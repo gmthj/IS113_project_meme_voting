@@ -7,9 +7,10 @@ const authMiddleware = require('../middleware/auth-middleware')
 
 
 // /vote
-router.post('/', authMiddleware.isLoggedIn, voteController.handlePostVote)
+router.post('/', authMiddleware.isLoggedIn, voteController.handlePostVote);
 // router.post('/', voteController.handlePostVote)
 
+router.post('/comment', authMiddleware.isLoggedIn, voteController.handleCommentVote);
 
 
 

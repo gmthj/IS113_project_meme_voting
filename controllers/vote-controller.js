@@ -1,4 +1,7 @@
-const { deletePostVote, switchPostVote, newPostVote } = require("../services/voteService");
+const { 
+    deletePostVote, switchPostVote, newPostVote, 
+    deleteCommentVote, switchCommentVote, newCommentVote 
+} = require("../services/voteService");
 
 
 // /vote
@@ -32,4 +35,31 @@ exports.handlePostVote = async (req, res) => {
 
     const backURL = req.get('Referrer') || '/';
     res.redirect(`${backURL}#post-${postId}`)
+}
+
+exports.handleCommentVote = async (req, res) => {
+    const sessionUser = req.session.sessionuser || {};
+
+    const voteDirection = req.body.vote
+    const authorId = req.body.authorId
+    const userId = req.body.userId //voter
+    const commentId = req.body.commentId
+    const voteValue = req.body.voteValue // "true" / "false"
+
+    const currentVote = voteValue === "true" ? true : (voteValue === "false" ? false : null);
+    const isUpvote = (voteDirection === "up");
+    const isSelfVote = (authorId == userId);
+
+    if (currentVote === isUpvote) {
+        await deleteCommentVote( commentId, userId, isUpvote, isSelfVote );
+    }
+    else if (currentVote !== null) {
+        await switchCommentVote( commentId, userId, isUpvote, isSelfVote );
+    }
+    else {
+        await newCommentVote( commentId, userId, isUpvote, isSelfVote );
+    }
+
+    const backURL = req.get('Referrer') || '/';
+    res.redirect(`${backURL}#post-${commentId}`)
 }
