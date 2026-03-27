@@ -2,7 +2,7 @@ const { deletePostVote, switchPostVote, newPostVote } = require("../services/vot
 
 
 // /vote
-exports.handleVote = async (req, res) => {
+exports.handlePostVote = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     // console.log(req.body)
 
