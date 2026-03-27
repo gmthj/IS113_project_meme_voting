@@ -1,7 +1,7 @@
 const Post = require("../models/Post-model");
 
 const { getUserById } = require("../services/userService");
-const { getVoteValue } = require("../services/voteService");
+const { getPostVoteValue } = require("../services/voteService");
 const { getBookmarkValue } = require("../services/bookmarkService");
 const { timeAgo } = require("../utils/utils");
 const { getAllBookmarksByUserId } = require("./bookmarkService");
@@ -13,7 +13,7 @@ async function expandPosts(posts, sessionUser = {}) {
     await Promise.all(
       posts.map(async (post) => {
         const author = await getUserById(post.userId.toString());
-        const voteValue = await getVoteValue(post._id, sessionUser._id);
+        const voteValue = await getPostVoteValue(post._id, sessionUser._id);
         const bookmark = await getBookmarkValue(post._id, sessionUser._id)
 
         post.postAge = timeAgo(post.upload_datetime);

@@ -3,7 +3,7 @@ const Post = require("../models/Post-model");
 
 
 
-async function getVoteValue( postId , userId ) {
+async function getPostVoteValue( postId , userId ) {
   try {
     const voteValue = await Vote.findOne({ postId , userId}).lean();
 
@@ -15,50 +15,48 @@ async function getVoteValue( postId , userId ) {
     }
   }
   catch(err) {
-    console.log("error: getVoteValue - no postId or on userId receieved -", err)
+    console.log("error: getPostVoteValue - no postId or on userId receieved -", err)
     return undefined
   }
 }
 
-
-
-async function deleteVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
+async function deletePostVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
   try {
     await Vote.deleteOne({ postId, userId });
     await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? -1 * weight : 1 * weight,
                                                 self_vote_score:  isSelfVote ? (isUpvote ? -1  * weight: 1 * weight) : 0}});
   }
   catch(err) {
-    console.log("error: deleteVote -", err)
+    console.log("error: deletePostVote -", err)
   }
 }
 
-async function switchVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
+async function switchPostVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
   try {
     await Vote.updateOne({ postId, userId }, { value: isUpvote });
     await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 2  * weight: -2 * weight,
                                                 self_vote_score:  isSelfVote ? (isUpvote ? 2  * weight: -2 * weight) : 0}});
   }
   catch(err) {
-    console.log("error: switchVote -", err)
+    console.log("error: switchPostVote -", err)
   }
 }
 
-async function newVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
+async function newPostVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
   try {
     await Vote.create({ postId, userId, value: isUpvote });
     await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 1  * weight: -1 * weight,
                                                 self_vote_score:  isSelfVote ? (isUpvote ? 1  * weight: -1 * weight) : 0}});
   }
   catch(err) {
-    console.log("error: newVote -", err)
+    console.log("error: newPostVote -", err)
   }
 }
 
 
 module.exports = {
-  getVoteValue,
-  deleteVote,
-  switchVote,
-  newVote
+  getPostVoteValue,
+  deletePostVote,
+  switchPostVote,
+  newPostVote
 };

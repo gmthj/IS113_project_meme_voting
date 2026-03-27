@@ -1,4 +1,4 @@
-const { deleteVote, switchVote, newVote } = require("../services/voteService");
+const { deletePostVote, switchPostVote, newPostVote } = require("../services/voteService");
 
 
 // /vote
@@ -20,13 +20,13 @@ exports.handleVote = async (req, res) => {
 
 
     if (currentVote === isUpvote) {
-        await deleteVote( postId, userId, isUpvote, isSelfVote );
+        await deletePostVote( postId, userId, isUpvote, isSelfVote );
     }
     else if (currentVote !== null) {
-        await switchVote( postId, userId, isUpvote, isSelfVote );
+        await switchPostVote( postId, userId, isUpvote, isSelfVote );
     }
     else {
-        await newVote( postId, userId, isUpvote, isSelfVote );
+        await newPostVote( postId, userId, isUpvote, isSelfVote );
     }
 
 
