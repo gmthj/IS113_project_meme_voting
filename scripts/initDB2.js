@@ -115,6 +115,20 @@ async function main() {
   await connectDB();
   mongoose.set('autoIndex', false);
 
+  // BOMB everything bruh wthhhhhhhh
+  try {
+    await mongoose.connection.db.dropCollection("votes");
+    await mongoose.connection.db.dropCollection("posts");
+    await mongoose.connection.db.dropCollection("users");
+    await mongoose.connection.db.dropCollection("comments");
+    await mongoose.connection.db.dropCollection("postpreferences");
+    await mongoose.connection.db.dropCollection("commentpreferences");
+    await mongoose.connection.db.dropCollection("bookmarks");
+    console.log("Collections dropped (data + indexes cleared) ✅");
+  } catch (e) {
+    console.log("Some collections didn't exist to drop, skipping...");
+  }
+
   // 2) Ensure indexes
   await User.init();
   await Post.init();
