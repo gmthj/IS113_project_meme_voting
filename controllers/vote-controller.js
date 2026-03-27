@@ -61,5 +61,5 @@ exports.handleCommentVote = async (req, res) => {
     }
 
     const backURL = req.get('Referrer') || '/';
-    res.redirect(`${backURL}#post-${commentId}`)
+    res.redirect(`${backURL}#comment-${commentId}`)
 }
