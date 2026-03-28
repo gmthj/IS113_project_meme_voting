@@ -1,4 +1,5 @@
 const Comment = require("../models/Comment-model");
+const Post = require("../models/Post-model");
 
 const { getUserById } = require("../services/userService");
 const { timeAgo } = require("../utils/utils");
@@ -43,7 +44,15 @@ async function updateCommentById(commentId, updatedText) {
 
 async function deleteCommentById(commentId) {
   try {
-    await Comment.findByIdAndDelete({ _id: commentId });
+    const deletedComment = await Comment.findByIdAndDelete({ _id: commentId });
+    console.log(deletedComment.postId);
+
+    if (deletedComment && deletedComment.postId) {
+      const postId = deletedComment.postId.toString();
+      await Post.findByIdAndUpdate(postId, {
+        $inc: { comment_count: -1}
+      });
+    }
 
     return true;
   } catch {
