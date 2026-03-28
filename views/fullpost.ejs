@@ -6,7 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="/css/style.css">
-    <title><%= post.title || 'Post' %></title>
+    <title>
+        <%= post.title || 'Post' %>
+    </title>
+    <style>
+        .sort-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            flex-wrap: nowrap;
+        }
+
+        .sort-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .sort-tabs {
+            display: flex;
+            background: #fff;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            flex-shrink: 0;
+        }
+
+        .sort-tab {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            border-right: 3px solid #000;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .sort-tab:last-child {
+            border-right: none;
+        }
+
+        .sort-tab:hover {
+            background: #f0f0f0;
+        }
+
+        .sort-tab.active {
+            background: #ffeb3b;
+        }
+    </style>
 </head>
 <%- include('partials/header', {sessionUser}) %>
 
@@ -16,26 +64,46 @@
             <section>
                 <%- include('partials/post', {post, sessionUser, showControls: true}) %>
             </section>
-    
+
             <section class="comment-post-section">
                 <form action="/fullpost/<%= post._id %>/comment" method="POST" class="comment-post-form">
-                    <textarea name="text" placeholder="Comment here..." id="commentText" class="comment-post-textarea" required></textarea>
-    
+                    <textarea name="text" placeholder="Comment here..." id="commentText" class="comment-post-textarea"
+                        required></textarea>
+
                     <button type="submit" class="neo-btn neo-btn-red comment-post-btn">
                         COMMENT
                     </button>
                 </form>
             </section>
-    
-            <section>
-                <% if (comments && comments.length > 0) { %>
-                    <% comments.forEach((comment) => { %>
-                        <%- include('partials/comment', {comment, sessionUser, showControls: true}) %>
-                    <% }); %>
-                <% } else { %>
-                    <p>No comments yet. Be the first to comment!</p>
+
+            <% if (sessionUser && sessionUser._id) { %>
+                <section>
+                    <div class="sort-wrapper">
+                        <div class="sort-left">
+                            <div class="sort-tabs">
+                                <a href="/fullpost/<%= post._id %>?sort=highest-votes"
+                                    class="sort-tab <%= currentSort === 'highest-votes' ? 'active' : '' %>">TOP</a>
+                                <a href="/fullpost/<%= post._id %>?sort=lowest-votes"
+                                    class="sort-tab <%= currentSort === 'lowest-votes' ? 'active' : '' %>">LOWEST</a>
+                                <a href="/fullpost/<%= post._id %>?sort=newest"
+                                    class="sort-tab <%= currentSort === 'newest' ? 'active' : '' %>">NEWEST</a>
+                                <a href="/fullpost/<%= post._id %>?sort=oldest"
+                                    class="sort-tab <%= currentSort === 'oldest' ? 'active' : '' %>">OLDEST</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <% } %>
-            </section>
+
+                    <section>
+                        <% if (comments && comments.length> 0) { %>
+                            <% comments.forEach((comment)=> { %>
+                                <%- include('partials/comment', {comment, sessionUser, showControls: true}) %>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <p>No comments yet. Be the first to comment!</p>
+                                            <% } %>
+                    </section>
         </main>
 
     </body>

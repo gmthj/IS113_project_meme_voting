@@ -14,7 +14,7 @@ const commentPreferenceSchema = new mongoose.Schema(
     },
     sortType: {
       type: String,
-      enum: ['newest', 'oldest'],
+      enum: ['newest', 'oldest', 'highest-votes', 'lowest-votes'],
       default: 'newest'
     }
   }

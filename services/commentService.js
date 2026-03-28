@@ -5,32 +5,50 @@ const { getUserById } = require("../services/userService");
 const { timeAgo } = require("../utils/utils");
 
 
-const { getCommentVoteValue } = require("../services/voteService"); 
+const { getCommentVoteValue } = require("../services/voteService");
 
 async function expandComments(comments, sessionUser = {}) {
   await Promise.all(comments.map(async (comment) => {
     const author = await getUserById(comment.userId.toString());
-    
+
     const voteValue = await getCommentVoteValue(comment._id, sessionUser._id);
 
     comment.commentAge = timeAgo(comment.upload_datetime);
     comment.author = author;
-    
-    comment.voteValue = voteValue; 
+
+    comment.voteValue = voteValue;
   }));
 
   return comments;
 }
 
-async function getAllCommentsByPostId(postId, sessionUser = {}) {
-  const comments = await Comment.find({postId: postId}).lean();
+async function getAllCommentsByPostId(postId, sessionUser = {}, sortType = 'newest') {
+  let sortQuery = {};
+
+  switch (sortType) {
+    case 'highest-votes':
+      sortQuery = { vote_score: -1 };
+      break;
+    case 'lowest-votes':
+      sortQuery = { vote_score: 1 };
+      break;
+    case 'oldest':
+      sortQuery = { upload_datetime: 1 };
+      break;
+    case 'newest':
+    default:
+      sortQuery = { upload_datetime: -1 };
+      break;
+  }
+
+  const comments = await Comment.find({ postId: postId }).sort(sortQuery).lean();
 
   return await expandComments(comments, sessionUser);
 }
 
 async function updateCommentById(commentId, updatedText) {
   try {
-    await Comment.findByIdAndUpdate(commentId, { 
+    await Comment.findByIdAndUpdate(commentId, {
       text: updatedText,
       edit_datetime: Date.now()
     });
@@ -50,7 +68,7 @@ async function deleteCommentById(commentId) {
     if (deletedComment && deletedComment.postId) {
       const postId = deletedComment.postId.toString();
       await Post.findByIdAndUpdate(postId, {
-        $inc: { comment_count: -1}
+        $inc: { comment_count: -1 }
       });
     }
 

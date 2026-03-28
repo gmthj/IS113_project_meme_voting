@@ -2,29 +2,39 @@ const Post = require('../models/Post-model');
 const Comment = require('../models/Comment-model');
 const User = require('../models/User-model');
 
-const { expandPosts, getPostById } = require('../services/postService')
-const { expandComments, getAllCommentsByPostId } = require('../services/commentService')
+const CommentPreference = require("../models/Comment-Preference-model");
+
+const { expandPosts, getPostById } = require('../services/postService');
+const { expandComments, getAllCommentsByPostId } = require('../services/commentService');
+const { getCommentSortType, updateCommentSortType } = require('../services/commentPreferenceService');
 
 exports.getFullPost = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
-    // get post data from db
     try {
         const postId = req.params.postId;
+        if (!postId) return res.status(400).send("Post ID missing.");
 
-        if (!postId) {
-            return res.status(400).send("Post ID missing.");
+        let sortType;
+
+        if (sessionUser && sessionUser._id) {
+            if (req.query.sort) {
+                sortType = req.query.sort;
+                await updateCommentSortType(sessionUser._id, postId, sortType);
+                return res.redirect(`/fullpost/${postId}`)
+            } else {
+                sortType = await getCommentSortType(sessionUser._id, postId);
+            }
+
+        } else {
+            sortType = req.query.sort || 'newest';
         }
 
         const [post, comments] = await Promise.all([
             getPostById(postId, sessionUser),
-            getAllCommentsByPostId(postId, sessionUser)
+            getAllCommentsByPostId(postId, sessionUser, sortType)
         ]);
 
-        // const posts = await expandPosts([rawPost]);
-        // const comments = await expandComments(rawComments);
-
-        res.render('fullpost', {post, comments, currentUser: '', sessionUser});
-
+        res.render('fullpost', { post, comments, sessionUser, currentSort: sortType });
     } catch (err) {
         console.error("Error: ", err);
         return res.status(500).send("Internal Server Error");
