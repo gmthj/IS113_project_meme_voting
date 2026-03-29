@@ -3,6 +3,9 @@ const Post = require('../models/Post-model');
 const Comment = require('../models/Comment-model');
 const Vote = require('../models/Vote-model');
 const bcrypt = require('bcrypt');
+const Bookmark = require('../models/Bookmark-model');
+const PostPreference = require('../models/Post-Preference-model');
+const CommentPreference = require('../models/Comment-Preference-model');
 const { avatarFor } = require("../utils/utils");
  
 const MIN_AGE = 13;
@@ -162,24 +165,70 @@ exports.handleDeleteAccount = async (req, res) => {
     if (!sessionUser) {
         return res.redirect('/account/login');
     }
-
+    
     try {
-        const userPosts = await Post.find({ userId: sessionUser._id });
 
-        for (const post of userPosts) {
-            await Comment.deleteMany({ postId: post._id });
-            await Vote.deleteMany({ postId: post._id });
-            await Post.findByIdAndDelete(post._id);
+    const userPosts = await Post.find({ userId: sessionUser._id });
+
+    for (const post of userPosts) {
+        
+        const comments = await Comment.find({ postId: post._id });
+
+        for (const comment of comments) {
+            await Vote.deleteMany({ commentId: comment._id }); 
         }
 
-        await Comment.deleteMany({ userId: sessionUser._id });
-        await Vote.deleteMany({ userId: sessionUser._id });
+        await Comment.deleteMany({ postId: post._id });
+        await Vote.deleteMany({ postId: post._id });
+        await Bookmark.deleteMany({ postId: post._id });
+        await CommentPreference.deleteMany({ postId: post._id });
+        await Post.findByIdAndDelete(post._id);
+    }
 
-        await User.findByIdAndDelete(sessionUser._id);
+    const userComments = await Comment.find({ userId: sessionUser._id });
 
-        req.session.destroy(() => {
-            res.redirect('/home');
-        });
+    for (const comment of userComments) {
+    
+    const parentPost = await Post.findById(comment.postId);
+    
+    if (parentPost) {
+        parentPost.comment_count = parentPost.comment_count - 1; //Takes the current comment count and minus 1, since comment is about to be deleted
+        await parentPost.save();
+    }
+    await Vote.deleteMany({ commentId: comment._id });
+    }
+
+    await Comment.deleteMany({ userId: sessionUser._id });
+    const userVotes = await Vote.find({ userId: sessionUser._id });
+
+    for (const vote of userVotes) {
+        const scoreChange = vote.value ? -1 : 1;
+        if (vote.postId) {
+            const post = await Post.findById(vote.postId);
+            if (post) {
+                post.vote_score = post.vote_score + scoreChange;
+                await post.save();
+            }
+        }
+        if (vote.commentId) {
+            const comment = await Comment.findById(vote.commentId);
+            if (comment) {
+                comment.vote_score = comment.vote_score + scoreChange;
+                await comment.save();
+            }
+        }
+    }
+    // delete remaining user data
+    await Vote.deleteMany({ userId: sessionUser._id });
+    await Bookmark.deleteMany({ userId: sessionUser._id });
+    await PostPreference.deleteMany({ userId: sessionUser._id });
+    await CommentPreference.deleteMany({ userId: sessionUser._id });
+
+    await User.findByIdAndDelete(sessionUser._id);
+
+    req.session.destroy(() => {
+        res.redirect('/home');
+    });
 
     } catch (err) {
         console.error('Error deleting account:', err);
