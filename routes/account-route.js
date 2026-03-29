@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const accountController = require('../controllers/account-controller')
+const authMiddleware = require('../middleware/auth-middleware')
 
 // =========================
 
@@ -19,13 +20,13 @@ router.post('/register', accountController.handleRegister)
 router.get('/logout', accountController.handleLogout)
 
 // /account/edit  (must be logged in)
-router.get('/edit', accountController.renderEdit)
-router.post('/edit', accountController.handleEdit)
+router.get('/edit', authMiddleware.isLoggedIn, accountController.renderEdit)
+router.post('/edit', authMiddleware.isLoggedIn, accountController.handleEdit)
 router.get('/edit', (req, res) => {
   res.send('EDIT ROUTE HIT');
 }); 
 // /account/delete  (must be logged in)
-router.post('/delete', accountController.handleDeleteAccount)
+router.post('/delete', authMiddleware.isLoggedIn, accountController.handleDeleteAccount)
  
 
 

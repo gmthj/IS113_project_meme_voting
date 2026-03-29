@@ -162,9 +162,9 @@ exports.handleLogout = (req, res) => {
 exports.handleDeleteAccount = async (req, res) => {
     const sessionUser = req.session.sessionUser;
 
-    if (!sessionUser) {
-        return res.redirect('/account/login');
-    }
+    // if (!sessionUser) {
+    //     return res.redirect('/account/login');
+    // }
     
     try {
 
@@ -240,9 +240,9 @@ exports.handleDeleteAccount = async (req, res) => {
 exports.renderEdit = (req, res) => {
     const sessionUser = req.session.sessionUser;
  
-    if (!sessionUser) {
-        return res.redirect('/account/login');
-    }
+    // if (!sessionUser) {
+    //     return res.redirect('/account/login');
+    // }
  
     res.render('edit-account', { //prefills the form with current name and bio
         sessionUser,
@@ -257,9 +257,9 @@ exports.renderEdit = (req, res) => {
 exports.handleEdit = async (req, res) => {
     const sessionUser = req.session.sessionUser;
  
-    if (!sessionUser) {
-        return res.redirect('/account/login');
-    }
+    // if (!sessionUser) {
+    //     return res.redirect('/account/login');
+    // }
  
     const name = req.body.name;
     const bio = req.body.bio;
