@@ -110,37 +110,44 @@ function handleFileSelect(input) {
         "image/webp",
         "image/svg+xml"
     ];
+    const maxSizeInBytes = 8 * 1024 * 1024;
 
-    const previewContainer = document.getElementById("preview-container");
-    const previewImage = document.getElementById("image-preview");
-    const fileNameSpan = document.getElementById("file-name");
-    const hiddenBase64 = document.getElementById("image_base64");
+    const previewContainer = document.getElementById('preview-container');
+    const previewImage = document.getElementById('image-preview');
+    const fileNameSpan = document.getElementById('file-name');
+    const hiddenBase64 = document.getElementById('image_base64');
 
     if (file) {
         if (!allowedTypes.includes(file.type)) {
-            alert("Only JPG, PNG, GIF, WEBP, and SVG files are allowed!");
+            alert("Only JPG, PNG, GIF, and WEBP files are allowed!");
             input.value = "";
-            fileNameSpan.innerText = "Click to replace your meme...";
-            previewImage.src = "<%= postData.image %>";
-            previewContainer.style.display = "block";
-            hiddenBase64.value = "<%= postData.image %>";
+            fileNameSpan.innerText = "Click to pick a meme...";
+            previewContainer.style.display = "none";
+            hiddenBase64.value = "";
+            return;
+        }
+
+        if (file.size > maxSizeInBytes) {
+            alert("Image must be smaller than 8MB!");
+            input.value = "";
+            fileNameSpan.innerText = "Click to pick a meme...";
+            previewContainer.style.display = "none";
+            hiddenBase64.value = "";
             return;
         }
 
         fileNameSpan.innerText = file.name;
 
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function(e) {
             const base64String = e.target.result;
             previewImage.src = base64String;
             previewContainer.style.display = "block";
             hiddenBase64.value = base64String;
         };
-
         reader.readAsDataURL(file);
     }
 }
-
 const flashMessages = document.querySelectorAll(".flash-msg");
 flashMessages.forEach(msg => {
     setTimeout(() => {

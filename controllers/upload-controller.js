@@ -11,8 +11,8 @@ function validateBase64Image(image_base64) {
     "image/jpeg",
     "image/png",
     "image/gif",
-    "image/webp"
-    // "image/svg+xml" // only add this if you really want SVG support
+    "image/webp",
+    "image/svg+xml"
   ];
 
   const mimeMatch = image_base64.match(/^data:(.*?);base64,/);
@@ -30,10 +30,10 @@ function validateBase64Image(image_base64) {
   try {
     const base64Data = image_base64.split(",")[1];
     const fileSizeInBytes = Buffer.from(base64Data, "base64").length;
-    const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
 
     if (fileSizeInBytes > maxSizeInBytes) {
-      return "Image must be smaller than 2MB";
+      return "Image must be smaller than 5MB";
     }
   } catch (err) {
     return "Invalid image data";

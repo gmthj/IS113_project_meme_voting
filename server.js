@@ -10,7 +10,7 @@ const server = express();
 
 server.set("view engine", "ejs");
 
-server.use(express.urlencoded({ extended: true, limit: "5mb" }));
+server.use(express.urlencoded({ extended: true, limit: "10mb" }));
 server.use(express.static(path.join(__dirname, "public")));
 server.use(express.json());
 

@@ -69,12 +69,13 @@
 function handleFileSelect(input) {
     const file = input.files[0];
     const allowedTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/gif",
-    "image/webp",
-    "image/svg+xml"
-];
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/svg+xml"
+    ];
+    const maxSizeInBytes = 8 * 1024 * 1024;
 
     const previewContainer = document.getElementById('preview-container');
     const previewImage = document.getElementById('image-preview');
@@ -82,12 +83,20 @@ function handleFileSelect(input) {
     const hiddenBase64 = document.getElementById('image_base64');
 
     if (file) {
-        // Reject invalid file types
         if (!allowedTypes.includes(file.type)) {
-            alert("Only JPG, PNG, GIF, WEBP, and SVG files are allowed!");
-            input.value = ""; // reset input
+            alert("Only JPG, PNG, GIF, and WEBP files are allowed!");
+            input.value = "";
             fileNameSpan.innerText = "Click to pick a meme...";
-            previewContainer.style.display = 'none';
+            previewContainer.style.display = "none";
+            hiddenBase64.value = "";
+            return;
+        }
+
+        if (file.size > maxSizeInBytes) {
+            alert("Image must be smaller than 8MB!");
+            input.value = "";
+            fileNameSpan.innerText = "Click to pick a meme...";
+            previewContainer.style.display = "none";
             hiddenBase64.value = "";
             return;
         }
@@ -98,14 +107,14 @@ function handleFileSelect(input) {
         reader.onload = function(e) {
             const base64String = e.target.result;
             previewImage.src = base64String;
-            previewContainer.style.display = 'block';
+            previewContainer.style.display = "block";
             hiddenBase64.value = base64String;
-        }
+        };
         reader.readAsDataURL(file);
     }
 }
-
-    // Success message timeout with a smooth fade
+    
+// Success message timeout with a smooth fade
     const flashMessages = document.querySelectorAll(".flash-msg");
     flashMessages.forEach(msg => {
         setTimeout(() => {
