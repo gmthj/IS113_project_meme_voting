@@ -1,8 +1,12 @@
 const Vote = require("../models/Vote-model");
 const Post = require("../models/Post-model");
 const Comment = require("../models/Comment-model");
+const User = require("../models/User-model");
 
-
+const {
+    POST_VOTE_WEIGHT, 
+    COMMENT_VOTE_WEIGHT, 
+} = require("../config");
 
 async function getPostVoteValue( postId , userId ) {
   try {
@@ -21,38 +25,49 @@ async function getPostVoteValue( postId , userId ) {
   }
 }
 
-async function deletePostVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
+async function deletePostVote( postId , userId, isUpvote, isSelfVote, authorId, weight = 1 ) {
   try {
     await Vote.deleteOne({ postId, userId });
-    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? -1 * weight : 1 * weight,
-                                                self_vote_score:  isSelfVote ? (isUpvote ? -1  * weight: 1 * weight) : 0}});
+
+    const incValue = (isUpvote ? -1 : 1) * weight;
+    await Post.updateOne({ _id: postId }, { $inc: { vote_score: incValue }});
+    if (!isSelfVote) await User.updateOne({ _id: authorId }, { $inc: { totalKarma: incValue * POST_VOTE_WEIGHT }});
   }
   catch(err) {
     console.log("error: deletePostVote -", err)
   }
 }
 
-async function switchPostVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
+async function switchPostVote( postId , userId, isUpvote, isSelfVote, authorId, weight = 1 ) {
   try {
     await Vote.updateOne({ postId, userId }, { value: isUpvote });
-    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 2  * weight: -2 * weight,
-                                                self_vote_score:  isSelfVote ? (isUpvote ? 2  * weight: -2 * weight) : 0}});
+    
+    const incValue = (isUpvote ? 2 : -2) * weight;
+    await Post.updateOne({ _id: postId }, { $inc: { vote_score: incValue }});
+    if (!isSelfVote) await User.updateOne({ _id: authorId }, { $inc: { totalKarma: incValue * POST_VOTE_WEIGHT }});
   }
   catch(err) {
     console.log("error: switchPostVote -", err)
   }
 }
 
-async function newPostVote( postId , userId, isUpvote, isSelfVote, weight = 1 ) {
+async function newPostVote( postId , userId, isUpvote, isSelfVote, authorId, weight = 1 ) {
   try {
     await Vote.create({ postId, userId, value: isUpvote });
-    await Post.updateOne({ _id: postId }, { $inc: { vote_score: isUpvote ? 1  * weight: -1 * weight,
-                                                self_vote_score:  isSelfVote ? (isUpvote ? 1  * weight: -1 * weight) : 0}});
+    
+    const incValue = (isUpvote ? 1 : -1) * weight;
+    await Post.updateOne({ _id: postId }, { $inc: { vote_score: incValue }});
+    if (!isSelfVote) await User.updateOne({ _id: authorId }, { $inc: { totalKarma: incValue * POST_VOTE_WEIGHT }});
   }
   catch(err) {
     console.log("error: newPostVote -", err)
   }
 }
+
+
+
+
+
 
 async function getCommentVoteValue(commentId, userId) {
   try {
@@ -69,52 +84,58 @@ async function getCommentVoteValue(commentId, userId) {
   }
 }
 
-async function deleteCommentVote(commentId, userId, isUpvote, isSelfVote, weight = 1) {
+async function deleteCommentVote(commentId, userId, isUpvote, isSelfVote, authorId, weight = 1) {
   try {
     await Vote.deleteOne({ commentId, userId });
+    
+    const incValue = (isUpvote ? -1 : 1) * weight;
     await Comment.updateOne(
       { _id: commentId },
       {
         $inc: {
-          vote_score: isUpvote ? -1 * weight : 1 * weight,
-          self_vote_score: isSelfVote ? (isUpvote ? -1 * weight : 1 * weight) : 0
+          vote_score: incValue
         }
       }
     );
+    if (!isSelfVote) await User.updateOne({ _id: authorId }, { $inc: { totalKarma: incValue * COMMENT_VOTE_WEIGHT }});
   } catch (err) {
     console.log("error: deleteCommentVote -", err);
   }
 }
 
-async function switchCommentVote(commentId, userId, isUpvote, isSelfVote, weight = 1) {
+async function switchCommentVote(commentId, userId, isUpvote, isSelfVote, authorId, weight = 1) {
   try {
     await Vote.updateOne({ commentId, userId }, { value: isUpvote });
+    
+    const incValue = (isUpvote ? 2 : -2) * weight;
     await Comment.updateOne(
       { _id: commentId },
       {
         $inc: {
-          vote_score: isUpvote ? 2 * weight : -2 * weight,
-          self_vote_score: isSelfVote ? (isUpvote ? 2 * weight : -2 * weight) : 0
+          vote_score: incValue
         }
       }
     );
+    if (!isSelfVote) await User.updateOne({ _id: authorId }, { $inc: { totalKarma: incValue * COMMENT_VOTE_WEIGHT }});
   } catch (err) {
     console.log("error: switchCommentVote -", err);
   }
 }
 
-async function newCommentVote(commentId, userId, isUpvote, isSelfVote, weight = 1) {
+async function newCommentVote(commentId, userId, isUpvote, isSelfVote, authorId, weight = 1) {
   try {
     await Vote.create({ commentId, userId, value: isUpvote });
+    
+    const incValue = (isUpvote ? 1 : -1) * weight;
     await Comment.updateOne(
       { _id: commentId },
       {
         $inc: {
-          vote_score: isUpvote ? 1 * weight : -1 * weight,
-          self_vote_score: isSelfVote ? (isUpvote ? 1 * weight : -1 * weight) : 0
+          vote_score: incValue
         }
       }
     );
+    if (!isSelfVote) await User.updateOne({ _id: authorId }, { $inc: { totalKarma: incValue * COMMENT_VOTE_WEIGHT }});
   } catch (err) {
     console.log("error: newCommentVote -", err);
   }

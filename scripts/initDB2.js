@@ -9,13 +9,15 @@ const readline = require("readline");
 const mongoose = require("mongoose");
 const { connectDB, avatarFor } = require("../utils/utils");
 const {
-    KARMA_TIER_0, 
-    KARMA_TIER_1, 
-    KARMA_TIER_2, 
-    KARMA_TIER_3, 
-    KARMA_NEW
+  KARMA_TIER_0,
+  KARMA_TIER_1,
+  KARMA_TIER_2,
+  KARMA_TIER_3,
+  KARMA_NEW,
+  VOTE_WEIGHTS,
+  POST_VOTE_WEIGHT,
+  COMMENT_VOTE_WEIGHT,
 } = require("../config");
-
 
 const User              = require("../models/User-model");
 const Post              = require("../models/Post-model");
@@ -112,6 +114,23 @@ async function resolveDataFile() {
   return path.join(DATA_DIR, files[files.length - 1]);
 }
 
+// ── Karma helpers (mirrors userService.js / voteService.js) ──────────────
+
+function getKarmaTier(totalKarma, accountAgeDays) {
+  if (totalKarma < KARMA_TIER_0)   return "Troller";
+  if (accountAgeDays < KARMA_NEW)  return "Newcomer";
+  if (totalKarma < KARMA_TIER_1)   return "Lurker";
+  if (totalKarma < KARMA_TIER_2)   return "Apprentice";
+  if (totalKarma < KARMA_TIER_3)   return "Master";
+  return "Legend";
+}
+
+function getWeight(totalKarma, accountAgeDays) {
+  return VOTE_WEIGHTS[getKarmaTier(totalKarma, accountAgeDays)] ?? 1;
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────
+
 async function main() {
   const dataFilePath = await resolveDataFile();
   const seedData = JSON.parse(fs.readFileSync(dataFilePath, "utf8"));
@@ -121,9 +140,9 @@ async function main() {
 
   // 1) Connect
   await connectDB();
-  mongoose.set('autoIndex', false);
+  mongoose.set("autoIndex", false);
 
-  // BOMB everything bruh wthhhhhhhh
+  // Drop all collections (clears indexes too — avoids stale index conflicts)
   try {
     await mongoose.connection.db.dropCollection("votes");
     await mongoose.connection.db.dropCollection("posts");
@@ -147,19 +166,9 @@ async function main() {
   await Bookmark.init();
   console.log("Indexes ensured ✅");
 
-  // 3) Nuke everything
-  await CommentPreference.deleteMany({});
-  await PostPreference.deleteMany({});
-  await Bookmark.deleteMany({});
-  await Vote.deleteMany({});
-  await Comment.deleteMany({});
-  await Post.deleteMany({});
-  await User.deleteMany({});
-  console.log("Collections cleared ✅");
-
-  // 4) Create users
-  // Use insertMany with { timestamps: false } to restore original createdAt/updatedAt.
-  // Falls back to User.create() for old snapshots that don't have those fields.
+  // 3) Create users
+  // insertMany with { timestamps: false } restores original createdAt/updatedAt.
+  // Falls back to create() for old snapshots without those fields.
   const hasTimestamps = seedData.users.some((u) => u.createdAt);
   let createdUsers;
 
@@ -171,6 +180,7 @@ async function main() {
       dob:          new Date(u.dob),
       bio:          u.bio,
       avatar:       u.avatar || avatarFor(u.avatarSeed),
+      totalKarma:   u.totalKarma ?? 0,
       createdAt:    new Date(u.createdAt),
       updatedAt:    new Date(u.updatedAt ?? u.createdAt),
     }));
@@ -185,13 +195,14 @@ async function main() {
           dob:          new Date(u.dob),
           bio:          u.bio,
           avatar:       u.avatar || avatarFor(u.avatarSeed),
+          totalKarma:   u.totalKarma ?? 0,
         })
       )
     );
   }
   console.log(`Users created ✅ (${createdUsers.length})`);
 
-  // 5) Create posts
+  // 4) Create posts
   const createdPosts = await Promise.all(
     seedData.posts.map((p) =>
       Post.create({
@@ -213,9 +224,8 @@ async function main() {
         Post.updateOne(
           { _id: createdPosts[i]._id },
           { $set: {
-            vote_score:      p.vote_score      ?? 0,
-            self_vote_score: p.self_vote_score ?? 0,
-            comment_count:   p.comment_count   ?? 0,
+            vote_score:    p.vote_score    ?? 0,
+            comment_count: p.comment_count ?? 0,
           }}
         )
       )
@@ -223,7 +233,7 @@ async function main() {
   }
   console.log(`Posts created ✅ (${createdPosts.length})`);
 
-  // 6) Create comments + tally comment_count per post
+  // 5) Create comments + tally comment_count per post
   const commentCountMap = {};
   const createdCommentsList = await Promise.all(
     seedData.comments.map((c) => {
@@ -243,10 +253,7 @@ async function main() {
       seedData.comments.map((c, i) =>
         Comment.updateOne(
           { _id: createdCommentsList[i]._id },
-          { $set: {
-            vote_score:      c.vote_score      ?? 0,
-            self_vote_score: c.self_vote_score ?? 0,
-          }}
+          { $set: { vote_score: c.vote_score ?? 0 } }
         )
       )
     );
@@ -262,26 +269,9 @@ async function main() {
   }
   console.log(`Comments created ✅ (${seedData.comments.length})`);
 
-  // 7) Create votes
-  //
-  // Two modes:
-  //   - Snapshot (hasStoredScores): scores already restored above, just insert Vote docs
-  //   - Hand-crafted JSON: recalculate using karma-weighted voting
-  //
-  // Karma formula (from userService.js):
-  //   postKarma    = sum(post.vote_score   - post.self_vote_score)   * 2
-  //   commentKarma = sum(comment.vote_score - comment.self_vote_score)
-  //   finalKarma   = postKarma + commentKarma
-  //
-  // Weight tiers:
-  //   Troller    (score < -5)  : 0  (vote recorded but ignored)
-  //   Newcomer   (age  < 30d)  : 1
-  //   Lurker     (score < 10)  : 1
-  //   Apprentice (score < 50)  : 2
-  //   Master     (score < 100) : 3
-  //   Legend     (score >= 100): 5
-
+  // ── 6) Create post votes ──────────────────────────────────────────────────
   if (hasStoredScores) {
+    // Snapshot mode: just insert docs, scores are already set
     await Promise.all(
       seedData.votes.map((v) =>
         Vote.create({
@@ -292,54 +282,41 @@ async function main() {
       )
     );
   } else {
-    function getKarmaWeight(karmaScore, accountAgeDays) {
-      if (karmaScore < KARMA_TIER_0)     return 0; // Troller
-      if (accountAgeDays < KARMA_NEW) return 1; // Newcomer
-      if (karmaScore < KARMA_TIER_1)     return 1; // Lurker
-      if (karmaScore < KARMA_TIER_2)     return 2; // Apprentice
-      if (karmaScore < KARMA_TIER_3)    return 3; // Master
-      return 5;                          // Legend
-    }
-
-    async function getUserKarmaWeight(userDoc) {
-      const postStats = await Post.aggregate([
-        { $match: { userId: userDoc._id } },
-        { $group: { _id: null, netScore: { $sum: { $subtract: ["$vote_score", "$self_vote_score"] } } } }
-      ]);
-      const commentStats = await Comment.aggregate([
-        { $match: { userId: userDoc._id } },
-        { $group: { _id: null, netScore: { $sum: { $subtract: ["$vote_score", "$self_vote_score"] } } } }
-      ]);
-      const postKarma    = postStats[0]?.netScore    ?? 0;
-      const commentKarma = commentStats[0]?.netScore ?? 0;
-      const finalKarma   = (postKarma * 2) + commentKarma;
-      const accountAgeDays = Math.ceil((new Date() - new Date(userDoc.createdAt)) / 86400000);
-      return getKarmaWeight(finalKarma, accountAgeDays);
-    }
-
+    // Hand-crafted mode: Recalculate everything
+    console.log("Recalculating Post Karma...");
     for (const v of seedData.votes) {
       const voterDoc   = createdUsers[v.authorIndex];
       const postDoc    = createdPosts[v.postIndex];
+      const authorDoc  = createdUsers[seedData.posts[v.postIndex].authorIndex];
       const isSelfVote = voterDoc._id.toString() === postDoc.userId.toString();
-      const weight     = await getUserKarmaWeight(voterDoc);
+
+      // Calculate weight based on CURRENT state of the voter in this script run
+      const accountAgeDays = Math.ceil((new Date() - new Date(voterDoc.createdAt)) / 86400000);
+      const weight = getWeight(voterDoc.totalKarma ?? 0, accountAgeDays);
 
       await Vote.create({ postId: postDoc._id, userId: voterDoc._id, value: v.value });
 
-      if (weight === 0) continue; // Troller — recorded but no score impact
+      if (weight === 0) continue; // Trollers don't affect scores
 
-      const delta = v.value ? weight : -weight;
-      await Post.updateOne(
-        { _id: postDoc._id },
-        { $inc: {
-          vote_score:      delta,
-          self_vote_score: isSelfVote ? delta : 0,
-        }}
-      );
+      const incValue = (v.value ? 1 : -1) * weight;
+
+      // 1. Update Post Score
+      await Post.updateOne({ _id: postDoc._id }, { $inc: { vote_score: incValue } });
+
+      // 2. Update Author Karma
+      if (!isSelfVote) {
+        const karmaChange = incValue * POST_VOTE_WEIGHT;
+        await User.updateOne({ _id: authorDoc._id }, { $inc: { totalKarma: karmaChange } });
+        
+        // FIX: Update in-memory karma so the next time this author votes, 
+        // their tier/weight is calculated correctly.
+        authorDoc.totalKarma = (authorDoc.totalKarma ?? 0) + karmaChange;
+      }
     }
   }
-  console.log(`Votes created ✅ (${seedData.votes.length})`);
+  console.log(`Post votes created ✅ (${seedData.votes.length})`);
 
-  // 8) Create comment votes
+  // ── 7) Create comment votes ───────────────────────────────────────────────
   if (seedData.commentVotes?.length) {
     if (hasStoredScores) {
       await Promise.all(
@@ -352,65 +329,55 @@ async function main() {
         )
       );
     } else {
+      console.log("Recalculating Comment Karma...");
       for (const v of seedData.commentVotes) {
-        const voterDoc      = createdUsers[v.authorIndex];
-        const commentDoc    = createdCommentsList[v.commentIndex];
-        const isSelfVote    = voterDoc._id.toString() === commentDoc.userId.toString();
-        const weight        = await getUserKarmaWeight(voterDoc);
+        const voterDoc   = createdUsers[v.authorIndex];
+        const commentDoc = createdCommentsList[v.commentIndex];
+        const authorDoc  = createdUsers[seedData.comments[v.commentIndex].authorIndex];
+        const isSelfVote = voterDoc._id.toString() === commentDoc.userId.toString();
+
+        const accountAgeDays = Math.ceil((new Date() - new Date(voterDoc.createdAt)) / 86400000);
+        const weight = getWeight(voterDoc.totalKarma ?? 0, accountAgeDays);
 
         await Vote.create({ commentId: commentDoc._id, userId: voterDoc._id, value: v.value });
 
         if (weight === 0) continue;
 
-        const delta = v.value ? weight : -weight;
-        await Comment.updateOne(
-          { _id: commentDoc._id },
-          { $inc: {
-            vote_score:      delta,
-            self_vote_score: isSelfVote ? delta : 0,
-          }}
-        );
+        const incValue = (v.value ? 1 : -1) * weight;
+
+        // 1. Update Comment Score
+        await Comment.updateOne({ _id: commentDoc._id }, { $inc: { vote_score: incValue } });
+
+        // 2. Update Author Karma
+        if (!isSelfVote) {
+          const karmaChange = incValue * COMMENT_VOTE_WEIGHT;
+          await User.updateOne({ _id: authorDoc._id }, { $inc: { totalKarma: karmaChange } });
+          
+          // FIX: Update in-memory karma
+          authorDoc.totalKarma = (authorDoc.totalKarma ?? 0) + karmaChange;
+        }
       }
     }
     console.log(`Comment votes created ✅ (${seedData.commentVotes.length})`);
   }
 
-  // // 9) Create bookmarks
-  // if (seedData.bookmarks?.length) {
-  //   await Promise.all(
-  //     seedData.bookmarks.map((b) =>
-  //       Bookmark.create({
-  //         postId: createdPosts[b.postIndex]._id,
-  //         userId: createdUsers[b.authorIndex]._id,
-  //       })
-  //     )
-  //   );
-  //   console.log(`Bookmarks created ✅ (${seedData.bookmarks.length})`);
-  // }
-
-    // 9) Create bookmarks (Safe Version)
+  // 8) Create bookmarks
   if (seedData.bookmarks?.length) {
-      await Promise.all(
-          seedData.bookmarks.map(async (b, i) => {
-              const post = createdPosts[b.postIndex];
-              const user = createdUsers[b.authorIndex];
+    await Promise.all(
+      seedData.bookmarks.map(async (b, i) => {
+        const post = createdPosts[b.postIndex];
+        const user = createdUsers[b.authorIndex];
+        if (!post || !user) {
+          console.warn(`⚠️  Skipping bookmark ${i}: postIndex ${b.postIndex} or authorIndex ${b.authorIndex} not found`);
+          return null;
+        }
+        return Bookmark.create({ postId: post._id, userId: user._id });
+      })
+    );
+    console.log(`Bookmarks created ✅ (${seedData.bookmarks.length})`);
+  }
 
-              // VALIDATION: Check if the index actually exists
-              if (!post || !user) {
-                  console.warn(`⚠️ Skipping Bookmark at index ${i}: PostIndex ${b.postIndex} or AuthorIndex ${b.authorIndex} not found.`);
-                  return null;
-              }
-
-              return Bookmark.create({
-                  postId: post._id,
-                  userId: user._id,
-              });
-          })
-      );
-      console.log(`Bookmarks created ✅ (${seedData.bookmarks.length})`);
-  } 
-
-  // 10) Create post preferences
+  // 9) Create post preferences
   if (seedData.postPreferences?.length) {
     await Promise.all(
       seedData.postPreferences.map((pp) =>
@@ -424,7 +391,7 @@ async function main() {
     console.log(`Post preferences created ✅ (${seedData.postPreferences.length})`);
   }
 
-  // 11) Create comment preferences
+  // 10) Create comment preferences
   if (seedData.commentPreferences?.length) {
     await Promise.all(
       seedData.commentPreferences.map((cp) =>
@@ -438,7 +405,7 @@ async function main() {
     console.log(`Comment preferences created ✅ (${seedData.commentPreferences.length})`);
   }
 
-  // 12) Summary
+  // 11) Summary
   const topPosts = await Post.find()
     .sort({ vote_score: -1, upload_datetime: -1 })
     .limit(20)

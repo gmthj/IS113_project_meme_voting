@@ -18,9 +18,19 @@ module.exports = {
     // KARMA_TIER_4: >100, // Legend
     KARMA_NEW: 30, //(days) Newcomer
 
+    // voting weight
+    POST_VOTE_WEIGHT: 2,
+    COMMENT_VOTE_WEIGHT: 1,
 
-
-
+    VOTE_WEIGHTS: {
+        "Troller": 0,
+        "Unknown": 1,
+        "Newcomer": 1,
+        "Lurker": 1,
+        "Apprentice": 2,
+        "Master": 3,
+        "Legend": 5,
+    }
 
 
 

@@ -46,9 +46,10 @@ async function main() {
     passwordHash: u.passwordHash,
     name:         u.name,
     dob:          u.dob ? u.dob.toISOString().split("T")[0] : null,
-    bio:          u.bio  ?? "",
-    avatar:       u.avatar ?? "",
+    bio:          u.bio        ?? "",
+    avatar:       u.avatar     ?? "",
     avatarSeed:   u.name,
+    totalKarma:   u.totalKarma ?? 0,
     createdAt:    u.createdAt?.toISOString() ?? null,
     updatedAt:    u.updatedAt?.toISOString() ?? null,
   }));
@@ -60,14 +61,13 @@ async function main() {
 
   const snapshotPosts = posts.map((p) => {
     const entry = {
-      authorIndex:     userIndexById[p.userId.toString()],
-      title:           p.title,
-      description:     p.description ?? "",
-      image:           p.image,
-      uploadedAt:      p.upload_datetime.toISOString(),
-      vote_score:      p.vote_score      ?? 0,
-      self_vote_score: p.self_vote_score ?? 0,
-      comment_count:   p.comment_count   ?? 0,
+      authorIndex:   userIndexById[p.userId.toString()],
+      title:         p.title,
+      description:   p.description ?? "",
+      image:         p.image,
+      uploadedAt:    p.upload_datetime.toISOString(),
+      vote_score:    p.vote_score    ?? 0,
+      comment_count: p.comment_count ?? 0,
     };
     if (p.edit_datetime) entry.editedAt = p.edit_datetime.toISOString();
     return entry;
@@ -75,27 +75,37 @@ async function main() {
 
   // ── Comments ──────────────────────────────────────────────────────────────
   const comments = await Comment.find().sort({ upload_datetime: 1 }).lean();
+  const commentIndexById = {};
+  comments.forEach((c, i) => { commentIndexById[c._id.toString()] = i; });
 
   const snapshotComments = comments.map((c) => {
     const entry = {
-      postIndex:       postIndexById[c.postId.toString()],
-      authorIndex:     userIndexById[c.userId.toString()],
-      text:            c.text,
-      uploadedAt:      c.upload_datetime.toISOString(),
-      vote_score:      c.vote_score      ?? 0,
-      self_vote_score: c.self_vote_score ?? 0,
+      postIndex:   postIndexById[c.postId.toString()],
+      authorIndex: userIndexById[c.userId.toString()],
+      text:        c.text,
+      uploadedAt:  c.upload_datetime.toISOString(),
+      vote_score:  c.vote_score ?? 0,
     };
     if (c.edit_datetime) entry.editedAt = c.edit_datetime.toISOString();
     return entry;
   });
 
-  // ── Votes ─────────────────────────────────────────────────────────────────
-  const votes = await Vote.find().lean();
+  // ── Post Votes ────────────────────────────────────────────────────────────
+  const postVotes = await Vote.find({ postId: { $exists: true, $ne: null } }).lean();
 
-  const snapshotVotes = votes.map((v) => ({
+  const snapshotVotes = postVotes.map((v) => ({
     postIndex:   postIndexById[v.postId.toString()],
     authorIndex: userIndexById[v.userId.toString()],
     value:       v.value,
+  }));
+
+  // ── Comment Votes ─────────────────────────────────────────────────────────
+  const commentVotes = await Vote.find({ commentId: { $exists: true, $ne: null } }).lean();
+
+  const snapshotCommentVotes = commentVotes.map((v) => ({
+    commentIndex: commentIndexById[v.commentId.toString()],
+    authorIndex:  userIndexById[v.userId.toString()],
+    value:        v.value,
   }));
 
   // ── Bookmarks ─────────────────────────────────────────────────────────────
@@ -132,6 +142,7 @@ async function main() {
     posts:              snapshotPosts,
     comments:           snapshotComments,
     votes:              snapshotVotes,
+    commentVotes:       snapshotCommentVotes,
     bookmarks:          snapshotBookmarks,
     postPreferences:    snapshotPostPrefs,
     commentPreferences: snapshotCommentPrefs,
@@ -145,7 +156,8 @@ async function main() {
   console.log(`  Users:              ${snapshotUsers.length}`);
   console.log(`  Posts:              ${snapshotPosts.length}`);
   console.log(`  Comments:           ${snapshotComments.length}`);
-  console.log(`  Votes:              ${snapshotVotes.length}`);
+  console.log(`  Post votes:         ${snapshotVotes.length}`);
+  console.log(`  Comment votes:      ${snapshotCommentVotes.length}`);
   console.log(`  Bookmarks:          ${snapshotBookmarks.length}`);
   console.log(`  Post prefs:         ${snapshotPostPrefs.length}`);
   console.log(`  Comment prefs:      ${snapshotCommentPrefs.length}`);

@@ -26,16 +26,16 @@ exports.renderUserProfile = async (req, res) => {
                 // save the preference
                 const existing = await PostPreference.findOne({
                     userId: sessionUser._id,
-                    page: 'home'
+                    page: 'user'
                 }).lean();
 
                 if (existing) {
-                    await updatePostSortType(sessionUser._id, 'home', sortType);
+                    await updatePostSortType(sessionUser._id, 'user', sortType);
                 } else {
-                    await createPostSortType(sessionUser._id, 'home', sortType);
+                    await createPostSortType(sessionUser._id, 'user', sortType);
                 }
             } else {
-                sortType = await getPostSortType(sessionUser._id, 'home');
+                sortType = await getPostSortType(sessionUser._id, 'user');
             }
 
         } else {
@@ -101,7 +101,7 @@ exports.resetSort = async (req, res) => {
 
     try {
         if (sessionUser && sessionUser._id) {
-            await deletePostSortType(sessionUser._id, 'home'); 
+            await deletePostSortType(sessionUser._id, 'user'); 
         }
         res.redirect(redirectUrl);
     } catch (error) {

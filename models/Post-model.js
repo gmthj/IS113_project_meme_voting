@@ -13,7 +13,6 @@ const PostSchema = new mongoose.Schema(
     image: { type: String, required: true, trim: true },
 
     vote_score: { type: Number, default: 0 },
-    self_vote_score: { type: Number, default: 0 },
     comment_count: { type: Number, default: 0 },
 
     upload_datetime: { type: Date, default: Date.now },

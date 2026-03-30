@@ -832,6 +832,7 @@ input:focus, textarea:focus {
     text-decoration: none;
     box-shadow: 8px 8px 0px #000;
     text-transform: uppercase;
+    margin-bottom: 20px;
 }
 
 .big-login-btn:hover {
@@ -1143,4 +1144,55 @@ input:focus, textarea:focus {
         align-items: center;
         text-align: center;
     }
+}
+
+
+/* --- Author Link Refinement --- */
+
+.neo-author-link {
+    display: flex;
+    align-items: center; /* Vertical alignment */
+    gap: 12px;
+    text-decoration: none;
+    color: var(--neo-ink);
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.neo-author-link:hover {
+    /* transform: translateX(5px); */
+    transform: translate(-2px, -2px);
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column; /* This stacks the name and stats */
+    line-height: 1.2;
+}
+
+.author-name {
+    font-weight: 900;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.author-stats {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #555;
+    text-transform: uppercase;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.stat-tier {
+    color: var(--neo-ink);
+    background: var(--neo-yellow);
+    padding: 0 4px;
+    border: 1px solid var(--neo-ink);
+}
+
+.stat-divider {
+    color: #ccc;
 }

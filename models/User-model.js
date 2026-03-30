@@ -9,6 +9,7 @@ const UserSchema = new mongoose.Schema(
     bio: { type: String, default: "" },
     avatar: { type: String, default: "" },
     sortPreference: { type: String, default: "highest-votes" },
+    totalKarma: { type: Number, default: 0 },
   },
   { timestamps: true },
 );

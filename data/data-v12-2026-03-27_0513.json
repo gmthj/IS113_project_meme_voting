@@ -912,12 +912,12 @@
   "postPreferences": [
     {
       "authorIndex": 7,
-      "page": "user-bookmarks",
+      "page": "user",
       "sortType": "most-comments"
     },
     {
       "authorIndex": 1,
-      "page": "user-posts",
+      "page": "user",
       "sortType": "oldest"
     },
     {
@@ -932,17 +932,17 @@
     },
     {
       "authorIndex": 0,
-      "page": "user-bookmarks",
+      "page": "user",
       "sortType": "newest"
     },
     {
       "authorIndex": 7,
-      "page": "user-posts",
+      "page": "user",
       "sortType": "newest"
     },
     {
       "authorIndex": 4,
-      "page": "user-bookmarks",
+      "page": "user",
       "sortType": "highest-votes"
     },
     {
@@ -952,12 +952,12 @@
     },
     {
       "authorIndex": 6,
-      "page": "user-bookmarks",
+      "page": "user",
       "sortType": "least-comments"
     },
     {
       "authorIndex": 2,
-      "page": "user-posts",
+      "page": "user",
       "sortType": "newest"
     },
     {

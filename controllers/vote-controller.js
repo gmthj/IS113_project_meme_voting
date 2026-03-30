@@ -7,6 +7,8 @@ const {
     newCommentVote 
 } = require("../services/voteService");
 
+const { getVoteWeight } = require("../services/userService");
+
 
 // /vote
 exports.handlePostVote = async (req, res) => {
@@ -24,16 +26,18 @@ exports.handlePostVote = async (req, res) => {
     const isUpvote = (voteDirection === "up");
     const isSelfVote = (authorId == userId);
     // console.log("selfvote ", isSelfVote)
+    const weight = await getVoteWeight(userId);
+    // console.log("post vote weight: ", weight)
 
 
     if (currentVote === isUpvote) {
-        await deletePostVote( postId, userId, isUpvote, isSelfVote );
+        await deletePostVote( postId, userId, isUpvote, isSelfVote, authorId, weight );
     }
     else if (currentVote !== null) {
-        await switchPostVote( postId, userId, isUpvote, isSelfVote );
+        await switchPostVote( postId, userId, isUpvote, isSelfVote, authorId, weight );
     }
     else {
-        await newPostVote( postId, userId, isUpvote, isSelfVote );
+        await newPostVote( postId, userId, isUpvote, isSelfVote, authorId, weight );
     }
 
 
@@ -49,19 +53,21 @@ exports.handleCommentVote = async (req, res) => {
     const userId = req.body.userId //voter
     const commentId = req.body.commentId
     const voteValue = req.body.voteValue // "true" / "false"
+    const weight = await getVoteWeight(userId);
+
 
     const currentVote = voteValue === "true" ? true : (voteValue === "false" ? false : null);
     const isUpvote = (voteDirection === "up");
     const isSelfVote = (authorId == userId);
 
     if (currentVote === isUpvote) {
-        await deleteCommentVote( commentId, userId, isUpvote, isSelfVote );
+        await deleteCommentVote( commentId, userId, isUpvote, isSelfVote, authorId, weight );
     }
     else if (currentVote !== null) {
-        await switchCommentVote( commentId, userId, isUpvote, isSelfVote );
+        await switchCommentVote( commentId, userId, isUpvote, isSelfVote, authorId, weight );
     }
     else {
-        await newCommentVote( commentId, userId, isUpvote, isSelfVote );
+        await newCommentVote( commentId, userId, isUpvote, isSelfVote, authorId, weight );
     }
 
     const backURL = req.get('Referrer') || '/';

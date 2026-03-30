@@ -3,20 +3,30 @@
     <div class="neo-card-header">
         <a href="/user/<%= comment.author._id %>" class="neo-author-link">
             <img src="<%= comment.author.avatar %>" class="neo-avatar-sm">
-            <%= comment.author.name %>
+
+            <div class="author-details">
+                <span class="author-name"><%= comment.author.name %></span>
+                <div class="author-stats">
+                    <span class="stat-tier"><%= comment.author.karmaTier %></span>
+                    <span class="stat-karma"><%= comment.author.totalKarma %></span>
+                </div>
+            </div>
         </a>
 
         <% if (comment.edit_datetime) { %>
             <span class="neo-edited-label">EDITED</span>
         <% } %>
+        
+        <% if (typeof post !== 'undefined' && post && post.author._id.toString() == comment.author._id.toString()) { %>
+            <span class="neo-badge neo-badge-author">AUTHOR</span>
+            &nbsp;
+        <% } %>
+
 
         <span class="neo-badge">
             <%= comment.commentAge %>
         </span>
 
-        <% if (typeof post !== 'undefined' && post && post.author._id.toString() == comment.author._id.toString()) { %>
-            <span class="neo-badge neo-badge-author">AUTHOR</span>
-        <% } %>
     </div>
     
     <div class="neo-card-body">

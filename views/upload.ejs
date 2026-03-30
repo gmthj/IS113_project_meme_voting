@@ -12,7 +12,7 @@
 
 <body>
 <main class="upload-container">
-    <div class="neo-card">
+    <div class="neo-card upload-card">
         <div class="neo-badge neo-badge-ink upload-badge">NEW MEME</div>
 
         <% if (typeof error !== 'undefined' && error) { %>
@@ -31,7 +31,7 @@
 
         <h2 class="neo-title">DRAFT YOUR MEME</h2>
         
-        <form action="/upload" method="POST"  class="neo-form">
+        <form action="/upload" method="POST" class="neo-form">
             <div class="neo-form-group">
                 <label for="title" class="neo-label">TITLE</label>
                 <input type="text" id="title" name="meme_title" class="neo-input" placeholder="Catchy title here..." required>

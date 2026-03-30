@@ -5,7 +5,14 @@
     <div class="neo-card-header">
         <a href="/user/<%= post.author._id %>" class="neo-author-link">
             <img src="<%= post.author.avatar %>" class="neo-avatar-sm">
-            <%= post.author.name %>
+
+            <div class="author-details">
+                <span class="author-name"><%= post.author.name %></span>
+                <div class="author-stats">
+                    <span class="stat-tier"><%= post.author.karmaTier %></span>
+                    <span class="stat-karma"><%= post.author.totalKarma %></span>
+                </div>
+            </div>
         </a>
 
         <% if (post.edit_datetime) { %>
@@ -38,6 +45,7 @@
             <div class="vote-block">
                 <form action="/vote" method="post" style="display: contents;">
                     <input type="hidden" name="userId" value="<%= sessionUser._id %>">
+                    <input type="hidden" name="authorId" value="<%= post.author._id %>">
                     <input type="hidden" name="postId" value="<%= post._id %>">
                     <input type="hidden" name="voteValue" value="<%= post.voteValue %>">
                     

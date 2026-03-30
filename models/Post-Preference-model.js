@@ -9,7 +9,7 @@ const postPreferenceSchema = new mongoose.Schema(
     },
     page: {
       type: String,
-      enum: ['home'],
+      enum: ['home', 'user'],
       required: true
     },
     sortType: {

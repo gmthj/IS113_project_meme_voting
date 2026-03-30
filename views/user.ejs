@@ -27,6 +27,10 @@
 
             <div class="profile-info">
                 <h2 class="neo-title" style="margin-bottom: 5px;"><%= userInfo.name %></h2>
+                <div class="author-stats">
+                    <span class="meta-text stat-tier"><%= userInfo.karmaTier %></span>
+                    <span class="meta-text stat-karma"><%= userInfo.totalKarma %> KARMA</span>
+                </div>
                 <p class="meta-text" style="margin-bottom: 20px;">MEMBER SINCE: <%= userInfo.joined %></p>
 
                 <div class="info-grid">
@@ -35,17 +39,18 @@
                         <p class="info-value"><%= userInfo.email %></p>
                     </div>
                     <div class="info-item">
-                        <span class="neo-label-mini">BIRTH DATE</span>
+                        <span class="neo-label-mini">BIRTHDAY</span>
                         <p class="info-value"><%= new Date(userInfo.dob).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() %></p>
                     </div>
                     <div class="info-item">
                         <span class="neo-label-mini">BIO</span>
                         <p class="info-value italic-bio">"<%= userInfo.bio %>"</p>
                     </div>
-                    <div class="info-item">
+                    <!-- <div class="info-item">
                         <span class="neo-label-mini">KARMA</span>
-                        <p class="info-value"><%= userInfo.karma.score %> - <%= userInfo.karma.tier %></p>
-                    </div>
+                        <p class="info-value"><%= userInfo.totalKarma %> / <%= userInfo.karmaTier %></p>
+                    </div> -->
+                    <!-- TODO: user stats : post count comment count  -->
                 </div>
             </div>
         </div>
