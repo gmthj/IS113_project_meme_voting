@@ -32,7 +32,9 @@ router.post('/delete', authMiddleware.isLoggedIn, accountController.handleDelete
 router.get('/change-password', authMiddleware.isLoggedIn, accountController.changepassword)
 router.post('/change-password', authMiddleware.isLoggedIn, accountController.updatePassword)
  
-
+// account/forget password 
+router.get('/forget-password', accountController.forgetPasswordPage)
+router.post('/forget-password', accountController.forgetPassword)
 
 
 // =========================

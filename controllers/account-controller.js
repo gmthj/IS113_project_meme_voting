@@ -296,6 +296,7 @@ exports.handleEdit = async (req, res) => {
 };
 
 
+// Change Password in the User Account Page
 exports.changepassword = (req, res) => {
     const sessionUser = req.session.sessionUser;
 
@@ -347,3 +348,68 @@ exports.updatePassword = async (req, res) => {
         success: "Password updated successfully"
     });
 };
+
+
+// Forget password at the login page
+exports.forgetPasswordPage = (req, res) => {
+    res.render("forgetPassword", {
+        error: null,
+        success: null
+    });
+};
+
+// Handle form submit
+exports.forgetPassword = async (req, res) => {
+    try {
+        const { email, dob, newPassword, confirmPassword } = req.body;
+
+        if (!email || !dob || !newPassword || !confirmPassword) {
+            return res.render("forgetPassword", {
+                error: "All fields are required",
+                success: null
+            });
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.render("forgetPassword", {
+                error: "Passwords do not match",
+                success: null
+            });
+        }
+
+        const user = await User.findOne({ email: email.trim().toLowerCase() });
+
+        if (!user) {
+            return res.render("forgetPassword", {
+                error: "User not found",
+                success: null
+            });
+        }
+
+        const inputDob = new Date(dob).toISOString().split("T")[0];
+        const userDob = new Date(user.dob).toISOString().split("T")[0];
+
+        if (inputDob !== userDob) {
+            return res.render("forgetPassword", {
+                error: "Email and date of birth do not match",
+                success: null
+            });
+        }
+
+        const newHash = await bcrypt.hash(newPassword, 10);
+        user.passwordHash = newHash;
+        await user.save();
+
+        return res.render("forgetPassword", {
+            error: null,
+            success: "Password updated successfully. Redirecting to login in 3s"
+        });
+    } catch (error) {
+        console.error("Forget password error:", error);
+        return res.render("forgetPassword", {
+            error: "Something went wrong. Please try again.",
+            success: null
+        });
+    }
+};
+
