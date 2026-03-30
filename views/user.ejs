@@ -9,6 +9,7 @@
 </head>
 <%- include('partials/header', {sessionUser, showActions: true}) %>
 <body>
+<div class="home-container">
     <h1> <%= userInfo.name %>'s Information </h1>
     <h3> Email: <%= userInfo.email %> </h3>
     <h3> Date of Birth: <%= userInfo.dob %> </h3>
@@ -31,9 +32,8 @@
     <% } %>
 <hr>
 
-<% if (sessionUser && sessionUser._id) { %>
+
     <%- include('partials/sortTabs', { baseUrl: '/user/' + userInfo._id, resetUrl: '/home/reset-sort', currentSort }) %>
-<% } %>
     <% userPost.forEach(post => { %>
         <%- include("partials/post", {
             post,
@@ -41,6 +41,7 @@
             showControls: true
         }) %>
     <% }) %>
-    
+</div>
+
 </body>
 </html>
