@@ -88,11 +88,13 @@ exports.renderHome = async (req, res) => {
 // DELETE the sort preference
 exports.resetSort = async (req, res) => {
     const sessionUser = req.session.sessionUser || null;
+    const redirectUrl = req.query.redirect || '/home'
+
     try {
         if (sessionUser && sessionUser._id) {
             await deletePostSortType(sessionUser._id, 'home'); 
         }
-        res.redirect('/home');
+        res.redirect(redirectUrl);
     } catch (error) {
         console.error("Error resetting sort:", error);
         res.status(500).render('error', { sessionUser, error: "Could not reset sort preference" });

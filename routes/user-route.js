@@ -8,7 +8,7 @@ const userController = require('../controllers/user-controller')
 // /user
 router.get('/:userId', userController.renderUserProfile)
 
-
+router.post('/reset-sort', userController.resetSort);
 
 
 

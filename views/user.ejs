@@ -28,7 +28,7 @@
     <h1> <%= userInfo.name %>'s Posts </h1>
     
     <!-- Display sort tabs -->
-    <%- include('partials/sortTabs', { baseUrl: '/user/' + userInfo._id, resetUrl: '/home/reset-sort', currentSort }) %>
+    <%- include('partials/sortTabs', { baseUrl: `/user/${userInfo._id}`, resetUrl: `/user/reset-sort`, currentSort }) %>
     
     <!-- Display Posts -->
     <main class="feed-container">

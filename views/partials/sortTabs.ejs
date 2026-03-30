@@ -13,7 +13,7 @@
             <a href="<%= baseUrl %>?sort=most-comments<%= onlyBookmarks ? '&bookmark=true' : '' %>"
                class="sort-tab <%= currentSort === 'most-comments' ? 'active' : '' %>">MOST COMMENTS</a>
 
-            <form action="<%= resetUrl %>" method="POST" style="margin:0; padding:0;">
+            <form action="<%= resetUrl %>?redirect=<%= baseUrl %>" method="POST" style="margin:0; padding:0;">
                 <button type="submit" class="reset-btn">RESET</button>
             </form>
         </div>
