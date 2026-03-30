@@ -70,6 +70,56 @@ http://localhost:8000
 
 ---
 
+## DATABASE
+
+**USER**
+- email: String (unique)
+- passwordHash: String
+- name: String
+- dob: Date
+- bio: String
+- avatar: String
+- totalKarma: Number (default: 0)
+
+**VOTE**
+- userId: ObjectId
+- postId: ObjectId
+- commentId: ObjectId
+- value: Boolean (true: upvote, false: downvote)
+
+**POST**
+- userId: ObjectId (author of the post)
+- title: String
+- description: String
+- image: String (URL or base64)
+- vote_score: Number (default: 0)
+- comment_count: Number (default: 0)
+- upload_datetime: Date (default: now)
+- edit_datetime: Date
+
+**COMMENT**
+- postId: ObjectId
+- userId: ObjectId (author of the comment)
+- text: String
+- upload_datetime: Date (default: now)
+- edit_datetime: Date
+
+**BOOKMARK**
+- postId: ObjectId
+- userId: ObjectId
+
+**POST PREFERENCE** (sorting)
+- userId: ObjectId
+- page: String (home, user)
+- sortType: String (newest, oldest, highest-votes, lowest-votes, most-comments, least-comments, bookmarks)
+
+**COMMENT PREFERENCE** (sorting)
+- userId: ObjectId
+- commentId: ObjectId
+- sortType: String (newest, oldest, highest-votes, lowest-votes)
+
+---
+
 ## STRUCTURE
 
 ### zhiyu
@@ -236,39 +286,6 @@ http://localhost:8000
 
 =====================================================================
 
-## DATABASE
-
-**USER**
-- email: String (unique)
-- passwordHash: String
-- name: String
-- dob: Date
-- bio: String
-- avatar: String
-
-**VOTE**
-- postId: [ObjectId]
-- userId: [ObjectId]
-- value: Boolean (true: upvote, false: downvote)
-
-**POST**
-- userId: [ObjectId] (author of the post)
-- title: String
-- description: String
-- image: String (URL or base64)
-- vote_score: Number (default: 0)
-- comment_count: Number (default: 0)
-- upload_datetime: Date (default: now)
-- edit_datetime: Date
-
-**COMMENT**
-- postId: [ObjectId]
-- userId: [ObjectId] (author of the comment)
-- text: String
-- upload_datetime: Date (default: now)
-- edit_datetime: Date
-
----
 
 _Give us A+ pls_
 
