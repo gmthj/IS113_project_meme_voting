@@ -10,19 +10,46 @@
 <%- include('partials/header', {sessionUser, showActions: true}) %>
 <body>
 <div class="home-container">
-    <h1> <%= userInfo.name %>'s Information </h1>
-    <h3> Email: <%= userInfo.email %> </h3>
-    <h3> Date of Birth: <%= userInfo.dob %> </h3>
-    <h3> Bio: <%= userInfo.bio %> </h3>
-    <h3> Joined: <%= userInfo.joined %> </h3>
-    <h3> Karma: <%= userInfo.karma.score %> </h3>
-    <h3> Tier: <%= userInfo.karma.tier %> </h3>
-    <h3> <img src="<%= userInfo.avatar %>" alt="avatar" height="100"></h3>
-    
-    <!-- Ensures that person is logged in, AND is visiting their user page -->
-    <% if (sessionUser._id && sessionUser._id.toString() === userInfo._id.toString()) { %>
-        <h3><a href="/account/edit">Edit</a></h3>
-    <% } %>
+
+    <div class="neo-card profile-card">
+        <div class="profile-layout">
+            <div class="profile-sidebar">
+                <div class="avatar-frame profile-page-avatar">
+                    <img src="<%= userInfo.avatar %>" alt="avatar">
+                </div>
+                
+                <% if (sessionUser._id && sessionUser._id.toString() === userInfo._id.toString()) { %>
+                    <a href="/account/edit" class="neo-btn-small" style="margin-top: 15px; text-decoration: none; display: inline-block;">
+                        EDIT PROFILE
+                    </a>
+                <% } %>
+            </div>
+
+            <div class="profile-info">
+                <h2 class="neo-title" style="margin-bottom: 5px;"><%= userInfo.name %></h2>
+                <p class="meta-text" style="margin-bottom: 20px;">MEMBER SINCE: <%= userInfo.joined %></p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="neo-label-mini">EMAIL</span>
+                        <p class="info-value"><%= userInfo.email %></p>
+                    </div>
+                    <div class="info-item">
+                        <span class="neo-label-mini">BIRTH DATE</span>
+                        <p class="info-value"><%= new Date(userInfo.dob).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() %></p>
+                    </div>
+                    <div class="info-item">
+                        <span class="neo-label-mini">BIO</span>
+                        <p class="info-value italic-bio">"<%= userInfo.bio %>"</p>
+                    </div>
+                    <div class="info-item">
+                        <span class="neo-label-mini">KARMA</span>
+                        <p class="info-value"><%= userInfo.karma.score %> - <%= userInfo.karma.tier %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <hr>
     <h1> <%= userInfo.name %>'s Posts </h1>

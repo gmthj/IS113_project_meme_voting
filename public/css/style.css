@@ -944,7 +944,7 @@ input:focus, textarea:focus {
 
 .upload-badge {
     position: absolute;
-    top: -15px;
+    top: 20px;
     right: 20px;
     transform: rotate(5deg);
 }
@@ -1072,3 +1072,75 @@ input:focus, textarea:focus {
     filter: contrast(1.1); /* Makes the meme "pop" more in preview */
 }
 
+/* --- Profile Page Specifics --- */
+
+.profile-layout {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+
+.profile-card {
+    position: relative;
+    max-width: 800px;
+    width: 100%;
+    padding: 40px;
+    background: var(--neo-bg);
+}
+
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.neo-label-mini {
+    font-size: 0.65rem;
+    font-weight: 900;
+    background: var(--neo-ink);
+    color: white;
+    padding: 2px 6px;
+    text-transform: uppercase;
+}
+
+.info-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 5px;
+    color: var(--neo-ink);
+}
+
+.italic-bio {
+    font-style: italic;
+    color: #444;
+    border-left: 3px solid var(--neo-yellow);
+    padding-left: 10px;
+}
+
+/* Adjusting the avatar for this specific page */
+.profile-page-avatar {
+    width: 150px;
+    height: 150px;
+    border-width: 6px; /* Even thicker for the main profile */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .profile-layout {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}

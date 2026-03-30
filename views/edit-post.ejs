@@ -13,7 +13,7 @@
 <body>
 <main class="upload-container">
     <div class="neo-card upload-card">
-        <div class="neo-badge-ink upload-badge">EDIT MEME</div>
+        <div class="neo-badge neo-badge-ink upload-badge">EDIT MEME</div>
 
         <% if (typeof error !== 'undefined' && error) { %>
             <div class="neo-error-sticker flash-msg">
@@ -37,7 +37,7 @@
             <input type="hidden" name="backURL" value="<%= backURL %>">
 
             <div class="neo-form-group">
-                <label for="meme_title" class="neo-label">TITLE *</label>
+                <label for="meme_title" class="neo-label">TITLE</label>
                 <input 
                     type="text" 
                     id="meme_title" 
@@ -50,7 +50,7 @@
             </div>
 
             <div class="neo-form-group">
-                <label for="description" class="neo-label">DESCRIPTION *</label>
+                <label for="description" class="neo-label">DESCRIPTION</label>
                 <textarea 
                     id="description" 
                     name="description" 
