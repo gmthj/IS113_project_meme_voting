@@ -21,7 +21,7 @@ exports.handleEditConfirm = async (req, res) => {
 
     if (!isCancel) {
         if (postId) {
-            await updatePostById(postId, updatedText); 
+            await updatePostById(postId, updatedText); //TODO: george whats this 
         } else if (commentId) {
             await updateCommentById(commentId, updatedText);
         }

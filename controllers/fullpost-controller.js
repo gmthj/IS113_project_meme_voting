@@ -12,7 +12,7 @@ exports.renderFullPost = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     try {
         const postId = req.params.postId;
-        if (!postId) return res.status(400).send("Post ID missing.");
+        if (!postId) return res.status(400).render('error', { sessionUser, error: "Post ID missing." });
 
         let sortType;
 
@@ -37,7 +37,7 @@ exports.renderFullPost = async (req, res) => {
         res.render('fullpost', { post, comments, sessionUser, currentSort: sortType });
     } catch (err) {
         console.error("Error: ", err);
-        return res.status(500).send("Internal Server Error");
+        return res.status(500).render('error', { sessionUser, error: "Could not render post" });
     }
 }
 
@@ -49,12 +49,15 @@ exports.handlePostComment = async (req, res) => {
         const postId = req.params.postId;
         const { text } = req.body;
 
+        // TODO: can remove, handled by auth middleware
         if (!sessionUser._id) {
-            return res.status(401).send("You must be logged in to comment.");
+            return res.status(401).render('error', { sessionUser, error: "You must be logged in to comment." });
         }
 
         if (!text || text.trim() === "") {
-            return res.status(400).send("Comment text is required.");
+            // TODO: show error in fullpost page (can be trigger by commenting "    " spaces)
+            return res.status(400).render('error', { sessionUser, error: "Comment text is required." });
+            // return res.status(400).send("Comment text is required.");
         }
 
         const newComment = new Comment({
@@ -73,6 +76,6 @@ exports.handlePostComment = async (req, res) => {
 
     } catch (err) {
         console.error("Error posting comment: ", err);
-        return res.status(500).send("Internal Server Error");
+        return res.status(500).render('error', { sessionUser, error: "Could not upload comment" });
     }
 };

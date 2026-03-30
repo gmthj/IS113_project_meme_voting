@@ -22,9 +22,9 @@ router.get('/logout', accountController.handleLogout)
 // /account/edit  (must be logged in)
 router.get('/edit', authMiddleware.isLoggedIn, accountController.renderEdit)
 router.post('/edit', authMiddleware.isLoggedIn, accountController.handleEdit)
-router.get('/edit', (req, res) => {
-  res.send('EDIT ROUTE HIT');
-}); 
+// router.get('/edit', (req, res) => {
+//   res.send('EDIT ROUTE HIT');
+// }); 
 // /account/delete  (must be logged in)
 router.post('/delete', authMiddleware.isLoggedIn, accountController.handleDeleteAccount)
  

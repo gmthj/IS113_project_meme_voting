@@ -44,7 +44,7 @@ exports.renderHome = async (req, res) => {
 
     } catch (error) {
         console.error("Error rendering home:", error);
-        res.status(500).render('error', { error: "Could not load posts" });
+        res.status(500).render('error', { sessionUser, error: "Could not load posts" });
         sessionUser;
     }
 };
@@ -59,7 +59,7 @@ exports.resetSort = async (req, res) => {
         res.redirect('/home');
     } catch (error) {
         console.error("Error resetting sort:", error);
-        res.status(500).render('error', { error: "Could not reset sort preference" });
+        res.status(500).render('error', { sessionUser, error: "Could not reset sort preference" });
         sessionUser;
     }
 };
