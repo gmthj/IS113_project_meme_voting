@@ -267,6 +267,26 @@ textarea {
     width: 100%;
 }
 
+/* Styles for all date pickers */
+input[type="date"] {
+    background: var(--neo-white);
+    border: var(--border-thick);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+}
+
+input[type="date"]:focus {
+    background: var(--neo-yellow);
+    outline: none;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--neo-ink);
+}
+
+
 input:focus, textarea:focus {
     background: var(--neo-yellow);
     outline: none;

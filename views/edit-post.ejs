@@ -5,113 +5,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="/css/style.css">
-    <title>Edit Post</title>
+    <title>Edit Meme | MemeLab</title>
 </head>
 
 <%- include('partials/header', { sessionUser, showActions: true }) %>
 
 <body>
-<% if (success) { %>
-    <div id="successMsg" style="color:green;">
-        <h3>Post Updated ╰(*°▽°*)╯</h3>
+<main class="upload-container">
+    <div class="neo-card upload-card">
+        <div class="neo-badge-ink upload-badge">EDIT MEME</div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="neo-error-sticker flash-msg">
+                <span class="sticker-icon">⚠️</span>
+                <%= error %>
+            </div>
+        <% } %>
+
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div id="successMsg" class="neo-success-sticker flash-msg">
+                <span class="sticker-icon">✅</span>
+                Post Updated ╰(*°▽°*)╯
+            </div>
+        <% } %>
+
+        <h2 class="neo-title">EDIT YOUR MEME</h2>
+
+        <form action="/upload/update" method="POST" class="neo-form">
+            <input type="hidden" name="postId" value="<%= postData._id %>">
+            <input type="hidden" name="authorId" value="<%= postData.author._id %>">
+            <input type="hidden" name="backURL" value="<%= backURL %>">
+
+            <div class="neo-form-group">
+                <label for="meme_title" class="neo-label">TITLE *</label>
+                <input 
+                    type="text" 
+                    id="meme_title" 
+                    name="meme_title" 
+                    class="neo-input"
+                    value="<%= postData.title %>" 
+                    placeholder="Catchy title here..."
+                    required
+                >
+            </div>
+
+            <div class="neo-form-group">
+                <label for="description" class="neo-label">DESCRIPTION *</label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    class="neo-input" 
+                    rows="3" 
+                    placeholder="What's the context?"
+                    required
+                ><%= postData.description %></textarea>
+            </div>
+
+            <div id="preview-container" class="image-preview-wrapper" style="display: block;">
+                <div class="preview-sticker">PREVIEW</div>
+                <img 
+                    id="image-preview" 
+                    src="<%= postData.image %>" 
+                    alt="Meme Preview" 
+                    class="neo-img-preview"
+                >
+            </div>
+
+            <div class="neo-form-group">
+                <label for="imageFile" class="neo-label">REPLACE MEDIA</label>
+                <div class="file-dropzone" onclick="document.getElementById('imageFile').click()">
+                    <span id="file-name">Click to replace your meme...</span>
+                    <input 
+                        type="file" 
+                        id="imageFile" 
+                        accept="image/png, image/jpeg, image/gif, image/webp, image/svg+xml"
+                        onchange="handleFileSelect(this)"
+                    >
+                </div>
+            </div>
+
+            <input 
+                type="hidden" 
+                name="image_base64" 
+                id="image_base64" 
+                value="<%= postData.image %>"
+            >
+
+            <div class="upload-actions">
+                <button type="submit" class="neo-btn neo-btn-yellow full-width">
+                    UPDATE POST
+                </button>
+            </div>
+        </form>
     </div>
-<% } %>
-
-<% if (error) { %>
-    <p style="color:red"><%= error %></p>
-<% } %>
-
-<form action="/upload/update" method="POST">
-    <input type="hidden" name="postId" value="<%= postData._id %>">
-    <input type="hidden" name="authorId" value="<%= postData.author._id %>">
-    <input type="hidden" name="backURL" value="<%= backURL %>">
-
-    <div>
-        <label for="meme_title">Meme Title</label>
-        <br>
-        <input 
-            type="text" 
-            name="meme_title" 
-            id="meme_title" 
-            value="<%= postData.title %>" 
-            required
-        >
-    </div>
-
-    <br>
-
-    <div>
-        <label for="imageFile">Upload New Meme (optional)</label>
-        <br>
-        <input type="file" id="imageFile" accept="image/png, image/jpeg, image/gif">
-    </div>
-
-    <br>
-
-    <div>
-        <p>Current / New Preview</p>
-        <img 
-            id="preview" 
-            src="<%= postData.image %>" 
-            style="display:block; max-width:300px;"
-        >
-    </div>
-
-    <br>
-
-    <div>
-        <label for="description">Description</label>
-        <br>
-        <textarea name="description" id="description" required><%= postData.description %></textarea>
-    </div>
-
-    <input 
-        type="hidden" 
-        name="image_base64" 
-        id="image_base64" 
-        value="<%= postData.image %>"
-    >
-
-    <br>
-    <input type="submit" value="update post">
-</form>
+</main>
 
 <script>
-const imageInput = document.getElementById("imageFile");
-const preview = document.getElementById("preview");
-const hiddenBase64 = document.getElementById("image_base64");
+function handleFileSelect(input) {
+    const file = input.files[0];
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/svg+xml"
+    ];
+    const maxSizeInBytes = 8 * 1024 * 1024;
 
-imageInput.addEventListener("change", function () {
-    const file = this.files[0];
+    const previewContainer = document.getElementById('preview-container');
+    const previewImage = document.getElementById('image-preview');
+    const fileNameSpan = document.getElementById('file-name');
+    const hiddenBase64 = document.getElementById('image_base64');
 
-    if (!file) {
-        return;
+    if (file) {
+        if (!allowedTypes.includes(file.type)) {
+            alert("Only JPG, PNG, GIF, and WEBP files are allowed!");
+            input.value = "";
+            fileNameSpan.innerText = "Click to pick a meme...";
+            previewContainer.style.display = "none";
+            hiddenBase64.value = "";
+            return;
+        }
+
+        if (file.size > maxSizeInBytes) {
+            alert("Image must be smaller than 8MB!");
+            input.value = "";
+            fileNameSpan.innerText = "Click to pick a meme...";
+            previewContainer.style.display = "none";
+            hiddenBase64.value = "";
+            return;
+        }
+
+        fileNameSpan.innerText = file.name;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64String = e.target.result;
+            previewImage.src = base64String;
+            previewContainer.style.display = "block";
+            hiddenBase64.value = base64String;
+        };
+        reader.readAsDataURL(file);
     }
-
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-        const base64String = e.target.result;
-        preview.src = base64String;
-        preview.style.display = "block";
-        hiddenBase64.value = base64String;
-    };
-
-    reader.readAsDataURL(file);
-});
-
-const successMsg = document.getElementById("successMsg");
-
-if (successMsg) {
+}
+const flashMessages = document.querySelectorAll(".flash-msg");
+flashMessages.forEach(msg => {
     setTimeout(() => {
-        successMsg.style.transition = "opacity 0.5s";
-        successMsg.style.opacity = "0";
+        msg.style.transition = "opacity 0.5s, transform 0.5s";
+        msg.style.opacity = "0";
+        msg.style.transform = "translateY(-10px)";
 
         setTimeout(() => {
-            successMsg.style.display = "none";
+            msg.style.display = "none";
         }, 500);
     }, 3000);
-}
+});
 </script>
 
 </body>
