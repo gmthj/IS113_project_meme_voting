@@ -27,6 +27,10 @@ router.post('/edit', authMiddleware.isLoggedIn, accountController.handleEdit)
 // }); 
 // /account/delete  (must be logged in)
 router.post('/delete', authMiddleware.isLoggedIn, accountController.handleDeleteAccount)
+
+// /account/change password  (must be logged in)
+router.get('/change-password', authMiddleware.isLoggedIn, accountController.changepassword)
+router.post('/change-password', authMiddleware.isLoggedIn, accountController.updatePassword)
  
 
 

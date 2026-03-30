@@ -8,45 +8,49 @@
     <link rel="stylesheet" href="/css/style.css">
     <title>Delete</title>
 </head>
-<%- include('partials/header', {sessionUser, showActions: true}) %>
+<body>
+    <%- include('partials/header', {sessionUser, showActions: true}) %>
 
-    <body>
+    <main class="delete-container">
+        <div class="neo-card delete-card">
+            <div class="delete-sticker">WARNING!</div>
 
-        <h1>Confirm Delete?</h1>
-        <h4>This cannot be undone</h4>
+            <h2>DELETE <%= post ? "post" : comment ? "comment" : "account" %>?</h2>
+            <p class="meta-text">
+                ARE YOU ABSOLUTELY SURE? THIS ACTION IS PERMANENT AND CANNOT BE UNDONE.
+            </p>
 
-        <form action="/delete/confirm" method="post">
-            
-            <% if (post) { %>
-                <input type="hidden" name="authorId" value="<%= post.author._id %>">
-                <input type="hidden" name="postId" value="<%= post._id %>">
-                
-                <%- include('partials/post', {post, sessionUser, showControls: false}) %>
-                
-            <% } else if (comment) { %>
-                <input type="hidden" name="authorId" value="<%= comment.author._id %>">
-                <input type="hidden" name="commentId" value="<%= comment._id %>">
-                
-                <%- include('partials/comment', {comment, sessionUser, showControls: false}) %>
-                
-            <% } %>
+            <div class="delete-actions">
+                <form action="/delete/confirm" method="post">
                     
-                    
-            <input type="hidden" name="backURL" value="<%= backURL %>">
-            <br>
-            <button type="submit" name="confirm" value="true">DELETE FOREVER</button>
-            <button type="submit" name="confirm" value="false">Cancel</button>
-        </form>
+                    <% if (post) { %>
+                        <input type="hidden" name="authorId" value="<%= post.author._id %>">
+                        <input type="hidden" name="postId" value="<%= post._id %>">
+                        
+                        <%- include('partials/post', {post, sessionUser, showControls: false}) %>
+                        
+                    <% } else if (comment) { %>
+                        <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+                        <input type="hidden" name="commentId" value="<%= comment._id %>">
+                        
+                        <%- include('partials/comment', {comment, sessionUser, showControls: false}) %>
+                        
+                    <% } %>
 
-        <!-- TODO: handle comment delete -->
+                    <input type="hidden" name="backURL" value="<%= backURL %>">
+
+                    <div class="delete-btn-group">
+                        <button type="submit" name="confirm" value="true" class="neo-btn neo-btn-red">DELETE FOREVER</button>
+                        <button type="submit" name="confirm" value="false" class="neo-btn neo-btn-yellow">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
 
-        
-        
-        
+
         <img src="/img/areyousure.png" alt="areyousure"
         style="position: fixed; bottom: 0px; right: 0px; width: auto; height: 50%; z-index: 1000;">
-        
-    </body>
-
+    </main>
+</body>
 </html>
