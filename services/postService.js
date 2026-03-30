@@ -55,7 +55,7 @@ async function getAllPosts(sessionUser = {}) {
 }
 
 
-async function getAllPostsSorted(sortType = 'highest-votes', sessionUser = {}) {
+async function getAllPostsSorted(sortType = 'highest-votes', sessionUser = {}, filter = {} ) {
   try {
     let sortOption = {};
   
@@ -67,7 +67,7 @@ async function getAllPostsSorted(sortType = 'highest-votes', sessionUser = {}) {
     else if (sortType === 'least-comments') sortOption = { comment_count: 1 };
     else sortOption = { vote_score: -1 }; // fallback default
   
-    const posts = await Post.find().sort(sortOption).lean();
+    const posts = await Post.find(filter).sort(sortOption).lean();
     return await expandPosts(posts, sessionUser);
   } catch {
     console.log("getAllPostsSorted - no posts received or no sessionUser");

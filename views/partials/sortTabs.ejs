@@ -1,0 +1,24 @@
+<div class="sort-wrapper">
+    <div class="sort-left">
+        <div class="sort-tabs">
+            <a href="<%= baseUrl %>?sort=highest-votes"
+               class="sort-tab <%= currentSort === 'highest-votes' ? 'active' : '' %>">TOP</a>
+
+            <a href="<%= baseUrl %>?sort=newest"
+               class="sort-tab <%= currentSort === 'newest' ? 'active' : '' %>">NEWEST</a>
+
+            <a href="<%= baseUrl %>?sort=oldest"
+               class="sort-tab <%= currentSort === 'oldest' ? 'active' : '' %>">OLDEST</a>
+
+            <a href="<%= baseUrl %>?sort=most-comments"
+               class="sort-tab <%= currentSort === 'most-comments' ? 'active' : '' %>">MOST COMMENTS</a>
+
+            <form action="<%= resetUrl %>" method="POST" style="margin:0; padding:0;">
+                <button type="submit" class="reset-btn">RESET</button>
+            </form>
+        </div>
+    </div>
+
+    <a href="<%= baseUrl %>?sort=bookmarks"
+       class="sort-tab bookmark-tab <%= currentSort === 'bookmarks' ? 'active' : '' %>">BOOKMARKS</a>
+</div>
