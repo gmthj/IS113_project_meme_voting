@@ -41,10 +41,22 @@
         <input type="password" id="confirmation" name="confirmation" required>
         <br><br>
 
-        <button type="submit">Register</button>
+        <button type="submit" class="neo-btn">Register</button>
     </form>
 
     <p>Already have an account? <a href="/account/login">Login here</a></p>
     
 </body>
+
+<script>
+    const dateInput = document.getElementById("dob");
+
+    if (dateInput) {
+        dateInput.addEventListener("click", function () {
+            if (this.showPicker) {
+                this.showPicker();
+            }
+        });
+    }
+</script>
 </html>
