@@ -31,6 +31,10 @@
                     <% posts.forEach(post => { %>
                         <%- include('partials/post', {post, sessionUser, showControls: true}) %>
                     <% }); %>
+                <% } else if (bookmarkError) { %>
+                    <div style="border: 3px dashed #ccc; padding: 40px; text-align: center; font-weight: bold; color: #888;">
+                        <%= bookmarkError %>
+                    </div>
                 <% } else { %>
                     <div style="border: 3px dashed #ccc; padding: 40px; text-align: center; font-weight: bold; color: #888;">
                         No memes found. Be the first to upload one!

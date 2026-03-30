@@ -2,7 +2,7 @@
 const User = require('./../services/userService')
 
 // Import post service
-const { getAllPostsSorted, getPostById, getPostsByUserId } = require('../services/postService')
+const { getAllPostsSorted, getPostById, getPostsByUserId, getPosts } = require('../services/postService')
 const PostPreference = require("../models/Post-Preference-model");
 
 const { getPostSortType, createPostSortType, updatePostSortType, deletePostSortType } = require("../services/postPreferenceService");
@@ -13,13 +13,17 @@ exports.renderUserProfile = async (req, res) => {
     const userId = req.params.userId;
 
     try {
+        // access bookmark query
+        const onlyBookmarks = req.query.bookmark === 'true'
+        
+        // determine sorting type
         let sortType;
 
         if (sessionUser && sessionUser._id) {
-
             if (req.query.sort) {
                 sortType = req.query.sort;
 
+                // save the preference
                 const existing = await PostPreference.findOne({
                     userId: sessionUser._id,
                     page: 'home'
@@ -30,8 +34,6 @@ exports.renderUserProfile = async (req, res) => {
                 } else {
                     await createPostSortType(sessionUser._id, 'home', sortType);
                 }
-
-                return res.redirect(`/user/${userId}`);
             } else {
                 sortType = await getPostSortType(sessionUser._id, 'home');
             }
@@ -40,16 +42,50 @@ exports.renderUserProfile = async (req, res) => {
             sortType = req.query.sort || 'highest-votes';
         }
 
+        // get user info
         const userInfo = await User.getUserById(userId);
 
-        // IMPORTANT: Pass sortType here
-        const userPost = await getAllPostsSorted(sortType, sessionUser, { userId })
+        // get posts using getPosts
+        const userPosts = await getPosts({
+        sessionUser,
+        userId,
+        onlyBookmarks,
+        sortType
+        });
+
+        // set bookmarkerror
+        let bookmarkError = null;
+        if (onlyBookmarks) {
+            // Case 1: Not logged in
+            if (!sessionUser || !sessionUser._id) {
+                bookmarkError = "You must be logged in to view bookmarked posts.";
+            }
+
+            // Case 2: Logged in but no bookmarks
+            else if (userPosts.length === 0) {
+                bookmarkError = "You have no bookmarked posts.";
+            }
+        }
+
+        // this is essential for loading bookmark posts for anom
+        if (onlyBookmarks && (!sessionUser || !sessionUser._id)) {
+            return res.render('user', {
+                sessionUser,
+                userInfo,
+                userPosts: [],
+                currentSort: sortType,
+                onlyBookmarks,
+                bookmarkError
+            });
+        }
 
         res.render('user', {
             sessionUser,
             userInfo,
-            userPost,
-            currentSort: sortType
+            userPosts,
+            currentSort: sortType,
+            onlyBookmarks,
+            bookmarkError
         });
 
     } catch (error) {

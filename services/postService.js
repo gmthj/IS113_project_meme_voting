@@ -111,6 +111,62 @@ async function getBookmarkedPosts(sessionUser) {
     }
 }
 
+async function getPosts({ sessionUser = {}, userId = null, onlyBookmarks = false, sortType = 'highest-votes' }) {
+  try {
+    let filter = {};
+
+    // Filter by user
+    if (userId) {
+      filter.userId = userId
+    }
+
+    // Filter by bookmarks
+    if (onlyBookmarks && sessionUser._id) {
+      const bookmarks = await getAllBookmarksByUserId(sessionUser._id);
+      const bookmarkedPostIds = bookmarks.map(b => b.postId);
+
+      // If there are no bookmarks, return empty array early
+      if (bookmarkedPostIds.length === 0) return [];
+      filter._id = { $in: bookmarkedPostIds };
+    }
+
+    // Sorting
+    let sortOption = {};
+    switch (sortType) {
+      case 'highest-votes':
+        sortOption = { vote_score: -1 };
+        break;
+      case 'lowest-votes':
+        sortOption = { vote_score: 1 };
+        break;
+      case 'newest':
+        sortOption = { upload_datetime: -1 };
+        break;
+      case 'oldest':
+        sortOption = { upload_datetime: 1 };
+        break;
+      case 'most-comments':
+        sortOption = { comment_count: -1 };
+        break;
+      case 'least-comments':
+        sortOption = { comment_count: 1 };
+        break;
+      default:
+        sortOption = { vote_score: -1 };
+    }
+
+    // Fetch posts from DB
+    const posts = await Post.find(filter).sort(sortOption).lean();
+
+    // 5️⃣ Expand posts (add vote info, user interactions, etc.)
+    return await expandPosts(posts, sessionUser);
+
+  } catch (err) {
+    console.log("Error in getPosts:", err);
+    return [];
+  }
+}
+
 module.exports = {
   // expandPosts,
   getPostById,
@@ -118,5 +174,6 @@ module.exports = {
   getAllPostsSorted,
   deletePostById,
   getPostsByUserId,
-  getBookmarkedPosts,  
+  getBookmarkedPosts,
+  getPosts,
 };

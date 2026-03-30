@@ -1,16 +1,16 @@
 <div class="sort-wrapper">
     <div class="sort-left">
         <div class="sort-tabs">
-            <a href="<%= baseUrl %>?sort=highest-votes"
+            <a href="<%= baseUrl %>?sort=highest-votes<%= onlyBookmarks ? '&bookmark=true' : '' %>"
                class="sort-tab <%= currentSort === 'highest-votes' ? 'active' : '' %>">TOP</a>
 
-            <a href="<%= baseUrl %>?sort=newest"
+            <a href="<%= baseUrl %>?sort=newest<%= onlyBookmarks ? '&bookmark=true' : '' %>"
                class="sort-tab <%= currentSort === 'newest' ? 'active' : '' %>">NEWEST</a>
 
-            <a href="<%= baseUrl %>?sort=oldest"
+            <a href="<%= baseUrl %>?sort=oldest<%= onlyBookmarks ? '&bookmark=true' : '' %>"
                class="sort-tab <%= currentSort === 'oldest' ? 'active' : '' %>">OLDEST</a>
 
-            <a href="<%= baseUrl %>?sort=most-comments"
+            <a href="<%= baseUrl %>?sort=most-comments<%= onlyBookmarks ? '&bookmark=true' : '' %>"
                class="sort-tab <%= currentSort === 'most-comments' ? 'active' : '' %>">MOST COMMENTS</a>
 
             <form action="<%= resetUrl %>" method="POST" style="margin:0; padding:0;">
@@ -18,7 +18,7 @@
             </form>
         </div>
     </div>
-
-    <a href="<%= baseUrl %>?sort=bookmarks"
-       class="sort-tab bookmark-tab <%= currentSort === 'bookmarks' ? 'active' : '' %>">BOOKMARKS</a>
+    
+   <a href="<%= baseUrl %>?bookmark=true&sort=<%= currentSort || 'highest-votes' %>"
+      class="sort-tab bookmark-tab <%= onlyBookmarks ? 'active' : '' %>">BOOKMARKS</a>
 </div>

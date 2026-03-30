@@ -1,6 +1,6 @@
 const PostPreference = require("../models/Post-Preference-model");
 
-const { getAllPostsSorted, getBookmarkedPosts } = require("../services/postService");
+const { getAllPostsSorted, getBookmarkedPosts, getPosts } = require("../services/postService");
 const { getPostSortType, createPostSortType, updatePostSortType, deletePostSortType } = require("../services/postPreferenceService");
 
 exports.renderHome = async (req, res) => {
@@ -9,10 +9,15 @@ exports.renderHome = async (req, res) => {
     // console.log(sessionUser)
 
     try {
-        let sortType;
+        // Handle annon
         let isAnnon = req.query.annon == "true" || (sessionUser && sessionUser.annon)
         if (req.query.annon == "true") req.session.sessionUser = {annon: true};
-
+        
+        // access bookmark query
+        const onlyBookmarks = req.query.bookmark === 'true'
+        
+        // Determine sorting type
+        let sortType;
         if (sessionUser && sessionUser._id) {
             if (req.query.sort) {
                 sortType = req.query.sort;
@@ -28,7 +33,8 @@ exports.renderHome = async (req, res) => {
                 } else {
                     await createPostSortType(sessionUser._id, 'home', sortType); // CREATE a preference
                 }
-                return res.redirect('/home');
+                // const bookmarkQuery = onlyBookmarks ? '?bookmark=true' : '';
+                // return res.redirect(`/home${bookmarkQuery}`);
             } else {
                 // READ the saved preference
                 sortType = await getPostSortType(sessionUser._id, 'home');
@@ -37,14 +43,40 @@ exports.renderHome = async (req, res) => {
             sortType = req.query.sort || 'highest-votes';
         }
 
-        let posts = [];
-        if (sortType === 'bookmarks' && sessionUser) {
-            posts = await getBookmarkedPosts(sessionUser);
-        } else if (sessionUser) {
-            posts = await getAllPostsSorted(sortType, sessionUser);
+        // get posts using getPosts
+        const posts = await getPosts({
+        sessionUser,
+        onlyBookmarks,
+        sortType
+        });
+
+        // bookmark error validation
+        let bookmarkError = null;
+        if (onlyBookmarks) {
+            // case 1: user not logged in
+            if (!sessionUser || !sessionUser._id) {
+                bookmarkError = "You must be logged in to view bookmarked posts."
+            }
+
+            // case 2: user logged in but no bookmarks
+            else if (posts.length === 0) {
+                bookmarkError = "You have no bookmarked posts."
+            }
         }
 
-        res.render('home', { posts, currentSort: sortType, sessionUser, isAnnon });
+        // this is essential for loading bookmark posts for anom
+        if (onlyBookmarks && (!sessionUser || !sessionUser._id)) {
+            return res.render('home', {
+                posts: [],
+                currentSort: sortType,
+                sessionUser,
+                isAnnon,
+                onlyBookmarks,
+                bookmarkError
+            });
+        }
+
+        res.render('home', { posts, currentSort: sortType, sessionUser, isAnnon, onlyBookmarks, bookmarkError });
 
     } catch (error) {
         console.error("Error rendering home:", error);
