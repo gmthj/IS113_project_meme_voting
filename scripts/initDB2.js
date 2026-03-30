@@ -8,6 +8,14 @@ const path     = require("path");
 const readline = require("readline");
 const mongoose = require("mongoose");
 const { connectDB, avatarFor } = require("../utils/utils");
+const {
+    KARMA_TIER_0, 
+    KARMA_TIER_1, 
+    KARMA_TIER_2, 
+    KARMA_TIER_3, 
+    KARMA_NEW
+} = require("../config");
+
 
 const User              = require("../models/User-model");
 const Post              = require("../models/Post-model");
@@ -285,11 +293,11 @@ async function main() {
     );
   } else {
     function getKarmaWeight(karmaScore, accountAgeDays) {
-      if (karmaScore < -5)     return 0; // Troller
-      if (accountAgeDays < 30) return 1; // Newcomer
-      if (karmaScore < 10)     return 1; // Lurker
-      if (karmaScore < 50)     return 2; // Apprentice
-      if (karmaScore < 100)    return 3; // Master
+      if (karmaScore < KARMA_TIER_0)     return 0; // Troller
+      if (accountAgeDays < KARMA_NEW) return 1; // Newcomer
+      if (karmaScore < KARMA_TIER_1)     return 1; // Lurker
+      if (karmaScore < KARMA_TIER_2)     return 2; // Apprentice
+      if (karmaScore < KARMA_TIER_3)    return 3; // Master
       return 5;                          // Legend
     }
 

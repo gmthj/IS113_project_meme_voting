@@ -3,6 +3,13 @@ const Post = require("../models/Post-model");
 const Comment = require("../models/Comment-model");
 
 const { timeAgo } = require("../utils/utils");
+const {
+    KARMA_TIER_0, 
+    KARMA_TIER_1, 
+    KARMA_TIER_2, 
+    KARMA_TIER_3, 
+    KARMA_NEW
+} = require("../config");
 
 
 async function getUserByEmail(email) {
@@ -62,12 +69,12 @@ async function calculateKarma(user) {
     const accountAgeDays = Math.ceil((new Date() - new Date(user.createdAt)) / (1000 * 60 * 60 * 24));
 
     let karmaTier = "Unknown";
-    if (finalKarmaScore < -5) karmaTier = "Troller";
-    else if (accountAgeDays < 30) karmaTier = "Newcomer";
-    else if (finalKarmaScore < 10) karmaTier = "Lurker";
-    else if (finalKarmaScore < 50) karmaTier = "Apprentice";
-    else if (finalKarmaScore < 100) karmaTier = "Master";
-    else karmaTier = "Legend";
+    if (finalKarmaScore < KARMA_TIER_0) karmaTier = "Troller"; // -5 karma
+    else if (accountAgeDays < KARMA_NEW) karmaTier = "Newcomer"; // < 30 days
+    else if (finalKarmaScore < KARMA_TIER_1) karmaTier = "Lurker"; // < 10 karma
+    else if (finalKarmaScore < KARMA_TIER_2) karmaTier = "Apprentice"; // < 50 karma
+    else if (finalKarmaScore < KARMA_TIER_3) karmaTier = "Master"; // < 100 karma
+    else karmaTier = "Legend"; // >= 100 karma
 
     return {score: finalKarmaScore, tier: karmaTier};
   }

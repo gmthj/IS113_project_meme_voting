@@ -2,13 +2,23 @@ const User = require('../models/User-model');
 const Post = require('../models/Post-model');
 const Comment = require('../models/Comment-model');
 const Vote = require('../models/Vote-model');
-const bcrypt = require('bcrypt');
 const Bookmark = require('../models/Bookmark-model');
 const PostPreference = require('../models/Post-Preference-model');
 const CommentPreference = require('../models/Comment-Preference-model');
+
+const bcrypt = require('bcrypt');
+
 const { avatarFor } = require("../utils/utils");
+const {
+    MIN_AGE, 
+    PW_MIN_LENGTH, 
+    PW_REQUIRE_UPPER, 
+    PW_REQUIRE_LOWER, 
+    PW_REQUIRE_NUMBER, 
+    PW_REQUIRE_SPECIAL
+} = require("../config");
  
-const MIN_AGE = 13;
+// const MIN_AGE = 13;
  
 // Helper: calculate age from a Date
 function getAge(dob) {
@@ -19,8 +29,8 @@ function getAge(dob) {
     return age;
 }
 function isValidPassword(password) {
-    if (password.length < 8) {
-        return 'Password must be at least 8 characters.';
+    if (password.length < PW_MIN_LENGTH) {
+        return `Password must be at least ${PW_MIN_LENGTH} characters.`;
     }
 
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -28,10 +38,10 @@ function isValidPassword(password) {
     const numbers = '0123456789';
     const special = '!@#$%^&*(),.?":{}|<>';
 
-    let hasUpper = false;
-    let hasLower = false;
-    let hasNumber = false;
-    let hasSpecial = false;
+    let hasUpper = (false || !PW_REQUIRE_UPPER);
+    let hasLower = (false || !PW_REQUIRE_LOWER);
+    let hasNumber = (false || !PW_REQUIRE_NUMBER);
+    let hasSpecial = (false || !PW_REQUIRE_SPECIAL);
 
     for (const char of password) {
         if (uppercase.includes(char)) hasUpper = true;
