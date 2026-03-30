@@ -1,43 +1,87 @@
 const POST_SCHEMA = require("../models/Post-model");
-const { getPostById } = require('../services/postService')
+const { getPostById } = require("../services/postService");
+
+// Shared helper to validate base64 image
+function validateBase64Image(image_base64) {
+  if (!image_base64) {
+    return "Image is required";
+  }
+
+  const allowedMimeTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp"
+    // "image/svg+xml" // only add this if you really want SVG support
+  ];
+
+  const mimeMatch = image_base64.match(/^data:(.*?);base64,/);
+
+  if (!mimeMatch) {
+    return "Invalid image format";
+  }
+
+  const mimeType = mimeMatch[1];
+
+  if (!allowedMimeTypes.includes(mimeType)) {
+    return "Only JPG, PNG, GIF, and WEBP files are allowed";
+  }
+
+  try {
+    const base64Data = image_base64.split(",")[1];
+    const fileSizeInBytes = Buffer.from(base64Data, "base64").length;
+    const maxSizeInBytes = 2 * 1024 * 1024; // 2MB
+
+    if (fileSizeInBytes > maxSizeInBytes) {
+      return "Image must be smaller than 2MB";
+    }
+  } catch (err) {
+    return "Invalid image data";
+  }
+
+  return null;
+}
 
 // Loading of the upload page
 exports.renderUpload = (req, res) => {
-  const sessionUser = req.session.sessionUser || {};
-  console.log("Session User in renderUploadPage:", sessionUser);
-  res.render("upload", { error: null, success: false, sessionUser });
+  const sessionUser = req.session?.sessionUser || {};
+
+  res.render("upload", {
+    error: null,
+    success: false,
+    sessionUser
+  });
 };
 
-// Handle Submission to Mongo DB
-// POST upload
+// Handle submission to MongoDB
 exports.handleUpload = async (req, res) => {
-  const sessionUser = req.session.sessionUser || {};
+  const sessionUser = req.session?.sessionUser || {};
+
   try {
     const { meme_title, description, image_base64 } = req.body;
-
-    // console.log("Data received:", req.body);
 
     if (!meme_title || !description || !image_base64) {
       return res.render("upload", {
         error: "All fields are required",
         success: false,
-        sessionUser,
+        sessionUser
       });
     }
-    console.log(
-      "Received data - Title:",
-      meme_title,
-      "Description:",
-      description,
-      "user:",
-      sessionUser,
-    );
+
+    const imageError = validateBase64Image(image_base64);
+    if (imageError) {
+      return res.render("upload", {
+        error: imageError,
+        success: false,
+        sessionUser
+      });
+    }
 
     const newPost = new POST_SCHEMA({
       userId: sessionUser._id,
-      title: meme_title,
-      description: description,
-      image: image_base64,
+      title: meme_title.trim(),
+      description: description.trim(),
+      image: image_base64
     });
 
     await newPost.save();
@@ -45,7 +89,7 @@ exports.handleUpload = async (req, res) => {
     return res.render("upload", {
       error: null,
       success: true,
-      sessionUser,
+      sessionUser
     });
   } catch (err) {
     console.error("Upload error:", err);
@@ -53,52 +97,96 @@ exports.handleUpload = async (req, res) => {
     return res.render("upload", {
       error: "Failed to upload post",
       success: false,
-      sessionUser,
+      sessionUser
     });
   }
 };
 
-
-
+// Render edit post page
 exports.renderEditPost = async (req, res) => {
-  const sessionUser = req.session.sessionUser || {};
-  const backURL = req.get('Referrer') || '/';
-  console.log(backURL,"reder edit")
+  const sessionUser = req.session?.sessionUser || {};
+  const backURL = req.get("Referrer") || "/";
   const postId = req.body.postId;
 
-  // Fetch post 
+  try {
+    const postData = await getPostById(postId, sessionUser);
 
-  const postData = await getPostById(postId, sessionUser)
-  // console.log(postData)
-  console.log("handleUploadEdit")
+    if (!postData) {
+      return res.redirect("/");
+    }
 
-
-  // console.log(req.body)
-  // console.log("Session User in renderUploadPage:", sessionUser);
-  res.render("edit-post", { error: null, success: false, sessionUser, postData, backURL});
+    res.render("edit-post", {
+      error: null,
+      success: false,
+      sessionUser,
+      postData,
+      backURL
+    });
+  } catch (err) {
+    console.error("Render edit post error:", err);
+    return res.redirect("/");
+  }
 };
 
-
-// This is a post request to handle update post data route
+// Handle update post data
 exports.handleEditPost = async (req, res) => {
-  const sessionUser = req.session.sessionUser || {};
-  const backURL = req.body.backURL;
+  const sessionUser = req.session?.sessionUser || {};
+  const backURL = req.body.backURL || "/";
   const postId = req.body.postId;
-
-  // Fetch post 
-  console.log("Update Post Data Called")
   const { meme_title, description, image_base64 } = req.body;
-  const postData = await POST_SCHEMA.findById(postId)
-    postData.title = meme_title;
-    postData.description = description;
+
+  try {
+    const postData = await POST_SCHEMA.findById(postId);
+
+    if (!postData) {
+      return res.redirect("/");
+    }
+
+    if (!meme_title || !description || !image_base64) {
+      return res.render("edit-post", {
+        error: "All fields are required",
+        success: false,
+        sessionUser,
+        postData,
+        backURL
+      });
+    }
+
+    const imageError = validateBase64Image(image_base64);
+    if (imageError) {
+      return res.render("edit-post", {
+        error: imageError,
+        success: false,
+        sessionUser,
+        postData,
+        backURL
+      });
+    }
+
+    postData.title = meme_title.trim();
+    postData.description = description.trim();
     postData.image = image_base64;
     postData.edit_datetime = new Date();
 
     await postData.save();
 
+    return res.redirect(`${backURL}#post-${postId}`);
+  } catch (err) {
+    console.error("Edit post error:", err);
 
-  // console.log(req.body)
-  // console.log("Session User in renderUploadPage:", sessionUser);
-  // res.render("edit-post", { error: null, success: false, sessionUser });
-  res.redirect(`${backURL}#post-${postId}`)
+    let postData = null;
+    try {
+      postData = await POST_SCHEMA.findById(postId);
+    } catch (innerErr) {
+      console.error("Failed to reload post data:", innerErr);
+    }
+
+    return res.render("edit-post", {
+      error: "Failed to update post",
+      success: false,
+      sessionUser,
+      postData,
+      backURL
+    });
+  }
 };

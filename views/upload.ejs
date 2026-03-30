@@ -66,31 +66,44 @@
 
 <script>
 
-    function handleFileSelect(input) {
-        const file = input.files[0];
-        const previewContainer = document.getElementById('preview-container');
-        const previewImage = document.getElementById('image-preview');
-        const fileNameSpan = document.getElementById('file-name');
-        const hiddenBase64 = document.getElementById('image_base64');
+function handleFileSelect(input) {
+    const file = input.files[0];
+    const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "image/svg+xml"
+];
 
-        if (file) {
-            fileNameSpan.innerText = file.name;
+    const previewContainer = document.getElementById('preview-container');
+    const previewImage = document.getElementById('image-preview');
+    const fileNameSpan = document.getElementById('file-name');
+    const hiddenBase64 = document.getElementById('image_base64');
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64String = e.target.result;
-                
-                previewImage.src = base64String;
-                previewContainer.style.display = 'block';
-                hiddenBase64.value = base64String;
-            }
-            reader.readAsDataURL(file);
-        } else {
+    if (file) {
+        // Reject invalid file types
+        if (!allowedTypes.includes(file.type)) {
+            alert("Only JPG, PNG, GIF, WEBP, and SVG files are allowed!");
+            input.value = ""; // reset input
             fileNameSpan.innerText = "Click to pick a meme...";
             previewContainer.style.display = 'none';
             hiddenBase64.value = "";
+            return;
         }
+
+        fileNameSpan.innerText = file.name;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64String = e.target.result;
+            previewImage.src = base64String;
+            previewContainer.style.display = 'block';
+            hiddenBase64.value = base64String;
+        }
+        reader.readAsDataURL(file);
     }
+}
 
     // Success message timeout with a smooth fade
     const flashMessages = document.querySelectorAll(".flash-msg");

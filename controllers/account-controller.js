@@ -352,6 +352,7 @@ exports.updatePassword = async (req, res) => {
 
 // Forget password at the login page
 exports.forgetPasswordPage = (req, res) => {
+
     res.render("forgetPassword", {
         error: null,
         success: null
