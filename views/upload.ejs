@@ -5,108 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="/css/style.css">
-    <title>Upload</title>
+    <title>Upload Meme | MemeLab</title>
 </head>
 
 <%- include('partials/header', {sessionUser, showActions: true}) %>
 
 <body>
-<% if (success) { %>
-    <div id="successMsg" style="color:green;">
-        <h3>Post Submitted ╰(*°▽°*)╯</h3>
+<main class="upload-container">
+    <div class="neo-card upload-card">
+        <div class="neo-badge-ink upload-badge">NEW MEME</div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="neo-error-sticker flash-msg">
+                <span class="sticker-icon">⚠️</span>
+                <%= error %>
+            </div>
+        <% } %>
+
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div id="successMsg" class="neo-success-sticker flash-msg">
+                <span class="sticker-icon">✅</span>
+                Post Submitted ╰(*°▽°*)╯
+            </div>
+        <% } %>
+
+        <h2 class="neo-title">DRAFT YOUR MEME</h2>
+        
+        <form action="/upload" method="POST"  class="neo-form">
+            <div class="neo-form-group">
+                <label for="title" class="neo-label">TITLE *</label>
+                <input type="text" id="title" name="meme_title" class="neo-input" placeholder="Catchy title here..." required>
+            </div>
+
+            <div class="neo-form-group">
+                <label for="description" class="neo-label">DESCRIPTION *</label>
+                <textarea id="description" name="description" class="neo-input" rows="3" placeholder="What's the context?" required></textarea>
+            </div>
+
+            <div id="preview-container" class="image-preview-wrapper" style="display: none;">
+                <div class="preview-sticker">PREVIEW</div>
+                <img id="image-preview" src="#" alt="Meme Preview" class="neo-img-preview">
+            </div>
+
+            <div class="neo-form-group">
+                <label for="image" class="neo-label">ATTACH MEDIA *</label>
+                <div class="file-dropzone" onclick="document.getElementById('image').click()">
+                    <span id="file-name">Click to pick a meme...</span>
+                    <input type="file" id="image" name="image" accept="image/*" required onchange="handleFileSelect(this)">
+                </div>
+            </div>
+
+            <input type="hidden" name="image_base64" id="image_base64">
+
+            <div class="upload-actions">
+                <button type="submit" class="neo-btn neo-btn-yellow full-width">POST TO GALLERY</button>
+            </div>
+        </form>
     </div>
-<% } %>
-
-
-<% if (error) { %>
-    <p style="color:red"><%= error %></p>
-<% } %>
-
-
-<form action="/upload" method="POST">
-    <div>
-        <label for="meme_title">Meme Title</label>
-        <br>
-        <input type="text" name="meme_title" id="meme_title" required>
-    </div>
-
-    <br>
-
-    <div>
-        <label for="imageFile">Upload Your Meme (.jpg, .png, .gif)</label>
-        <br>
-        <input type="file" id="imageFile" accept="image/png, image/jpeg,image/gif" required>
-    </div>
-
-    <br>
-
-    <div>
-        <img id="preview" style="display:none; max-width:300px;">
-    </div>
-
-    <br>
-
-    <div>
-        <label for="description">Description</label>
-        <br>
-        <textarea name="description" id="description" required></textarea>
-    </div>
-
-    <input type="hidden" name="image_base64" id="image_base64">
-
-    <br>
-    <input type="submit" value="post meme">
-</form>
-
-
-
+</main>
 
 <script>
-    
-    // Handles preview in browser as scripts runs at browser
-const imageInput = document.getElementById("imageFile");
-const preview = document.getElementById("preview");
-const hiddenBase64 = document.getElementById("image_base64");
 
-// Turn the image into base64 to send as JSON data later on to mongodb
-imageInput.addEventListener("change", function () {
-    const file = this.files[0];
+    function handleFileSelect(input) {
+        const file = input.files[0];
+        const previewContainer = document.getElementById('preview-container');
+        const previewImage = document.getElementById('image-preview');
+        const fileNameSpan = document.getElementById('file-name');
+        const hiddenBase64 = document.getElementById('image_base64');
 
-    if (!file) {
-        preview.src = "";
-        preview.style.display = "none";
-        hiddenBase64.value = "";
-        return;
+        if (file) {
+            fileNameSpan.innerText = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result;
+                
+                previewImage.src = base64String;
+                previewContainer.style.display = 'block';
+                hiddenBase64.value = base64String;
+            }
+            reader.readAsDataURL(file);
+        } else {
+            fileNameSpan.innerText = "Click to pick a meme...";
+            previewContainer.style.display = 'none';
+            hiddenBase64.value = "";
+        }
     }
 
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-        const base64String = e.target.result;
-        preview.src = base64String;
-        preview.style.display = "block";
-        hiddenBase64.value = base64String;
-    };
-
-    reader.readAsDataURL(file);
-});
-
-
-// Show the success message and hide it after 3s
-const successMsg = document.getElementById("successMsg");
-
-if (successMsg) {
-    setTimeout(() => {
-        successMsg.style.transition = "opacity 0.5s";
-        successMsg.style.opacity = "0";
-
+    // Success message timeout with a smooth fade
+    const flashMessages = document.querySelectorAll(".flash-msg");
+    flashMessages.forEach(msg => {
         setTimeout(() => {
-            successMsg.style.display = "none";
-        }, 500);
+            msg.style.transition = "opacity 0.5s, transform 0.5s";
+            msg.style.opacity = "0";
+            msg.style.transform = "translateY(-10px)";
 
-    }, 3000);
-}
+            setTimeout(() => {
+                msg.style.display = "none";
+            }, 500);
+        }, 3000);
+    });
 </script>
-
 </body>
 </html>

@@ -109,6 +109,7 @@ main {
     
     /* This centers the card on the screen */
     margin: 0 auto 40px auto; 
+    text-align: left;
     
     display: flex;
     flex-direction: column;
@@ -678,4 +679,233 @@ input:focus, textarea:focus {
 }
 
 
+
+/* --- Delete Confirmation Page --- */
+
+.delete-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 20px;
+}
+
+.delete-card {
+    position: relative;
+    text-align: center;
+    padding: 60px 40px 40px 40px;
+    max-width: 600px;
+    background: var(--neo-white);
+}
+
+.delete-sticker {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-5deg);
+    background: var(--neo-red);
+    color: white;
+    padding: 10px 25px;
+    border: var(--border-thick);
+    box-shadow: 4px 4px 0px 0px var(--neo-ink);
+    font-weight: 900;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.delete-actions form {
+    margin-top: 30px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Ensure the buttons feel mechanical on click */
+.delete-actions .neo-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+/* --- Delete Button Spacing --- */
+
+.delete-btn-group {
+    display: flex;
+    justify-content: center; /* Centered is better for big "Danger" warnings */
+    gap: 30px;               /* Significant spacing to prevent mis-clicks */
+    margin-top: 40px;        /* Pushes them away from the post/comment preview */
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+/* Make sure buttons take up equal visual weight */
+.delete-btn-group .neo-btn {
+    flex: 1;                 /* Optional: makes both buttons the same width */
+    max-width: 200px;
+    text-align: center;
+
+
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    
+    /* 3. Ensure no weird padding is pushing the text */
+    padding: 12px 24px; 
+
+}
+
+/* Specific fix for the Delete actions container */
+.delete-btn-group {
+    display: flex;
+    justify-content: center; /* Centers the buttons themselves */
+    width: 100%;
+    gap: 20px;
+}
+
+
+/* --- Upload Page Layout --- */
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.upload-card {
+    position: relative;
+    max-width: 600px;
+    width: 100%;
+    padding: 40px;
+    background: var(--neo-white);
+}
+
+.upload-badge {
+    position: absolute;
+    top: -15px;
+    right: 20px;
+    transform: rotate(5deg);
+}
+
+/* --- Form Elements --- */
+
+.neo-form-group {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.neo-label {
+    font-weight: 900;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.neo-input {
+    border: var(--border-thick);
+    padding: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    box-shadow: 4px 4px 0px var(--neo-ink);
+    transition: all 0.1s ease;
+}
+
+.neo-input:focus {
+    outline: none;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--neo-ink);
+}
+
+/* --- Custom File Picker --- */
+
+.file-dropzone {
+    border: 3px dashed var(--neo-ink);
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    background: #f0f0f0;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.file-dropzone:hover {
+    background: var(--neo-yellow);
+}
+
+.file-dropzone input {
+    display: none; /* Hide the ugly default input */
+}
+
+.full-width {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* --- High-Impact Error/Success Stickers --- */
+
+.neo-error-sticker, .neo-success-sticker {
+    border: var(--border-thick);
+    padding: 15px;
+    margin-bottom: 25px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 4px 4px 0px var(--neo-ink);
+    transform: rotate(-1deg); /* Slight tilt for the "sticker" look */
+}
+
+.neo-error-sticker {
+    background: var(--neo-red); /* Using your existing red variable */
+    color: white;
+}
+
+.neo-success-sticker {
+    background: #00ff66; /* Bright neon green */
+    color: var(--neo-ink);
+}
+
+.sticker-icon {
+    font-size: 1.5rem;
+    background: white;
+    border: 2px solid var(--neo-ink);
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+
+/* --- Meme Preview Frame --- */
+
+.image-preview-wrapper {
+    position: relative;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: var(--neo-white);
+    border: var(--border-thick);
+    box-shadow: 8px 8px 0px var(--neo-ink);
+    transform: rotate(1deg); /* Slight tilt for the "Meme Lab" vibe */
+}
+
+.preview-sticker {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background: var(--neo-yellow);
+    border: 2px solid var(--neo-ink);
+    padding: 2px 10px;
+    font-weight: 900;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    z-index: 10;
+}
+
+.neo-img-preview {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 2px solid var(--neo-ink);
+    filter: contrast(1.1); /* Makes the meme "pop" more in preview */
+}
 
