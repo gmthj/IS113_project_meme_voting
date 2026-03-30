@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <title>Login</title>
 </head>
-<%- include('partials/header', {sessionUser}) %>
+<%- include('partials/header', {sessionUser, showActions: true}) %>
 <body>
     <h1>Login Page</h1>
     <% if (error) { %>

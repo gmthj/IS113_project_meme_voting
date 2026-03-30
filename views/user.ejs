@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <title>Users name</title>
 </head>
-<%- include('partials/header', {sessionUser}) %>
+<%- include('partials/header', {sessionUser, showActions: true}) %>
 <body>
     <h1> <%= userInfo.name %>'s Information </h1>
     <h3> Email: <%= userInfo.email %> </h3>

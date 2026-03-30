@@ -4,10 +4,14 @@ const { getAllPostsSorted, getBookmarkedPosts } = require("../services/postServi
 const { getPostSortType, createPostSortType, updatePostSortType, deletePostSortType } = require("../services/postPreferenceService");
 
 exports.renderHome = async (req, res) => {
-    const sessionUser = req.session.sessionUser || null;
+    // console.log(req.session)
+    const sessionUser = req.session.sessionUser || {};
+    // console.log(sessionUser)
 
     try {
         let sortType;
+        let isAnnon = req.query.annon == "true" || (sessionUser && sessionUser.annon)
+        if (req.query.annon == "true") req.session.sessionUser = {annon: true};
 
         if (sessionUser && sessionUser._id) {
             if (req.query.sort) {
@@ -40,7 +44,7 @@ exports.renderHome = async (req, res) => {
             posts = await getAllPostsSorted(sortType, sessionUser);
         }
 
-        res.render('home', { posts, currentSort: sortType, sessionUser });
+        res.render('home', { posts, currentSort: sortType, sessionUser, isAnnon });
 
     } catch (error) {
         console.error("Error rendering home:", error);

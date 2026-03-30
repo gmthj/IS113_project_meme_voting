@@ -155,19 +155,19 @@
 </head>
 
 <body>
-    <%- include('partials/header', {sessionUser}) %>
+    <%- include('partials/header', {sessionUser, showActions: (isAnnon || (sessionUser && sessionUser._id)) }) %>
 
     <div class="home-container">
         <div class="feed-header">
             <h1 class="feed-title">Meme Gallery</h1>
-            <div class="user-status">
+            <!-- <div class="user-status">
                 <% if (sessionUser && sessionUser._id) { %>
                     <span>Logged in as <strong><%= sessionUser.name %></strong></span>
                 <% } %>
-            </div>
+            </div> -->
         </div>
 
-        <% if (sessionUser && sessionUser._id) { %>
+        <% if (isAnnon || (sessionUser && sessionUser._id)) { %>
             <!-- Sorting Interface (only shown when logged in) -->
             <div class="sort-wrapper">
                 <div class="sort-left">
@@ -201,8 +201,9 @@
             <!-- Login Prompt (shown when not logged in) -->
             <div class="login-prompt">
                 <h2 style="margin-bottom: 20px;">Welcome to Meme Vote!</h2>
-                <p style="margin-bottom: 40px; color: #666;">Login to view, vote, and bookmark memes.</p>
-                <a href="/account/login" class="big-login-btn">Login to Enter</a>
+                <p style="margin-bottom: 40px; color: #666;">Login to vote, comment, and bookmark memes.</p>
+                <a href="/account/login" class="big-login-btn">Login now</a>
+                <a href="/home?annon=true" class="big-login-btn">Continue Anonymously</a>
             </div>
         <% } %>
 

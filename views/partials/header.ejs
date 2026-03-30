@@ -7,30 +7,33 @@
                 </a>
             </div>
 
-            <div class="nav-actions">
-                <a href="/upload" class="neo-btn neo-btn-red">
-                    NEW POST
-                </a>
-                
-                <% if (sessionUser && sessionUser._id) { %>
-                    <div class="nav-user-badge">
-                        <a href="/user/<%= sessionUser._id %>" class="nav-profile-link">
-                            <img src="<%= sessionUser.avatar %>" class="nav-avatar">
-                            <span class="nav-username"><%= sessionUser.name %></span>
-                        </a>
-                        <div class="nav-utility-stack">
-                        <a href="/account/edit" class="nav-edit-link">EDIT</a>
-                        <a href="/account/logout" class="nav-logout-link">LOGOUT</a>
-                    </div>
-                <% } else { %>
-                    <a href="/account/login" class="neo-btn neo-btn-white">
-                        LOGIN
+            <% if (showActions) { %>
+                <div class="nav-actions">
+                    <a href="/upload" class="neo-btn neo-btn-red">
+                        NEW POST
                     </a>
-                <% } %>
-            </div>
+                    
+                    <% if (sessionUser && sessionUser._id) { %>
+                        <div class="nav-user-badge">
+                            <a href="/user/<%= sessionUser._id %>" class="nav-profile-link">
+                                <img src="<%= sessionUser.avatar %>" class="nav-avatar">
+                                <span class="nav-username"><%= sessionUser.name %></span>
+                            </a>
+                            <div class="nav-utility-stack">
+                            <a href="/account/edit" class="nav-edit-link">EDIT</a>
+                            <a href="/account/logout" class="nav-logout-link">LOGOUT</a>
+                        </div>
+                    <% } else { %>
+                        <a href="/account/login" class="neo-btn neo-btn-white">
+                            LOGIN
+                        </a>
+                    <% } %>
+                </div>
+            <% } %>
         </div>
     </nav>
 
+    <!-- TODO: comment out before submission -->
     <div class="test-login-bar">
         <span>TESTING BYPASS LOGIN:</span>
         <a href="/testlogin/alex.tan@smu.edu.sg">ALEX</a>

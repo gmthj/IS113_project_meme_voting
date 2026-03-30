@@ -3,7 +3,7 @@
 exports.isLoggedIn = (req, res, next) => {
     // console.log("isloggedin")
     // console.log(req.session)
-    if (!req.session.sessionUser) {
+    if (!req.session.sessionUser._id) {
         console.log("isLoggedIn - User not logged in, redirecting to /login");
         return res.redirect('/account/login');
     }
@@ -12,7 +12,7 @@ exports.isLoggedIn = (req, res, next) => {
 
 
 exports.isAuthor = (req, res, next) => {
-    if (!req.session.sessionUser) {
+    if (!req.session.sessionUser._id) {
         console.log("isAuthor - User not logged in, redirecting to /login");
         return res.redirect('/account/login');
     }

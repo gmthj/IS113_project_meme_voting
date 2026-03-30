@@ -46,7 +46,9 @@ server.get("/testlogin/:userEmail", async (req, res) => {
     const userEmail = req.params.userEmail;
     const sessionUser = await getUserByEmail(userEmail);
     req.session.sessionUser = sessionUser;
-    const backURL = req.get('Referrer') || '/';
+    let backURL = req.get('Referrer') || '/';
+    backURL = backURL.split("?")[0]
+    // console.log(backURL)
     return res.redirect(`${backURL}`)
   }
   catch (error) {

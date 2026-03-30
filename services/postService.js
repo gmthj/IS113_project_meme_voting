@@ -24,7 +24,7 @@ async function expandPosts(posts, sessionUser = {}) {
     );
     return posts;
   } catch {
-    console.log("error: expandPosts - no posts received or no sessionUser");
+    console.log("expandPosts - no posts received or no sessionUser");
     return [];
   }
 }
@@ -39,7 +39,7 @@ async function getPostById(postId, sessionUser = {}) {
     const expandedPosts = await expandPosts([post], sessionUser);
     return expandedPosts[0];
   } catch {
-    console.log("error: getPostById - no postId received or no sessionUser");
+    console.log("getPostById - no postId received or no sessionUser");
     return {};
   }
 }
@@ -49,7 +49,7 @@ async function getAllPosts(sessionUser = {}) {
     const posts = await Post.find().lean();
     return await expandPosts(posts, sessionUser);
   } catch {
-    console.log("error: getAllPosts - no posts received or no sessionUser");
+    console.log("getAllPosts - no posts received or no sessionUser");
     return [];
   }
 }
@@ -70,7 +70,7 @@ async function getAllPostsSorted(sortType = 'highest-votes', sessionUser = {}) {
     const posts = await Post.find().sort(sortOption).lean();
     return await expandPosts(posts, sessionUser);
   } catch {
-    console.log("error: getAllPostsSorted - no posts received or no sessionUser");
+    console.log("getAllPostsSorted - no posts received or no sessionUser");
     return [];
   }
 }
