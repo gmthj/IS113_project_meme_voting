@@ -8,7 +8,7 @@ const { expandPosts, getPostById } = require('../services/postService');
 const { expandComments, getAllCommentsByPostId } = require('../services/commentService');
 const { getCommentSortType, updateCommentSortType } = require('../services/commentPreferenceService');
 
-exports.getFullPost = async (req, res) => {
+exports.renderFullPost = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     try {
         const postId = req.params.postId;
@@ -41,7 +41,7 @@ exports.getFullPost = async (req, res) => {
     }
 }
 
-exports.postComment = async (req, res) => {
+exports.handlePostComment = async (req, res) => {
     // post comment
     const sessionUser = req.session.sessionUser || {};
 

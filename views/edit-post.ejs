@@ -23,6 +23,8 @@
 
 <form action="/upload/update" method="POST">
     <input type="hidden" name="postId" value="<%= postData._id %>">
+    <input type="hidden" name="authorId" value="<%= postData.author._id %>">
+    <input type="hidden" name="backURL" value="<%= backURL %>">
 
     <div>
         <label for="meme_title">Meme Title</label>

@@ -8,13 +8,13 @@ const authMiddleware = require('../middleware/auth-middleware')
 
 
 // Inital Upload Page Loads -> /upload
-router.get('/', authMiddleware.isLoggedIn, uploadController.renderUploadPage)
+router.get('/', authMiddleware.isLoggedIn, uploadController.renderUpload)
 // Upload Page Handel Route
-router.post('/', authMiddleware.isLoggedIn, uploadController.renderUploadPage_Mongo)
+router.post('/', authMiddleware.isLoggedIn, uploadController.handleUpload)
 
 // /upload/edit
-router.post('/edit', authMiddleware.isAuthor, uploadController.handleUploadEdit)
-router.post('/update', uploadController.updateEditpost)
+router.post('/edit', authMiddleware.isAuthor, uploadController.renderEditPost)
+router.post('/update', authMiddleware.isAuthor, uploadController.handleEditPost)
 
 
 

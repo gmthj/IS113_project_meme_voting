@@ -1,7 +1,7 @@
 const { deletePostById } = require("../services/postService");
 const { deleteCommentById } = require("../services/commentService");
 
-exports.handleDeletion = (req, res) => {
+exports.renderDeletionConfirmation = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     // console.log(req.body)
     const post = req.body.post ? JSON.parse(req.body.post) : undefined
@@ -16,8 +16,7 @@ exports.handleDeletion = (req, res) => {
 
 }
 
-
-exports.handleDeletionConfirm = async (req, res) => {
+exports.handleDeletion = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     
     const postId = req.body.postId
@@ -38,6 +37,5 @@ exports.handleDeletionConfirm = async (req, res) => {
     }
 
     res.redirect(`${backURL}#post-${postId}`)
-    // TODO: test redirect back to user page
 
 }

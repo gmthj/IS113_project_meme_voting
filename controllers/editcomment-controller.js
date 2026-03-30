@@ -1,7 +1,7 @@
 const { updatePostById } = require("../services/postService");
 const { updateCommentById } = require("../services/commentService");
 
-exports.handleEditRender = (req, res) => {
+exports.renderEditComment = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     
     const post = req.body.post ? JSON.parse(req.body.post) : undefined;

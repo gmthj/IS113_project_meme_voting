@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <%- include('partials/header', {sessionUser || null}) %>
+    <%- include('partials/header', {sessionUser}) %>
 
     <main class="error-main">
         <div class="error-card">
@@ -44,10 +44,8 @@
 
 
 <script>
-// i stole this from stackoverflow fight me
-// https://stackoverflow.com/questions/31106189/create-a-simple-10-second-countdown
-var timeleft = 9;
-var countdownTimer = setInterval(function(){
+let timeleft = 9;
+let countdownTimer = setInterval(function(){
     document.getElementById("countdown").innerHTML = (timeleft > 0) ? `REDIRECTING AUTOMATICALLY IN ${timeleft} SECONDS...` : "REDIRECTING HOME...";
     timeleft -= 1;
 }, 1000);

@@ -1,7 +1,8 @@
 const POST_SCHEMA = require("../models/Post-model");
+const { getPostById } = require('../services/postService')
 
 // Loading of the upload page
-exports.renderUploadPage = (req, res) => {
+exports.renderUpload = (req, res) => {
   const sessionUser = req.session.sessionUser || {};
   console.log("Session User in renderUploadPage:", sessionUser);
   res.render("upload", { error: null, success: false, sessionUser });
@@ -9,7 +10,7 @@ exports.renderUploadPage = (req, res) => {
 
 // Handle Submission to Mongo DB
 // POST upload
-exports.renderUploadPage_Mongo = async (req, res) => {
+exports.handleUpload = async (req, res) => {
   const sessionUser = req.session.sessionUser || {};
   try {
     const { meme_title, description, image_base64 } = req.body;
@@ -59,33 +60,36 @@ exports.renderUploadPage_Mongo = async (req, res) => {
 
 
 
-exports.handleUploadEdit = async (req, res) => {
+exports.renderEditPost = async (req, res) => {
   const sessionUser = req.session.sessionUser || {};
-  const postID = req.body.postId
+  const backURL = req.get('Referrer') || '/';
+  console.log(backURL,"reder edit")
+  const postId = req.body.postId;
 
   // Fetch post 
 
-  const postData = await POST_SCHEMA.findById(postID)
+  const postData = await getPostById(postId, sessionUser)
   // console.log(postData)
   console.log("handleUploadEdit")
 
 
   // console.log(req.body)
   // console.log("Session User in renderUploadPage:", sessionUser);
- res.render("edit-post", { error: null, success: false, sessionUser, postData });
+  res.render("edit-post", { error: null, success: false, sessionUser, postData, backURL});
 };
 
 
 // This is a post request to handle update post data route
-exports.updateEditpost = async (req, res) => {
+exports.handleEditPost = async (req, res) => {
   const sessionUser = req.session.sessionUser || {};
-  const postID = req.body.postId
+  const backURL = req.body.backURL;
+  const postId = req.body.postId;
 
   // Fetch post 
   console.log("Update Post Data Called")
   const { meme_title, description, image_base64 } = req.body;
-  const postData = await POST_SCHEMA.findById(postID)
-   postData.title = meme_title;
+  const postData = await POST_SCHEMA.findById(postId)
+    postData.title = meme_title;
     postData.description = description;
     postData.image = image_base64;
     postData.edit_datetime = new Date();
@@ -96,5 +100,5 @@ exports.updateEditpost = async (req, res) => {
   // console.log(req.body)
   // console.log("Session User in renderUploadPage:", sessionUser);
   // res.render("edit-post", { error: null, success: false, sessionUser });
-   res.redirect(`/fullpost/${postID}`);
+  res.redirect(`${backURL}#post-${postId}`)
 };

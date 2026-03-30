@@ -1,6 +1,10 @@
 const { 
-    deletePostVote, switchPostVote, newPostVote, 
-    deleteCommentVote, switchCommentVote, newCommentVote 
+    deletePostVote, 
+    switchPostVote, 
+    newPostVote, 
+    deleteCommentVote, 
+    switchCommentVote, 
+    newCommentVote 
 } = require("../services/voteService");
 
 
