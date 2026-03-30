@@ -294,3 +294,56 @@ exports.handleEdit = async (req, res) => {
         return res.render('edit-account', { sessionUser, error: 'Something went wrong. Please try again.', formData });
     }
 };
+
+
+exports.changepassword = (req, res) => {
+    const sessionUser = req.session.sessionUser;
+
+    res.render("changePassword", {
+        sessionUser,
+        error: null,
+        success: null
+    });
+};
+
+exports.updatePassword = async (req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const sessionUser = req.session.sessionUser;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        return res.render("changePassword", {
+            sessionUser,
+            error: "All fields are required",
+            success: null
+        });
+    }
+
+    if (newPassword !== confirmPassword) {
+        return res.render("changePassword", {
+            sessionUser,
+            error: "Passwords do not match",
+            success: null
+        });
+    }
+
+    const user = await User.findById(sessionUser._id);
+
+    const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!isMatch) {
+        return res.render("changePassword", {
+            sessionUser,
+            error: "Current password incorrect",
+            success: null
+        });
+    }
+
+    const newHash = await bcrypt.hash(newPassword, 10);
+    user.passwordHash = newHash;
+    await user.save();
+
+    return res.render("changePassword", {
+        sessionUser,
+        error:null,
+        success: "Password updated successfully"
+    });
+};
