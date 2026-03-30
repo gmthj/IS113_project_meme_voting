@@ -19,6 +19,6 @@
         </div>
     </div>
     
-   <a href="<%= baseUrl %>?bookmark=true&sort=<%= currentSort || 'highest-votes' %>"
+   <a href="<%= baseUrl %>?bookmark=<%= !onlyBookmarks ? 'true' : 'false' %>&sort=<%= currentSort || 'highest-votes' %>"
       class="sort-tab bookmark-tab <%= onlyBookmarks ? 'active' : '' %>">BOOKMARKS</a>
 </div>
