@@ -31,14 +31,14 @@ npm i
 SECRET=<some super long random string>
 MONGO_URI=<connnection string>
 ```
-replace `<some super long random string>` with an actual long string of random characters <br>
+> replace `<some super long random string>` with an actual long string of random characters <br>
 replace `<connnection string>` with your actual connection string from MongoDB Atlas. It should look something like this:
 
 ```bash
 mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/<db_name>?retryWrites=true&w=majority&appName=Cluster0
 ```
 
-note: replace `<db_password>` with the password you created for the user in your mongodb database
+> note: replace `<db_password>` with the password you created for the user in your mongodb database
 
 7. Initialise database with sample data (optional)
 
@@ -57,18 +57,39 @@ npm run dev
 9. Open your browser <br>
 http://localhost:8000
 
+---
+
 ## Sample Data Login Credentials
 | Email                   | Password             |
 | ----------------------- | -------------------- |
 | lkshar@smu.edu.sg       | Pass1234!            |
 | alex.tan@smu.edu.sg     | Alexl0ve5Mei!        |
-| priya.nair@smu.edu.sg   | P0oO0o109k$            |
+| priya.nair@smu.edu.sg   | P0oO0o109k$          |
 | jordan.lim@smu.edu.sg   | Pasdvsds1534!        |
 | mei.chen@gmail.com      | #iubPu#po            |
-| ravi.s@smu.edu.sg       | Pas676767!            |
+| ravi.s@smu.edu.sg       | Pas676767!           |
 | sophie.wu@smu.edu.sg    | HelloPass109#        |
 
----
+## Karma Based Voting
+
+totalKarma = (Post Votes * Post Weight * Tier Weight) + (Comment Votes * Comment Weight * Tier Weight)
+
+| Vote Entity    | Weight |
+| -------------- |------- |
+| Post           | 2      |
+| Comment        | 1      |
+
+| Priority | Tier           | Weight   | Condition                                    |
+|----------|----------------|----------|----------------------------------------------|
+| 0        | **Unknown**    |  1       |  -                                           |
+| 1        | **Troller**    |  0       | `totalKarma < KARMA_TIER_0` (default: -5)    |
+| 2        | **Newcomer**   |  1       | Account age < `KARMA_NEW` days (default: 30) |
+| 3        | **Lurker**     |  1       | `totalKarma < KARMA_TIER_1` (default: 10)    |
+| 4        | **Apprentice** |  2       | `totalKarma < KARMA_TIER_2` (default: 50)    |
+| 5        | **Master**     |  3       | `totalKarma < KARMA_TIER_3` (default: 100)   |
+| 6        | **Legend**     |  5       | `KARMA_TIER_3 <= totalKarma`                 |
+
+
 
 ## DATABASE
 
