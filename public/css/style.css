@@ -318,10 +318,7 @@ input:focus, textarea:focus {
 
 /* NEW: A sticker container for the logo */
 .logo-sticker {
-    background: white;
-    border: var(--border-thick);
     padding: 5px 10px;
-    box-shadow: var(--shadow-sm);
     display: inline-block;
     line-height: 0;
     transition: transform 0.2s ease-out;
