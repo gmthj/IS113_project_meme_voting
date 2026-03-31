@@ -12,7 +12,7 @@ exports.renderDeletionConfirmation = (req, res) => {
     
     
     const backURL = req.get('Referrer') || '/';
-    res.render("confirm-delete", {sessionUser, post, comment, backURL})
+    return res.render("confirm-delete", {sessionUser, post, comment, backURL})
 
 }
 
@@ -32,10 +32,10 @@ exports.handleDeletion = async (req, res) => {
         console.log("delete status: ", delStatus)
 
         if (backURL.includes("fullpost") && postId) {
-            res.redirect("/home")
+            return res.redirect("/home")
         }
     }
 
-    res.redirect(`${backURL}#post-${postId}`)
+    return res.redirect(`${backURL}#post-${postId}`)
 
 }

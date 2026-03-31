@@ -49,6 +49,7 @@ exports.renderUpload = (req, res) => {
   res.render("upload", {
     error: null,
     success: false,
+    postId: null,
     sessionUser
   });
 };
@@ -64,6 +65,7 @@ exports.handleUpload = async (req, res) => {
       return res.render("upload", {
         error: "All fields are required",
         success: false,
+        postId: null,
         sessionUser
       });
     }
@@ -73,6 +75,7 @@ exports.handleUpload = async (req, res) => {
       return res.render("upload", {
         error: imageError,
         success: false,
+        postId: null,
         sessionUser
       });
     }
@@ -89,6 +92,7 @@ exports.handleUpload = async (req, res) => {
     return res.render("upload", {
       error: null,
       success: true,
+      postId: newPost._id.toString(),
       sessionUser
     });
   } catch (err) {
@@ -97,6 +101,7 @@ exports.handleUpload = async (req, res) => {
     return res.render("upload", {
       error: "Failed to upload post",
       success: false,
+      postId: null,
       sessionUser
     });
   }
