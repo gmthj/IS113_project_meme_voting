@@ -325,7 +325,7 @@ input:focus, textarea:focus {
 }
 
 .logo-sticker:hover {
-    transform: rotate(-2deg); /* Fun sticker wiggle */
+    transform: rotate(360deg); /* Fun sticker wiggle */
 }
 
 
