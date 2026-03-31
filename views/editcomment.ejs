@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <title>Edit</title>
 </head>
-<%- include('partials/header', {sessionUser, showActions: true}) %>
+
 <body>
+    <%- include('partials/header', {sessionUser, showActions: true}) %>
 
     <h1>Edit your <%= post ? 'Post' : 'Comment' %></h1>
 
@@ -30,6 +32,6 @@
         <button type="submit" name="cancel" value="false">Save Changes</button>
         <button type="submit" name="cancel" value="true">Cancel</button>
     </form>
-
 </body>
+
 </html>

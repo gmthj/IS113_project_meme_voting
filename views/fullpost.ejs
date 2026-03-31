@@ -56,62 +56,58 @@
         }
     </style>
 </head>
-<%- include('partials/header', {sessionUser, showActions: true}) %>
 
-    <body>
+<body>
+    <%- include('partials/header', {sessionUser, showActions: true}) %>
 
-        <main class="feed-container">
-            <!-- <section> -->
-            <%- include('partials/post', {post, sessionUser, showControls: true}) %>
-            <!-- </section> -->
+    <main class="feed-container">
+        <%- include('partials/post', {post, sessionUser, showControls: true}) %>
 
-            <% if (locals.errorMessage) { %>
-                <div class="error-badge" style="margin-top: 1em">
-                    <%= errorMessage %>
+        <% if (locals.errorMessage) { %>
+            <div class="error-badge" style="margin-top: 1em">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+
+        <section id="comment-section" class="comment-post-section">
+            <form action="/fullpost/<%= post._id %>/comment" method="POST" class="comment-post-form">
+                <textarea name="text" placeholder="Comment here..." id="commentText"
+                    class="comment-post-textarea" required></textarea>
+                <button type="submit" class="neo-btn neo-btn-red comment-post-btn">
+                    COMMENT
+                </button>
+            </form>
+        </section>
+
+        <% if (sessionUser && sessionUser._id) { %>
+            <section>
+                <div class="sort-wrapper">
+                    <div class="sort-left">
+                        <div class="sort-tabs">
+                            <a href="/fullpost/<%= post._id %>?sort=highest-votes"
+                                class="sort-tab <%= currentSort === 'highest-votes' ? 'active' : '' %>">TOP</a>
+                            <a href="/fullpost/<%= post._id %>?sort=lowest-votes"
+                                class="sort-tab <%= currentSort === 'lowest-votes' ? 'active' : '' %>">LOWEST</a>
+                            <a href="/fullpost/<%= post._id %>?sort=newest"
+                                class="sort-tab <%= currentSort === 'newest' ? 'active' : '' %>">NEWEST</a>
+                            <a href="/fullpost/<%= post._id %>?sort=oldest"
+                                class="sort-tab <%= currentSort === 'oldest' ? 'active' : '' %>">OLDEST</a>
+                        </div>
+                    </div>
                 </div>
-                <% } %>
+            </section>
+        <% } %>
 
-                    <section id="comment-section" class="comment-post-section">
-                        <form action="/fullpost/<%= post._id %>/comment" method="POST" class="comment-post-form">
-                            <textarea name="text" placeholder="Comment here..." id="commentText"
-                                class="comment-post-textarea" required></textarea>
-                            <button type="submit" class="neo-btn neo-btn-red comment-post-btn">
-                                COMMENT
-                            </button>
-                        </form>
-
-                    </section>
-
-                    <% if (sessionUser && sessionUser._id) { %>
-                        <section>
-                            <div class="sort-wrapper">
-                                <div class="sort-left">
-                                    <div class="sort-tabs">
-                                        <a href="/fullpost/<%= post._id %>?sort=highest-votes"
-                                            class="sort-tab <%= currentSort === 'highest-votes' ? 'active' : '' %>">TOP</a>
-                                        <a href="/fullpost/<%= post._id %>?sort=lowest-votes"
-                                            class="sort-tab <%= currentSort === 'lowest-votes' ? 'active' : '' %>">LOWEST</a>
-                                        <a href="/fullpost/<%= post._id %>?sort=newest"
-                                            class="sort-tab <%= currentSort === 'newest' ? 'active' : '' %>">NEWEST</a>
-                                        <a href="/fullpost/<%= post._id %>?sort=oldest"
-                                            class="sort-tab <%= currentSort === 'oldest' ? 'active' : '' %>">OLDEST</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                        <% } %>
-
-                            <section>
-                                <% if (comments && comments.length> 0) { %>
-                                    <% comments.forEach((comment)=> { %>
-                                        <%- include('partials/comment', {comment, sessionUser, showControls: true}) %>
-                                            <% }); %>
-                                                <% } else { %>
-                                                    <p>No comments yet. Be the first to comment!</p>
-                                                    <% } %>
-                            </section>
-        </main>
-
-    </body>
+        <section>
+            <% if (comments && comments.length> 0) { %>
+                <% comments.forEach((comment)=> { %>
+                    <%- include('partials/comment', {comment, sessionUser, showControls: true}) %>
+                <% }); %>
+            <% } else { %>
+                <p>No comments yet. Be the first to comment!</p>
+            <% } %>
+        </section>
+    </main>
+</body>
 
 </html>

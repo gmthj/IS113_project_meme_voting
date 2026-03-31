@@ -33,20 +33,17 @@
                 <p id="countdown" class="countdown-text">
                     REDIRECTING AUTOMATICALLY IN 10 SECONDS...
                 </p>
-                <!-- <progress value="0" max="10" id="progressBar"></progress> -->
             </div>
         </div>
     </main>
-
 </body>
-</html>
-
-
 
 <script>
-let timeleft = 9;
-let countdownTimer = setInterval(function(){
-    document.getElementById("countdown").innerHTML = (timeleft > 0) ? `REDIRECTING AUTOMATICALLY IN ${timeleft} SECONDS...` : "REDIRECTING HOME...";
-    timeleft -= 1;
-}, 1000);
+    let timeleft = 9;
+    let countdownTimer = setInterval(function(){
+        document.getElementById("countdown").innerHTML = (timeleft > 0) ? `REDIRECTING AUTOMATICALLY IN ${timeleft} SECONDS...` : "REDIRECTING HOME...";
+        timeleft -= 1;
+    }, 1000);
 </script>
+
+</html>

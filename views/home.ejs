@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="/css/style.css">
-    <title>Meme Gallery - Home</title>
+    <title>THE DAILY DANK - Home</title>
 </head>
 
 <body>
@@ -14,18 +15,11 @@
     <div class="home-container">
         <div class="feed-header">
             <h1 class="feed-title">Meme Gallery</h1>
-            <!-- <div class="user-status">
-                <% if (sessionUser && sessionUser._id) { %>
-                    <span>Logged in as <strong><%= sessionUser.name %></strong></span>
-                <% } %>
-            </div> -->
         </div>
 
         <% if (isAnnon || (sessionUser && sessionUser._id)) { %>
-            <!-- Sorting Interface (only shown when logged in) -->
             <%- include('partials/sortTabs', { baseUrl: '/home', resetUrl: '/home/reset-sort', currentSort }) %>
 
-            <!-- Display Posts -->
             <main class="feed-container">
                 <% if (posts && posts.length > 0) { %>
                     <% posts.forEach(post => { %>
@@ -43,7 +37,6 @@
             </main>
 
         <% } else { %>
-            <!-- Login Prompt (shown when not logged in) -->
             <div class="login-prompt">
                 <h2 style="margin-bottom: 20px;">Welcome to Meme Vote!</h2>
                 <p style="margin-bottom: 40px; color: #666;">Login to vote, comment, and bookmark memes.</p>
@@ -51,7 +44,7 @@
                 <a href="/home?annon=true" class="big-login-btn">Continue Anonymously</a>
             </div>
         <% } %>
-
     </div>
 </body>
+
 </html>

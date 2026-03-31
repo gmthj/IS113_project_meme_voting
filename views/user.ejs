@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,78 +8,79 @@
     <link rel="stylesheet" href="/css/style.css">
     <title>Users name</title>
 </head>
-<%- include('partials/header', {sessionUser, showActions: true}) %>
+
 <body>
-<div class="home-container">
+    <%- include('partials/header', {sessionUser, showActions: true}) %>
 
-    <div class="neo-card profile-card">
-        <div class="profile-layout">
-            <div class="profile-sidebar">
-                <div class="avatar-frame profile-page-avatar">
-                    <img src="<%= userInfo.avatar %>" alt="avatar">
+    <div class="home-container">
+        <div class="neo-card profile-card">
+            <div class="profile-layout">
+                <div class="profile-sidebar">
+                    <div class="avatar-frame profile-page-avatar">
+                        <img src="<%= userInfo.avatar %>" alt="avatar">
+                    </div>
+                    
+                    <% if (sessionUser._id && sessionUser._id.toString() === userInfo._id.toString()) { %>
+                        <a href="/account/edit" class="neo-btn-small" style="margin-top: 15px; text-decoration: none; display: inline-block;">
+                            EDIT PROFILE
+                        </a>
+                    <% } %>
                 </div>
-                
-                <% if (sessionUser._id && sessionUser._id.toString() === userInfo._id.toString()) { %>
-                    <a href="/account/edit" class="neo-btn-small" style="margin-top: 15px; text-decoration: none; display: inline-block;">
-                        EDIT PROFILE
-                    </a>
-                <% } %>
-            </div>
 
-            <div class="profile-info">
-                <h2 class="neo-title" style="margin-bottom: 5px;"><%= userInfo.name %></h2>
-                <div class="author-stats">
-                    <span class="meta-text stat-tier"><%= userInfo.karmaTier %></span>
-                    <span class="meta-text stat-karma"><%= userInfo.totalKarma %> KARMA</span>
-                </div>
-                <p class="meta-text" style="margin-bottom: 20px;">MEMBER SINCE: <%= userInfo.joined %></p>
+                <div class="profile-info">
+                    <h2 class="neo-title" style="margin-bottom: 5px;"><%= userInfo.name %></h2>
+                    <div class="author-stats">
+                        <span class="meta-text stat-tier"><%= userInfo.karmaTier %></span>
+                        <span class="meta-text stat-karma"><%= userInfo.totalKarma %> KARMA</span>
+                    </div>
+                    <p class="meta-text" style="margin-bottom: 20px;">MEMBER SINCE: <%= userInfo.joined %></p>
 
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="neo-label-mini">EMAIL</span>
-                        <p class="info-value"><%= userInfo.email %></p>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="neo-label-mini">EMAIL</span>
+                            <p class="info-value"><%= userInfo.email %></p>
+                        </div>
+                        <div class="info-item">
+                            <span class="neo-label-mini">BIRTHDAY</span>
+                            <p class="info-value"><%= new Date(userInfo.dob).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() %></p>
+                        </div>
+                        <div class="info-item">
+                            <span class="neo-label-mini">BIO</span>
+                            <p class="info-value italic-bio">"<%= userInfo.bio %>"</p>
+                        </div>
+                        <!-- <div class="info-item">
+                            <span class="neo-label-mini">KARMA</span>
+                            <p class="info-value"><%= userInfo.totalKarma %> / <%= userInfo.karmaTier %></p>
+                        </div> -->
+                        <!-- TODO: user stats : post count comment count  -->
                     </div>
-                    <div class="info-item">
-                        <span class="neo-label-mini">BIRTHDAY</span>
-                        <p class="info-value"><%= new Date(userInfo.dob).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() %></p>
-                    </div>
-                    <div class="info-item">
-                        <span class="neo-label-mini">BIO</span>
-                        <p class="info-value italic-bio">"<%= userInfo.bio %>"</p>
-                    </div>
-                    <!-- <div class="info-item">
-                        <span class="neo-label-mini">KARMA</span>
-                        <p class="info-value"><%= userInfo.totalKarma %> / <%= userInfo.karmaTier %></p>
-                    </div> -->
-                    <!-- TODO: user stats : post count comment count  -->
                 </div>
             </div>
         </div>
+
+        <hr>
+        <h1> <%= userInfo.name %>'s Posts </h1>
+        
+        <!-- Display sort tabs -->
+        <%- include('partials/sortTabs', { baseUrl: `/user/${userInfo._id}`, resetUrl: `/user/reset-sort`, currentSort }) %>
+        
+        <!-- Display Posts -->
+        <main class="feed-container">
+            <% if (userPosts && userPosts.length > 0) { %>
+                <% userPosts.forEach(post => { %>
+                    <%- include('partials/post', {post, sessionUser, showControls: true}) %>
+                <% }); %>
+            <% } else if (bookmarkError) { %>
+                <div style="border: 3px dashed #ccc; padding: 40px; text-align: center; font-weight: bold; color: #888;">
+                    <%= bookmarkError %>
+                </div>
+            <% } else { %>
+                <div style="border: 3px dashed #ccc; padding: 40px; text-align: center; font-weight: bold; color: #888;">
+                    No memes found. Be the first to upload one!
+                </div>
+            <% } %>
+        </main>
     </div>
-
-    <hr>
-    <h1> <%= userInfo.name %>'s Posts </h1>
-    
-    <!-- Display sort tabs -->
-    <%- include('partials/sortTabs', { baseUrl: `/user/${userInfo._id}`, resetUrl: `/user/reset-sort`, currentSort }) %>
-    
-    <!-- Display Posts -->
-    <main class="feed-container">
-        <% if (userPosts && userPosts.length > 0) { %>
-            <% userPosts.forEach(post => { %>
-                <%- include('partials/post', {post, sessionUser, showControls: true}) %>
-            <% }); %>
-        <% } else if (bookmarkError) { %>
-            <div style="border: 3px dashed #ccc; padding: 40px; text-align: center; font-weight: bold; color: #888;">
-                <%= bookmarkError %>
-            </div>
-        <% } else { %>
-            <div style="border: 3px dashed #ccc; padding: 40px; text-align: center; font-weight: bold; color: #888;">
-                No memes found. Be the first to upload one!
-            </div>
-        <% } %>
-    </main>
-</div>
-
 </body>
+
 </html>
