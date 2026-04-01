@@ -79,9 +79,20 @@ async function deleteCommentById(commentId) {
   }
 }
 
+async function deleteCommentsByPostId(postId) {
+  try {
+    await Comment.deleteMany({ postId: postId });
+    return true;
+  } catch (err) {
+    console.log("error: deleteCommentByPostId - failed to delete comments", err);
+    return false;
+  }
+}
+
 module.exports = {
   getAllCommentsByPostId,
   expandComments,
   updateCommentById,
-  deleteCommentById
+  deleteCommentById,
+  deleteCommentsByPostId
 };

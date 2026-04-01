@@ -6,6 +6,7 @@ const { getPostVoteValue } = require("../services/voteService");
 const { getBookmarkValue } = require("../services/bookmarkService");
 const { timeAgo } = require("../utils/utils");
 const { getAllBookmarksByUserId } = require("./bookmarkService");
+const { deleteCommentsByPostId } = require("../services/commentService");
 
 // adds the post's author's User obj and other details to each Post obj
 async function expandPosts(posts, sessionUser = {}) {
@@ -61,6 +62,8 @@ async function deletePostById(postId) {
     if (deletedPost?.imageId) {
       await Image.findByIdAndDelete(deletedPost.imageId);
     }
+
+    await deleteCommentsByPostId(postId);
 
     return true;
   } catch {
