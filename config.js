@@ -36,5 +36,5 @@ module.exports = {
   },
 
   // Post Per Page
-  POSTS_PER_PAGE: 15,
+  POSTS_PER_PAGE: 10,
 };
