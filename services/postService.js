@@ -14,12 +14,12 @@ async function expandPosts(posts, sessionUser = {}) {
       posts.map(async (post) => {
         const author = await getUserById(post.userId.toString());
         const voteValue = await getPostVoteValue(post._id, sessionUser._id);
-        const bookmark = await getBookmarkValue(post._id, sessionUser._id)
+        const bookmarkValue = await getBookmarkValue(post._id, sessionUser._id)
 
-        post.postAge = timeAgo(post.upload_datetime);
+        post.postAge = `${timeAgo(post.upload_datetime)} ago`;
         post.author = author;
         post.voteValue = voteValue;
-        post.bookmark = bookmark;
+        post.bookmark = bookmarkValue;
       }),
     );
     return posts;

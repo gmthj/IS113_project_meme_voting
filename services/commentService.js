@@ -13,7 +13,7 @@ async function expandComments(comments, sessionUser = {}) {
 
     const voteValue = await getCommentVoteValue(comment._id, sessionUser._id);
 
-    comment.commentAge = timeAgo(comment.upload_datetime);
+    comment.commentAge = `${timeAgo(comment.upload_datetime)} ago`;
     comment.author = author;
 
     comment.voteValue = voteValue;

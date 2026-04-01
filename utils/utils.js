@@ -7,35 +7,35 @@ dotenv.config({quiet:true});
 async function connectDB(uri = process.env.MONGO_URI) {
   try {
     await mongoose.connect(uri);
-    console.log("MongoDB connected:", mongoose.connection.name);
+    console.log("\n\nMongoDB connected:", mongoose.connection.name);
   } catch (err) {
-    console.error("MongoDB connection error:", err);
+    console.error("\n\nMongoDB connection error:", err);
     process.exit(1);
   }
 }
 
-function timeAgo(datetime) {
-  const seconds = Math.floor((new Date() - new Date(datetime)) / 1000);
+function timeAgo(startDatetime, endDatetime = new Date()){
+  const seconds = Math.floor((new Date(endDatetime) - new Date(startDatetime)) / 1000);
 
   if (seconds < 60) {
-    return `${seconds}s ago`
+    return `${seconds}s`
   }
   if (seconds < 3600) {
-    return `${Math.floor(seconds / 60)}m ago`
+    return `${Math.floor(seconds / 60)}m`
   }
   if (seconds < 86400) {
-    return `${Math.floor(seconds / 3600)}h ago`
+    return `${Math.floor(seconds / 3600)}h`
   }
   if (seconds < 7 * 86400) {
-    return `${Math.floor(seconds / 86400)}d ago`
+    return `${Math.floor(seconds / 86400)}d`
   }
   if (seconds < 30 * 86400) {
-    return `${Math.floor(seconds / (7 * 86400))}w ago`
+    return `${Math.floor(seconds / (7 * 86400))}w`
   }
   if (seconds < 365 * 86400) {
-    return `${Math.floor(seconds / (30 * 86400))}mo ago`
+    return `${Math.floor(seconds / (30 * 86400))}mo`
   }
-  return `${Math.floor(seconds / (365 * 86400))}y ago`
+  return `${Math.floor(seconds / (365 * 86400))}y`
 }
 
 function avatarFor(seed) {
