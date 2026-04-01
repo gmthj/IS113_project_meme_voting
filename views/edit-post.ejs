@@ -34,7 +34,7 @@
 
             <form action="/upload/update" method="POST" class="neo-form">
                 <input type="hidden" name="postId" value="<%= postData._id %>">
-                <input type="hidden" name="authorId" value="<%= postData.author._id %>">
+                <input type="hidden" name="authorId" value="<%= (postData.author && postData.author._id) ? postData.author._id : postData.userId %>">
                 <input type="hidden" name="backURL" value="<%= backURL %>">
 
                 <div class="neo-form-group">
@@ -89,7 +89,7 @@
                     type="hidden" 
                     name="image_base64" 
                     id="image_base64" 
-                    value="<%= postData.image %>"
+                    value=""
                 >
 
                 <div class="upload-actions">

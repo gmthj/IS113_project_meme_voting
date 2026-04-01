@@ -1,10 +1,11 @@
 const POST_SCHEMA = require("../models/Post-model");
+const IMAGE_SCHEMA = require("../models/Image-model");
 const { getPostById } = require("../services/postService");
 
-// Shared helper to validate base64 image
-function validateBase64Image(image_base64) {
+// Shared helper to validate and parse base64 image
+function parseBase64Image(image_base64) {
   if (!image_base64) {
-    return "Image is required";
+    return { error: "Image is required" };
   }
 
   const allowedMimeTypes = [
@@ -18,28 +19,29 @@ function validateBase64Image(image_base64) {
   const mimeMatch = image_base64.match(/^data:(.*?);base64,/);
 
   if (!mimeMatch) {
-    return "Invalid image format";
+    return { error: "Invalid image format" };
   }
 
   const mimeType = mimeMatch[1];
 
   if (!allowedMimeTypes.includes(mimeType)) {
-    return "Only JPG, PNG, GIF, and WEBP files are allowed";
+    return { error: "Only JPG, PNG, GIF, and WEBP files are allowed" };
   }
 
   try {
     const base64Data = image_base64.split(",")[1];
-    const fileSizeInBytes = Buffer.from(base64Data, "base64").length;
-    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    const buffer = Buffer.from(base64Data, "base64");
+    const fileSizeInBytes = buffer.length;
+    const maxSizeInBytes = 8 * 1024 * 1024; // 8MB
 
     if (fileSizeInBytes > maxSizeInBytes) {
-      return "Image must be smaller than 5MB";
+      return { error: "Image must be smaller than 8MB" };
     }
-  } catch (err) {
-    return "Invalid image data";
-  }
 
-  return null;
+    return { mimeType, buffer, fileSizeInBytes };
+  } catch (err) {
+    return { error: "Invalid image data" };
+  }
 }
 
 // Loading of the upload page
@@ -70,21 +72,27 @@ exports.handleUpload = async (req, res) => {
       });
     }
 
-    const imageError = validateBase64Image(image_base64);
-    if (imageError) {
+    const parsedImage = parseBase64Image(image_base64);
+    if (parsedImage.error) {
       return res.render("upload", {
-        error: imageError,
+        error: parsedImage.error,
         success: false,
         postId: null,
         sessionUser
       });
     }
 
+    const savedImage = await IMAGE_SCHEMA.create({
+      data: parsedImage.buffer,
+      mimeType: parsedImage.mimeType,
+      sizeBytes: parsedImage.fileSizeInBytes
+    });
+
     const newPost = new POST_SCHEMA({
       userId: sessionUser._id,
       title: meme_title.trim(),
       description: description.trim(),
-      image: image_base64
+      imageId: savedImage._id
     });
 
     await newPost.save();
@@ -146,8 +154,9 @@ exports.handleEditPost = async (req, res) => {
     if (!postData) {
       return res.redirect("/");
     }
+    postData.image = postData.imageId ? `/media/images/${postData.imageId}` : postData.image;
 
-    if (!meme_title || !description || !image_base64) {
+    if (!meme_title || !description) {
       return res.render("edit-post", {
         error: "All fields are required",
         success: false,
@@ -157,20 +166,36 @@ exports.handleEditPost = async (req, res) => {
       });
     }
 
-    const imageError = validateBase64Image(image_base64);
-    if (imageError) {
-      return res.render("edit-post", {
-        error: imageError,
-        success: false,
-        sessionUser,
-        postData,
-        backURL
-      });
-    }
-
     postData.title = meme_title.trim();
     postData.description = description.trim();
-    postData.image = image_base64;
+
+    // Replace image only when a new file is provided.
+    if (image_base64) {
+      const parsedImage = parseBase64Image(image_base64);
+      if (parsedImage.error) {
+        return res.render("edit-post", {
+          error: parsedImage.error,
+          success: false,
+          sessionUser,
+          postData,
+          backURL
+        });
+      }
+
+      const savedImage = await IMAGE_SCHEMA.create({
+        data: parsedImage.buffer,
+        mimeType: parsedImage.mimeType,
+        sizeBytes: parsedImage.fileSizeInBytes
+      });
+
+      if (postData.imageId) {
+        await IMAGE_SCHEMA.findByIdAndDelete(postData.imageId);
+      }
+
+      postData.imageId = savedImage._id;
+      postData.image = null;
+    }
+
     postData.edit_datetime = new Date();
 
     await postData.save();
@@ -182,6 +207,9 @@ exports.handleEditPost = async (req, res) => {
     let postData = null;
     try {
       postData = await POST_SCHEMA.findById(postId);
+      if (postData) {
+        postData.image = postData.imageId ? `/media/images/${postData.imageId}` : postData.image;
+      }
     } catch (innerErr) {
       console.error("Failed to reload post data:", innerErr);
     }

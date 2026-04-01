@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const { connectDB } = require("./utils/utils");
+const mongoose = require("mongoose");
+const Image = require("./models/Image-model");
 
 const server = express();
 
@@ -13,6 +15,28 @@ server.set("view engine", "ejs");
 server.use(express.urlencoded({ extended: true, limit: "10mb" }));
 server.use(express.static(path.join(__dirname, "public")));
 server.use(express.json());
+
+server.get("/media/images/:imageId", async (req, res) => {
+  try {
+    const { imageId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(imageId)) {
+      return res.status(400).send("Invalid image id");
+    }
+
+    const imageDoc = await Image.findById(imageId).select("data mimeType").lean();
+    if (!imageDoc) {
+      return res.status(404).send("Image not found");
+    }
+
+    res.set("Content-Type", imageDoc.mimeType || "application/octet-stream");
+    res.set("Cache-Control", "public, max-age=86400");
+    return res.send(imageDoc.data);
+  } catch (error) {
+    console.error("Image fetch error:", error);
+    return res.status(500).send("Image fetch failed");
+  }
+});
 
 const secret = process.env.SECRET;
 

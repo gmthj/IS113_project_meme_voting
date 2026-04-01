@@ -1,4 +1,5 @@
 const Post = require("../models/Post-model");
+const Image = require("../models/Image-model");
 
 const { getUserById } = require("../services/userService");
 const { getPostVoteValue } = require("../services/voteService");
@@ -20,6 +21,7 @@ async function expandPosts(posts, sessionUser = {}) {
         post.author = author;
         post.voteValue = voteValue;
         post.bookmark = bookmark;
+        post.image = post.imageId ? `/media/images/${post.imageId}` : post.image;
       }),
     );
     return posts;
@@ -53,7 +55,11 @@ async function getAllPosts(sessionUser = {}) {
 
 async function deletePostById(postId) {
   try {
-    await Post.findByIdAndDelete({ _id: postId });
+    const deletedPost = await Post.findByIdAndDelete({ _id: postId });
+
+    if (deletedPost?.imageId) {
+      await Image.findByIdAndDelete(deletedPost.imageId);
+    }
 
     return true;
   } catch {

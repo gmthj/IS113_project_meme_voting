@@ -20,6 +20,7 @@ exports.renderDeletionConfirmation = async (req, res) => {
             post.postAge = timeAgo(rawPost.upload_datetime);
             post.voteValue = undefined;
             post.bookmark = false;
+            post.image = rawPost.imageId ? `/media/images/${rawPost.imageId}` : rawPost.image;
         }
     }
 
