@@ -24,14 +24,24 @@ server.get("/media/images/:imageId", async (req, res) => {
       return res.status(400).send("Invalid image id");
     }
 
-    const imageDoc = await Image.findById(imageId).select("data mimeType").lean();
+    const imageDoc = await Image.findById(imageId).select("data mimeType");
     if (!imageDoc) {
       return res.status(404).send("Image not found");
     }
 
+    let imageBuffer = imageDoc.data;
+    // Defensive conversion in case data is returned as a plain object shape.
+    if (!Buffer.isBuffer(imageBuffer) && imageBuffer?.type === "Buffer" && Array.isArray(imageBuffer.data)) {
+      imageBuffer = Buffer.from(imageBuffer.data);
+    }
+
+    if (!Buffer.isBuffer(imageBuffer)) {
+      return res.status(500).send("Invalid image data");
+    }
+
     res.set("Content-Type", imageDoc.mimeType || "application/octet-stream");
     res.set("Cache-Control", "public, max-age=86400");
-    return res.send(imageDoc.data);
+    return res.send(imageBuffer);
   } catch (error) {
     console.error("Image fetch error:", error);
     return res.status(500).send("Image fetch failed");
