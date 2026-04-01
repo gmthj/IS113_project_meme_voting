@@ -115,7 +115,7 @@ exports.handleLogin = async (req, res) => {
  
 exports.renderRegister = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
-    res.render('register', { sessionUser, error: null, formData: {} });
+    res.render('register', { sessionUser, error: null, formData: {}, MIN_AGE });
 };
  
 // /account/register
@@ -125,35 +125,35 @@ exports.handleRegister = async (req, res) => {
     const formData = { email, name, dob, bio };
  
     if (!email || !password || !confirmation || !name || !dob) {
-        return res.render('register', { sessionUser, error: 'Please fill in all required fields.', formData });
+        return res.render('register', { sessionUser, error: 'Please fill in all required fields.', formData, MIN_AGE });
     }
  
     if (password !== confirmation) {
-        return res.render('register', { sessionUser, error: 'Passwords do not match.', formData });
+        return res.render('register', { sessionUser, error: 'Passwords do not match.', formData, MIN_AGE });
     }
     if (!isValidEmail(email.trim())) {
-    return res.render('register', { sessionUser, error: 'Please enter a valid email address (e.g. name@example.com).', formData });
+    return res.render('register', { sessionUser, error: 'Please enter a valid email address (e.g. name@example.com).', formData, MIN_AGE });
     }
     const passwordError = isValidPassword(password);
     if (passwordError) {
-        return res.render('register', { sessionUser, error: passwordError, formData });
+        return res.render('register', { sessionUser, error: passwordError, formData, MIN_AGE });
     }
  
     const dobDate = new Date(dob);
     if (isNaN(dobDate.getTime())) {
-        return res.render('register', { sessionUser, error: 'Invalid date of birth.', formData });
+        return res.render('register', { sessionUser, error: 'Invalid date of birth.', formData, MIN_AGE });
     }
     if (dobDate > new Date() || getAge(dobDate) > 100) {
-        return res.render('register', { sessionUser, error: `Please enter valid date of birth.`, formData });
+        return res.render('register', { sessionUser, error: `Please enter valid date of birth.`, formData, MIN_AGE });
     }
     if (getAge(dobDate) < MIN_AGE) {
-        return res.render('register', { sessionUser, error: `You must be at least ${MIN_AGE} years old to register.`, formData });
+        return res.render('register', { sessionUser, error: `You must be at least ${MIN_AGE} years old to register.`, formData, MIN_AGE });
     }
  
     try {
         const existing = await User.findOne({ email: email.trim().toLowerCase() });
         if (existing) {
-            return res.render('register', { sessionUser, error: 'An account with that email already exists.', formData });
+            return res.render('register', { sessionUser, error: 'An account with that email already exists.', formData, MIN_AGE });
         }
  
         const passwordHash = await bcrypt.hash(password, 10);
@@ -173,14 +173,14 @@ exports.handleRegister = async (req, res) => {
         req.session.save((err) => {
             if (err) {
                 console.error('Session save error:', err);
-                return res.render('register', { sessionUser, error: 'Something went wrong. Please try again.', formData });
+                return res.render('register', { sessionUser, error: 'Something went wrong. Please try again.', formData, MIN_AGE });
             }
             return res.redirect('/home');
         });
  
     } catch (err) {
         console.error('Registration error:', err);
-        return res.render('register', { sessionUser, error: 'Something went wrong. Please try again.', formData });
+        return res.render('register', { sessionUser, error: 'Something went wrong. Please try again.', formData, MIN_AGE });
     }
 };
  
