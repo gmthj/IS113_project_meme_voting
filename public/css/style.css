@@ -1197,3 +1197,37 @@ input:focus, textarea:focus {
 .stat-divider {
     color: #ccc;
 }
+
+
+/* --- Floating Back to Top Sticker --- */
+
+.back-to-top-btn {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99; /* Stay on top of everything */
+    
+    /* Neo-Brutalist Weight */
+    padding: 15px 20px;
+    font-weight: 900;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    box-shadow: 6px 6px 0px var(--neo-ink);
+    border: var(--border-thick);
+    
+    /* Animation */
+    transition: transform 0.1s ease;
+    cursor: pointer;
+}
+
+.back-to-top-btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px var(--neo-ink);
+    background-color: var(--neo-white); /* Flash to white on hover */
+}
+
+.back-to-top-btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+}
