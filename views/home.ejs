@@ -18,9 +18,9 @@
         </div>
 
         <% if (isAnnon || (sessionUser && sessionUser._id)) { %>
-            <%- include('partials/sortTabs', { baseUrl: '/home', resetUrl: '/home/reset-sort', currentSort }) %>
-
             <main class="feed-container">
+                <%- include('partials/sortTabs', { baseUrl: '/home', resetUrl: '/home/reset-sort', currentSort }) %>
+
                 <% if (posts && posts.length > 0) { %>
                     <% posts.forEach(post => { %>
                         <%- include('partials/post', {post, sessionUser, showControls: true}) %>

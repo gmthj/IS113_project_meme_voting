@@ -1,24 +1,28 @@
 <div class="sort-wrapper">
     <div class="sort-left">
         <div class="sort-tabs">
-            <a href="<%= baseUrl %>?sort=highest-votes<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
-               class="sort-tab <%= currentSort === 'highest-votes' ? 'active' : '' %>">TOP</a>
-
-            <a href="<%= baseUrl %>?sort=lowest-votes<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
-               class="sort-tab <%= currentSort === 'lowest-votes' ? 'active' : '' %>">LOWEST</a>
-
-            <a href="<%= baseUrl %>?sort=newest<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
-               class="sort-tab <%= currentSort === 'newest' ? 'active' : '' %>">NEWEST</a>
-
-            <a href="<%= baseUrl %>?sort=oldest<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
-               class="sort-tab <%= currentSort === 'oldest' ? 'active' : '' %>">OLDEST</a>
+            <% 
+                const commonQuery = (onlyBookmarks ? '&bookmark=true' : '') + ((typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '');
+                const isVotes = currentSort === 'highest-votes' || currentSort === 'lowest-votes' || (!currentSort);
+                const isTime = currentSort === 'newest' || currentSort === 'oldest';
+                const isComments = currentSort === 'most-comments' || currentSort === 'least-comments';
+            %>
             
-            <% if (!isFullPost) { %>
-               <a href="<%= baseUrl %>?sort=most-comments<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
-                  class="sort-tab <%= currentSort === 'most-comments' ? 'active' : '' %>">MOST COMMENTS</a>
+            <a href="<%= baseUrl %>?sort=<%= currentSort === 'highest-votes' ? 'lowest-votes' : 'highest-votes' %><%= commonQuery %>"
+               class="sort-tab <%= isVotes ? 'active' : '' %>">
+               <%= currentSort === 'lowest-votes' ? 'LOWEST' : 'TOP' %>
+            </a>
 
-               <!-- <a href="<%= baseUrl %>?sort=least-comments<%= onlyBookmarks ? '&bookmark=true' : '' %>"
-                  class="sort-tab <%= currentSort === 'least-comments' ? 'active' : '' %>">LEAST COMMENTS</a> -->
+            <a href="<%= baseUrl %>?sort=<%= currentSort === 'newest' ? 'oldest' : 'newest' %><%= commonQuery %>"
+               class="sort-tab <%= isTime ? 'active' : '' %>">
+               <%= currentSort === 'oldest' ? 'OLDEST' : 'NEWEST' %>
+            </a>
+
+            <% if (!isFullPost) { %>
+               <a href="<%= baseUrl %>?sort=<%= currentSort === 'most-comments' ? 'least-comments' : 'most-comments' %><%= commonQuery %>"
+                  class="sort-tab <%= isComments ? 'active' : '' %>">
+                  <%= currentSort === 'least-comments' ? 'LEAST COMMENTS' : 'MOST COMMENTS' %>
+               </a>
 
                <form action="<%= resetUrl %>?redirect=<%= baseUrl %>" method="POST" style="margin:0; padding:0;">
                   <button type="submit" class="reset-btn">RESET</button>
