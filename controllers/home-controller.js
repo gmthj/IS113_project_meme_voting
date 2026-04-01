@@ -8,6 +8,8 @@ const {
   deletePostSortType,
 } = require("../services/postPreferenceService");
 
+const { POSTS_PER_PAGE } = require("../config");
+
 exports.renderHome = async (req, res) => {
   // console.log(req.session)
   const sessionUser = req.session.sessionUser || {};
@@ -55,7 +57,7 @@ exports.renderHome = async (req, res) => {
       sessionUser,
       onlyBookmarks,
       sortType,
-      limit: 15,
+      limit: POSTS_PER_PAGE,
       page,
       returnMeta: true,
     });
