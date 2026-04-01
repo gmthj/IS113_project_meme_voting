@@ -1,5 +1,3 @@
-const PostPreference = require("../models/Post-Preference-model");
-
 const { getPosts } = require("../services/postService");
 const {
   getPostSortType,
@@ -32,10 +30,7 @@ exports.renderHome = async (req, res) => {
         sortType = req.query.sort;
 
         // Check if there is already a sortPreference
-        const existing = await PostPreference.findOne({
-          userId: sessionUser._id,
-          page: "home",
-        }).lean();
+        const existing = await getPostSortType(sessionUser._id, "home");
 
         if (existing) {
           await updatePostSortType(sessionUser._id, "home", sortType); // UPDATE the preference

@@ -46,7 +46,7 @@ exports.handlePostVote = async (req, res) => {
 }
 
 exports.handleCommentVote = async (req, res) => {
-    const sessionUser = req.session.sessionuser || {};
+    const sessionUser = req.session.sessionUser || {};
 
     const voteDirection = req.body.vote
     const authorId = req.body.authorId
