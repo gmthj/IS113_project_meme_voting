@@ -12,37 +12,39 @@
 <body>
     <%- include('partials/header', {sessionUser, showActions: true}) %>
 
-    <h1>Edit Profile</h1>
-
-    <% if (error) { %>
-        <%= error %>
-    <% } %>
-
-    <form action="/account/edit" method="post">
-        <label for="name">Full Name:</label>
-        <input type="text" id="name" name="name" value="<%= formData.name || '' %>" required>
-        <br><br>
-
-        <label for="bio">Bio:</label>
+    <div class="home-container">
+        <h1>Edit Profile</h1>
+    
+        <% if (error) { %>
+            <%= error %>
+        <% } %>
+    
+        <form action="/account/edit" method="post">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" value="<%= formData.name || '' %>" required>
+            <br><br>
+    
+            <label for="bio">Bio:</label>
+            <br>
+            <textarea name="bio" id="bio" rows="5" cols="40"><%= formData.bio || '' %></textarea>
+            <br><br>
+    
+            <button type="submit" class="neo-btn ">Save Changes</button>
+        </form>
+    
         <br>
-        <textarea name="bio" id="bio" rows="5" cols="40"><%= formData.bio || '' %></textarea>
-        <br><br>
-
-        <button type="submit" class="neo-btn ">Save Changes</button>
-    </form>
-
-    <br>
-    <a href="/home">Cancel</a>
-    <br>
-
-    <a href="/account/change-password">Change Password</a>
-    <hr>
-
-    <h2>Delete Account</h2>
-    <p>Warning: this will permanently delete your account and all your posts and comments.</p>
-    <form action="/account/delete" method="post">
-        <button type="submit" class="neo-btn neo-btn-red">Delete My Account</button>
-    </form>
+        <a href="/home">Cancel</a>
+        <br>
+    
+        <a href="/account/change-password">Change Password</a>
+        <hr>
+    
+        <h2>Delete Account</h2>
+        <p>Warning: this will permanently delete your account and all your posts and comments.</p>
+        <form action="/account/delete" method="post">
+            <button type="submit" class="neo-btn neo-btn-red">Delete My Account</button>
+        </form>
+    </div>
 </body>
 
 </html>
