@@ -1,20 +1,20 @@
 <div class="sort-wrapper">
     <div class="sort-left">
         <div class="sort-tabs">
-            <a href="<%= baseUrl %>?sort=highest-votes<%= onlyBookmarks ? '&bookmark=true' : '' %>"
+            <a href="<%= baseUrl %>?sort=highest-votes<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
                class="sort-tab <%= currentSort === 'highest-votes' ? 'active' : '' %>">TOP</a>
 
-            <a href="<%= baseUrl %>?sort=lowest-votes<%= onlyBookmarks ? '&bookmark=true' : '' %>"
+            <a href="<%= baseUrl %>?sort=lowest-votes<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
                class="sort-tab <%= currentSort === 'lowest-votes' ? 'active' : '' %>">LOWEST</a>
 
-            <a href="<%= baseUrl %>?sort=newest<%= onlyBookmarks ? '&bookmark=true' : '' %>"
+            <a href="<%= baseUrl %>?sort=newest<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
                class="sort-tab <%= currentSort === 'newest' ? 'active' : '' %>">NEWEST</a>
 
-            <a href="<%= baseUrl %>?sort=oldest<%= onlyBookmarks ? '&bookmark=true' : '' %>"
+            <a href="<%= baseUrl %>?sort=oldest<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
                class="sort-tab <%= currentSort === 'oldest' ? 'active' : '' %>">OLDEST</a>
             
             <% if (!isFullPost) { %>
-               <a href="<%= baseUrl %>?sort=most-comments<%= onlyBookmarks ? '&bookmark=true' : '' %>"
+               <a href="<%= baseUrl %>?sort=most-comments<%= onlyBookmarks ? '&bookmark=true' : '' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
                   class="sort-tab <%= currentSort === 'most-comments' ? 'active' : '' %>">MOST COMMENTS</a>
 
                <!-- <a href="<%= baseUrl %>?sort=least-comments<%= onlyBookmarks ? '&bookmark=true' : '' %>"
@@ -23,7 +23,7 @@
                <form action="<%= resetUrl %>?redirect=<%= baseUrl %>" method="POST" style="margin:0; padding:0;">
                   <button type="submit" class="reset-btn">RESET</button>
                </form>
-               <a href="<%= baseUrl %>?bookmark=<%= !onlyBookmarks ? 'true' : 'false' %>&sort=<%= currentSort || 'highest-votes' %>"
+               <a href="<%= baseUrl %>?bookmark=<%= !onlyBookmarks ? 'true' : 'false' %>&sort=<%= currentSort || 'highest-votes' %><%= (typeof isAnnon !== 'undefined' && isAnnon) ? '&annon=true' : '' %>"
                   class="sort-tab bookmark-tab <%= onlyBookmarks ? 'active' : '' %>">BOOKMARKS</a>
             <% } %>
         </div>
