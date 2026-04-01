@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/img/icon.png">
     <link rel="stylesheet" href="/css/style.css">
-    <title>Users name</title>
+    <title><%= userInfo.name || "User" %></title>
 </head>
 
 <body>
@@ -48,10 +48,6 @@
                             <span class="neo-label-mini">BIO</span>
                             <p class="info-value italic-bio">"<%= userInfo.bio %>"</p>
                         </div>
-                        <!-- <div class="info-item">
-                            <span class="neo-label-mini">KARMA</span>
-                            <p class="info-value"><%= userInfo.totalKarma %> / <%= userInfo.karmaTier %></p>
-                        </div> -->
                         <!-- TODO: user stats : post count comment count  -->
                     </div>
                 </div>
