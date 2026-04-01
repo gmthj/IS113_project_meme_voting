@@ -18,7 +18,6 @@ const {
     PW_REQUIRE_SPECIAL
 } = require("../config");
  
-// const MIN_AGE = 13;
  
 // Helper: calculate age from a Date
 function getAge(dob) {
@@ -57,7 +56,20 @@ function isValidPassword(password) {
 
     return null;
 }
- 
+function isValidEmail(email) {
+    const atIndex = email.indexOf('@');
+    if (atIndex <= 0) return false;
+    if (email.indexOf('@', atIndex + 1) !== -1) return false;
+
+    const domain = email.slice(atIndex + 1);
+    const dotIndex = domain.lastIndexOf('.');
+    if (dotIndex <= 0) return false;         
+    if (dotIndex === domain.length - 1) return false;
+    const tld = domain.slice(dotIndex + 1);
+    if (tld.length < 2) return false;
+
+    return true;
+}
 exports.renderLoginRoot = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     res.render('login', { sessionUser, error: null });
@@ -118,7 +130,9 @@ exports.handleRegister = async (req, res) => {
     if (password !== confirmation) {
         return res.render('register', { sessionUser, error: 'Passwords do not match.', formData });
     }
- 
+    if (!isValidEmail(email.trim())) {
+    return res.render('register', { sessionUser, error: 'Please enter a valid email address (e.g. name@example.com).', formData });
+    }
     const passwordError = isValidPassword(password);
     if (passwordError) {
         return res.render('register', { sessionUser, error: passwordError, formData });
@@ -128,7 +142,9 @@ exports.handleRegister = async (req, res) => {
     if (isNaN(dobDate.getTime())) {
         return res.render('register', { sessionUser, error: 'Invalid date of birth.', formData });
     }
- 
+    if (dobDate > new Date() || getAge(dobDate) > 100) {
+        return res.render('register', { sessionUser, error: `Please enter valid date of birth.`, formData });
+    }
     if (getAge(dobDate) < MIN_AGE) {
         return res.render('register', { sessionUser, error: `You must be at least ${MIN_AGE} years old to register.`, formData });
     }
@@ -151,9 +167,15 @@ exports.handleRegister = async (req, res) => {
         });
  
         await newUser.save();
- 
+
         req.session.sessionUser = newUser;
-        return res.redirect('/home');
+        req.session.save((err) => {
+            if (err) {
+                console.error('Session save error:', err);
+                return res.render('register', { sessionUser, error: 'Something went wrong. Please try again.', formData });
+            }
+            return res.redirect('/home');
+        });
  
     } catch (err) {
         console.error('Registration error:', err);
