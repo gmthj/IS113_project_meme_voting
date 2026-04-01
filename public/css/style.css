@@ -1231,3 +1231,155 @@ input:focus, textarea:focus {
     transform: translate(4px, 4px);
     box-shadow: none;
 }
+
+/* Form UI Utilities added for Refactored Card Forms */
+.form-center-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.neo-card-header h2 {
+    margin: 0;
+}
+
+.error-message {
+    border-left: 4px solid var(--neo-red);
+    padding-left: 10px;
+    color: var(--neo-red);
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.error-message ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.error-message li {
+    margin-bottom: 5px;
+}
+
+.error-message p {
+    margin: 0;
+}
+
+.neo-success-sticker {
+    border-left: 4px solid green;
+    padding-left: 10px;
+    color: green;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.neo-form-group {
+    margin-bottom: 15px;
+}
+
+.neo-form-group.last {
+    margin-bottom: 20px;
+}
+
+.neo-label {
+    font-weight: 900;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+input.neo-input, textarea.neo-input {
+    margin-top: 5px;
+    width: 100%;
+}
+
+.neo-btn.full-width {
+    width: 100%;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.neo-footer-column {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.neo-footer-row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.neo-card-footer a.neo-btn {
+    justify-content: center;
+}
+
+.neo-card-footer.neo-footer-row a.neo-btn {
+    flex: 1;
+    font-size: 0.8rem;
+}
+
+.danger-text {
+    color: var(--neo-red);
+    margin-bottom: 10px;
+}
+
+.danger-desc {
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.neo-hr {
+    border: 2px solid var(--neo-ink);
+    margin: 30px 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-bold {
+    font-weight: 700;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.neo-btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.neo-btn-group .flex-2 {
+    flex: 2;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.neo-btn-group .flex-1 {
+    flex: 1;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.account-info-text {
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.edit-password-link {
+    font-weight: 900;
+    text-decoration: underline;
+}
+
+.edit-comment-card {
+    max-width: 600px;
+}
+
+.card-footer-msg {
+    margin: 0;
+    text-align: center;
+    font-weight: 700;
+}

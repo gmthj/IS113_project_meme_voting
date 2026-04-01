@@ -11,29 +11,41 @@
 <body>
     <%- include('partials/header', {sessionUser, showActions: true}) %>
 
-    <div class="home-container">
-        <h1>Edit your <%= post ? 'Post' : 'Comment' %></h1>
-    
-        <form action="/editcomment/confirm" method="post">
-            <% if (post) { %>
-                <input type="hidden" name="authorId" value="<%= post.author._id %>">
-                <input type="hidden" name="postId" value="<%= post._id %>">
-                
-                <textarea name="updatedText" required style="width: 100%; height: 10em;"><%= post.text %></textarea>
-            <% } else if (comment) { %>
-                <input type="hidden" name="authorId" value="<%= comment.author._id %>">
-                <input type="hidden" name="commentId" value="<%= comment._id %>">
-                
-                <textarea name="updatedText" required style="width: 100%; height: 5em;"><%= comment.text %></textarea>
-            <% } %>
+    <main class="home-container form-center-wrapper">
+        <div class="neo-card edit-comment-card">
+            <div class="neo-card-header">
+                <h2>EDIT YOUR <%= post ? 'POST' : 'COMMENT' %></h2>
+            </div>
+            <div class="neo-card-body">
+                <form action="/editcomment/confirm" method="post">
+                    <% if (post) { %>
+                        <input type="hidden" name="authorId" value="<%= post.author._id %>">
+                        <input type="hidden" name="postId" value="<%= post._id %>">
+                        
+                        <div class="neo-form-group last">
+                            <label class="neo-label">TEXT CONTENT:</label>
+                            <textarea name="updatedText" required class="neo-input" style="height: 10em;"><%= post.text %></textarea>
+                        </div>
+                    <% } else if (comment) { %>
+                        <input type="hidden" name="authorId" value="<%= comment.author._id %>">
+                        <input type="hidden" name="commentId" value="<%= comment._id %>">
+                        
+                        <div class="neo-form-group last">
+                            <label class="neo-label">COMMENT CONTENT:</label>
+                            <textarea name="updatedText" required class="neo-input" style="height: 5em;"><%= comment.text %></textarea>
+                        </div>
+                    <% } %>
+                    
+                    <input type="hidden" name="backURL" value="<%= backURL %>">
             
-            <input type="hidden" name="backURL" value="<%= backURL %>">
-            <br><br>
-    
-            <button type="submit" name="cancel" value="false">Save Changes</button>
-            <button type="submit" name="cancel" value="true">Cancel</button>
-        </form>
-    </div>
+                    <div class="neo-btn-group">
+                        <button type="submit" name="cancel" value="false" class="neo-btn neo-btn-yellow flex-2">SAVE CHANGES</button>
+                        <button type="submit" name="cancel" value="true" class="neo-btn neo-btn-white flex-1">CANCEL</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
 
 </body>
 

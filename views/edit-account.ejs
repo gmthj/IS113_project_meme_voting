@@ -12,39 +12,50 @@
 <body>
     <%- include('partials/header', {sessionUser, showActions: true}) %>
 
-    <div class="home-container">
-        <h1>Edit Profile</h1>
-    
-        <% if (error) { %>
-            <%= error %>
-        <% } %>
-    
-        <form action="/account/edit" method="post">
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" value="<%= formData.name || '' %>" required>
-            <br><br>
-    
-            <label for="bio">Bio:</label>
-            <br>
-            <textarea name="bio" id="bio" rows="5" cols="40"><%= formData.bio || '' %></textarea>
-            <br><br>
-    
-            <button type="submit" class="neo-btn ">Save Changes</button>
-        </form>
-    
-        <br>
-        <a href="/home">Cancel</a>
-        <br>
-    
-        <a href="/account/change-password">Change Password</a>
-        <hr>
-    
-        <h2>Delete Account</h2>
-        <p>Warning: this will permanently delete your account and all your posts and comments.</p>
-        <form action="/account/delete" method="post">
-            <button type="submit" class="neo-btn neo-btn-red">Delete My Account</button>
-        </form>
-    </div>
+    <main class="home-container form-center-wrapper">
+        <div class="neo-card">
+            <div class="neo-card-header">
+                <h2>EDIT PROFILE</h2>
+            </div>
+            <div class="neo-card-body">
+                <% if (error) { %>
+                    <div class="error-message">
+                        <%= error %>
+                    </div>
+                <% } %>
+            
+                <form action="/account/edit" method="post">
+                    <div class="neo-form-group">
+                        <label for="name" class="neo-label">Full Name:</label>
+                        <input type="text" id="name" name="name" value="<%= formData.name || '' %>" required class="neo-input">
+                    </div>
+            
+                    <div class="neo-form-group last">
+                        <label for="bio" class="neo-label">Bio:</label>
+                        <textarea name="bio" id="bio" rows="5" class="neo-input"><%= formData.bio || '' %></textarea>
+                    </div>
+            
+                    <button type="submit" class="neo-btn neo-btn-yellow full-width">SAVE CHANGES</button>
+                </form>
+
+                <div class="text-center" style="margin-top: 20px;">
+                    <a href="/account/change-password" class="edit-password-link">Change Password</a>
+                </div>
+
+                <hr class="neo-hr">
+            
+                <h3 class="danger-text">DANGER ZONE</h3>
+                <p class="danger-desc">Warning: this will permanently delete your account and all your posts and comments.</p>
+                <form action="/account/delete" method="post">
+                    <button type="submit" class="neo-btn neo-btn-red full-width">DELETE MY ACCOUNT</button>
+                </form>
+            </div>
+            <div class="neo-card-footer neo-footer-row">
+                <a href="/user/<%= sessionUser._id %>" class="neo-btn neo-btn-white">BACK TO PROFILE</a>
+                <a href="/home" class="neo-btn neo-btn-white">GO HOME</a>
+            </div>
+        </div>
+    </main>
 </body>
 
 </html>

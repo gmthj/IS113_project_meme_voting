@@ -12,29 +12,33 @@
 <body>
     <%- include('partials/header', {sessionUser, showActions: true}) %>
 
-    <div class="home-container">
-        <h1>Login Page</h1>
-        <% if (error) { %>
-            <%= error %>
-        <% } %>
-        <form action="/account/login" method="post">
-            <br><br>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br><br>
-            <button type="submit" class="neo-btn">Login</button>
-        </form>
-        <br>
-        <h3>If no account, register here: 
-            <nav>
-                <a href="/account/register">Register</a><br><br>
-                <a href="/account/forget-password">Forget Password</a>
-            </nav>
-        </h3>
-    </div>
+    <main class="home-container form-center-wrapper">
+        <div class="neo-card">
+            <div class="neo-card-header">
+                <h2>LOGIN PAGE</h2>
+            </div>
+            <div class="neo-card-body">
+                <% if (error) { %>
+                    <div class="error-message"><%= error %></div>
+                <% } %>
+                <form action="/account/login" method="post">
+                    <div class="neo-form-group">
+                        <label for="email" class="neo-label">Email:</label>
+                        <input type="email" id="email" name="email" required class="neo-input">
+                    </div>
+                    <div class="neo-form-group last">
+                        <label for="password" class="neo-label">Password:</label>
+                        <input type="password" id="password" name="password" required class="neo-input">
+                    </div>
+                    <button type="submit" class="neo-btn neo-btn-yellow full-width">LOGIN</button>
+                </form>
+            </div>
+            <div class="neo-card-footer neo-footer-column">
+                <a href="/account/register" class="neo-btn neo-btn-violet">CREATE AN ACCOUNT</a>
+                <a href="/account/forget-password" class="neo-btn neo-btn-white">FORGOT PASSWORD?</a>
+            </div>
+        </div>
+    </main>
 </body>
 
 </html>
