@@ -4,7 +4,7 @@
 
     <div class="neo-card-header">
         <a href="/user/<%= post.author._id %>" class="neo-author-link">
-            <img src="<%= post.author.avatar %>" class="neo-avatar-sm">
+            <img src="<%= post.author.avatar %>" class="neo-avatar-sm" loading="lazy">
 
             <div class="author-details">
                 <span class="author-name"><%= post.author.name %></span>
@@ -29,7 +29,7 @@
             <h2 class="neo-post-title"><%= post.title %></h2>
             
             <div class="neo-img-box">
-                <img src="<%= post.image %>" alt="meme image" referrerpolicy="no-referrer">
+                <img src="<%= post.image %>" alt="meme image" referrerpolicy="no-referrer" loading="lazy">
             </div>
             
             <p style="font-weight: 700;"><%= post.description %></p>
@@ -78,7 +78,6 @@
                     <form action="/delete" method="post">
                         <input type="hidden" name="authorId" value="<%= post.author._id %>">
                         <input type="hidden" name="postId" value="<%= post._id %>">
-                        <input type="hidden" name="post" value="<%= JSON.stringify(post) %>">
                         <button type="submit" class="neo-btn neo-btn-red" style="padding: 5px 10px; font-size: 0.8rem;">DELETE</button>
                     </form>
                 <% } %>

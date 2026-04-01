@@ -1,20 +1,32 @@
 const { deletePostById } = require("../services/postService");
 const { deleteCommentById } = require("../services/commentService");
+const Post = require("../models/Post-model");
+const { getUserById } = require("../services/userService");
+const { timeAgo } = require("../utils/utils");
 
-exports.renderDeletionConfirmation = (req, res) => {
+exports.renderDeletionConfirmation = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
-    // console.log(req.body)
-    const post = req.body.post ? JSON.parse(req.body.post) : undefined
-    const comment = req.body.comment ? JSON.parse(req.body.comment) : undefined
+    const postId = req.body.postId;
+    const postFromBody = req.body.post ? JSON.parse(req.body.post) : undefined;
+    let post = postFromBody;
+    const comment = req.body.comment ? JSON.parse(req.body.comment) : undefined;
 
-    // console.log("post", post)
-    // console.log("comment", comment)
-    
-    
+    // Fallback fetch by postId so delete forms don't need to send large JSON payloads.
+    if (!post && postId) {
+        const rawPost = await Post.findById(postId).lean();
+        if (rawPost) {
+            post = rawPost;
+            post.author = await getUserById(rawPost.userId.toString());
+            post.postAge = timeAgo(rawPost.upload_datetime);
+            post.voteValue = undefined;
+            post.bookmark = false;
+        }
+    }
+
     const backURL = req.get('Referrer') || '/';
-    return res.render("confirm-delete", {sessionUser, post, comment, backURL})
+    return res.render("confirm-delete", {sessionUser, post, comment, backURL});
 
-}
+};
 
 exports.handleDeletion = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};

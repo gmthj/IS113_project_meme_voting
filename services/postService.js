@@ -62,7 +62,15 @@ async function deletePostById(postId) {
   }
 }
 
-async function getPosts({ sessionUser = {}, userId = null, onlyBookmarks = false, sortType = 'highest-votes' }) {
+async function getPosts({
+  sessionUser = {},
+  userId = null,
+  onlyBookmarks = false,
+  sortType = 'highest-votes',
+  limit = null,
+  page = 1,
+  returnMeta = false
+}) {
   try {
     let filter = {};
 
@@ -106,14 +114,49 @@ async function getPosts({ sessionUser = {}, userId = null, onlyBookmarks = false
         sortOption = { vote_score: -1 };
     }
 
-    // Fetch posts from DB
-    const posts = await Post.find(filter).sort(sortOption).lean();
+    const isPaged = Number.isInteger(limit) && limit > 0;
+    const parsedPage = parseInt(page, 10);
+    let currentPage = Number.isInteger(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+    let totalPosts = 0;
+    let totalPages = 1;
+
+    let query = Post.find(filter).sort(sortOption);
+
+    if (isPaged) {
+      totalPosts = await Post.countDocuments(filter);
+      totalPages = Math.max(1, Math.ceil(totalPosts / limit));
+      currentPage = Math.min(currentPage, totalPages);
+      const skip = (currentPage - 1) * limit;
+      query = query.skip(skip);
+      query = query.limit(limit);
+    }
+
+    const posts = await query.lean();
 
     // Expand posts (add vote info, user interactions, etc.)
-    return await expandPosts(posts, sessionUser);
+    const expandedPosts = await expandPosts(posts, sessionUser);
+
+    if (returnMeta) {
+      return {
+        posts: expandedPosts,
+        totalPosts,
+        totalPages,
+        currentPage
+      };
+    }
+
+    return expandedPosts;
 
   } catch (err) {
     console.log("Error in getPosts:", err);
+    if (returnMeta) {
+      return {
+        posts: [],
+        totalPosts: 0,
+        totalPages: 1,
+        currentPage: 1
+      };
+    }
     return [];
   }
 }
