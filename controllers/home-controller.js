@@ -1,6 +1,6 @@
 const PostPreference = require("../models/Post-Preference-model");
 
-const { getAllPostsSorted, getBookmarkedPosts, getPosts } = require("../services/postService");
+const { getPosts } = require("../services/postService");
 const { getPostSortType, createPostSortType, updatePostSortType, deletePostSortType } = require("../services/postPreferenceService");
 
 exports.renderHome = async (req, res) => {

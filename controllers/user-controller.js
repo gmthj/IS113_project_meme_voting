@@ -2,7 +2,7 @@
 const User = require('./../services/userService')
 
 // Import post service
-const { getAllPostsSorted, getPostById, getPostsByUserId, getPosts } = require('../services/postService')
+const { getPosts } = require('../services/postService')
 const PostPreference = require("../models/Post-Preference-model");
 
 const { getPostSortType, createPostSortType, updatePostSortType, deletePostSortType } = require("../services/postPreferenceService");
