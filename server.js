@@ -5,6 +5,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const { connectDB } = require("./utils/utils");
+const { PORT, HOSTNAME } = require("./config");
+
+
 
 const server = express();
 
@@ -33,7 +36,6 @@ server.use("/editcomment", require("./routes/editcomment-route"));
 server.use("/delete", require("./routes/delete-route"));
 server.use("/vote", require("./routes/vote-route"));
 server.use("/bookmark", require("./routes/bookmark-route"));
-// server.use("/preference", require("./routes/preference-route"));
 
 server.get("/", (req, res) => res.redirect("/home"));
 server.get("/index.html", (req, res) => res.redirect("/home"));
@@ -64,9 +66,7 @@ server.use((req, res) => {
 });
 
 connectDB().then(() => {
-  const port = 8000;
-  const hostname = "localhost";
-  server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}`);
+  server.listen(PORT, HOSTNAME, () => {
+    console.log(`Adjust HOSTNAME/PORT in config.js\nServer running at http://${HOSTNAME}:${PORT}`);
   });
 });

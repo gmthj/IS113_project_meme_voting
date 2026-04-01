@@ -26,7 +26,8 @@ async function getUserById(userId) {
   try {
     const user = await User.findById(userId).lean();
     user.karmaTier = getKarmaTier(user);
-    user.joined = timeAgo(user.createdAt);
+    user.joined = `${timeAgo(user.createdAt)} ago`;
+    user.age = timeAgo(user.dob)
     
 
     return user;
@@ -45,7 +46,7 @@ function getKarmaTier(user) {
 
     if (!user) return karmaTier;
 
-    const accountAgeDays = Math.ceil((new Date() - new Date(user.createdAt)) / (1000 * 60 * 60 * 24));
+    const accountAgeDays = Math.ceil((new Date() - new Date(user.createdAt)) / (1000 * 86400));
 
     if (user.totalKarma < KARMA_TIER_0) karmaTier = "Troller"; // -5 karma
     else if (accountAgeDays < KARMA_NEW) karmaTier = "Newcomer"; // < 30 days

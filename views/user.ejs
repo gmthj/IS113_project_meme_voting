@@ -33,16 +33,21 @@
                         <span class="meta-text stat-tier"><%= userInfo.karmaTier %></span>
                         <span class="meta-text stat-karma"><%= userInfo.totalKarma %> KARMA</span>
                     </div>
-                    <p class="meta-text" style="margin-bottom: 20px;">MEMBER SINCE: <%= userInfo.joined %></p>
+                    <p class="meta-text" style="margin-bottom: 20px;">JOINED: <%= userInfo.joined %></p>
 
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="neo-label-mini">EMAIL</span>
                             <p class="info-value"><%= userInfo.email %></p>
                         </div>
-                        <div class="info-item">
+                        <!-- do not show birthday as it is used in forget password, show age instead -->
+                        <!-- <div class="info-item">
                             <span class="neo-label-mini">BIRTHDAY</span>
                             <p class="info-value"><%= new Date(userInfo.dob).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() %></p>
+                        </div> -->
+                        <div class="info-item">
+                            <span class="neo-label-mini">AGE</span>
+                            <p class="info-value text-upper"><%= userInfo.age %> OLD</p>
                         </div>
                         <div class="info-item">
                             <span class="neo-label-mini">BIO</span>

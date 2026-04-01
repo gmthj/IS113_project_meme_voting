@@ -1,5 +1,9 @@
 module.exports = {
 
+    // server
+    PORT: 8000,
+    HOSTNAME: "localhost",
+
     // account
     MIN_AGE: 18,
 
@@ -15,12 +19,12 @@ module.exports = {
     KARMA_TIER_1: 10, // Lurker
     KARMA_TIER_2: 50, // Apprentice
     KARMA_TIER_3: 100, // Master
-    // KARMA_TIER_4: >100, // Legend
+    // KARMA_TIER_4: > 100, // Legend
     KARMA_NEW: 30, //(days) Newcomer
 
     // voting weight
-    POST_VOTE_WEIGHT: 2,
-    COMMENT_VOTE_WEIGHT: 1,
+    POST_WEIGHT: 2,
+    COMMENT_WEIGHT: 1,
 
     VOTE_WEIGHTS: {
         "Troller": 0,

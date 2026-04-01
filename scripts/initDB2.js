@@ -15,8 +15,8 @@ const {
   KARMA_TIER_3,
   KARMA_NEW,
   VOTE_WEIGHTS,
-  POST_VOTE_WEIGHT,
-  COMMENT_VOTE_WEIGHT,
+  POST_WEIGHT,
+  COMMENT_WEIGHT,
 } = require("../config");
 
 const User              = require("../models/User-model");
@@ -305,7 +305,7 @@ async function main() {
 
       // 2. Update Author Karma
       if (!isSelfVote) {
-        const karmaChange = incValue * POST_VOTE_WEIGHT;
+        const karmaChange = incValue * POST_WEIGHT;
         await User.updateOne({ _id: authorDoc._id }, { $inc: { totalKarma: karmaChange } });
         
         // FIX: Update in-memory karma so the next time this author votes, 
@@ -350,7 +350,7 @@ async function main() {
 
         // 2. Update Author Karma
         if (!isSelfVote) {
-          const karmaChange = incValue * COMMENT_VOTE_WEIGHT;
+          const karmaChange = incValue * COMMENT_WEIGHT;
           await User.updateOne({ _id: authorDoc._id }, { $inc: { totalKarma: karmaChange } });
           
           // FIX: Update in-memory karma
