@@ -1,4 +1,3 @@
-const { updatePostById } = require("../services/postService");
 const { updateCommentById } = require("../services/commentService");
 
 exports.renderEditComment = (req, res) => {

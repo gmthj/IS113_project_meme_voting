@@ -181,10 +181,73 @@ async function getPosts({
   }
 }
 
+async function createPost({ userId, title, description, parsedImage }) {
+  try {
+    let savedImage = null;
+    if (parsedImage && !parsedImage.error) {
+      savedImage = await Image.create({
+        data: parsedImage.buffer,
+        mimeType: parsedImage.mimeType,
+        sizeBytes: parsedImage.fileSizeInBytes
+      });
+    }
+
+    const newPost = new Post({
+      userId,
+      title: title.trim(),
+      description: description.trim(),
+      imageId: savedImage ? savedImage._id : null
+    });
+
+    await newPost.save();
+    return newPost;
+  } catch (err) {
+    console.error("error: createPost - failed to create post", err);
+    throw err;
+  }
+}
+
+async function updatePost({ postId, title, description, parsedImage }) {
+  try {
+    const postData = await Post.findById(postId);
+    if (!postData) {
+      throw new Error("Post not found");
+    }
+
+    postData.title = title.trim();
+    postData.description = description.trim();
+
+    if (parsedImage && !parsedImage.error) {
+      const savedImage = await Image.create({
+        data: parsedImage.buffer,
+        mimeType: parsedImage.mimeType,
+        sizeBytes: parsedImage.fileSizeInBytes
+      });
+
+      if (postData.imageId) {
+        await Image.findByIdAndDelete(postData.imageId);
+      }
+
+      postData.imageId = savedImage._id;
+      postData.image = null;
+    }
+
+    postData.edit_datetime = new Date();
+    await postData.save();
+
+    return postData;
+  } catch (err) {
+    console.error("error: updatePost - failed to update post", err);
+    throw err;
+  }
+}
+
 module.exports = {
   // expandPosts,
   getPostById,
   getAllPosts,
   deletePostById,
   getPosts,
+  createPost,
+  updatePost,
 };

@@ -1,18 +1,8 @@
-const Post = require("../models/Post-model");
 const Comment = require("../models/Comment-model");
-const User = require("../models/User-model");
 
-const CommentPreference = require("../models/Comment-Preference-model");
-
-const { expandPosts, getPostById } = require("../services/postService");
-const {
-  expandComments,
-  getAllCommentsByPostId,
-} = require("../services/commentService");
-const {
-  getCommentSortType,
-  updateCommentSortType,
-} = require("../services/commentPreferenceService");
+const { getPostById } = require("../services/postService");
+const { getAllCommentsByPostId } = require("../services/commentService");
+const { getCommentSortType, updateCommentSortType } = require("../services/commentPreferenceService");
 
 exports.renderFullPost = async (req, res) => {
   const sessionUser = req.session.sessionUser || {};

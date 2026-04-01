@@ -1,4 +1,11 @@
 const User = require("../models/User-model");
+const Post = require("../models/Post-model");
+const Comment = require("../models/Comment-model");
+const Vote = require("../models/Vote-model");
+const Bookmark = require("../models/Bookmark-model");
+const PostPreference = require("../models/Post-Preference-model");
+const CommentPreference = require("../models/Comment-Preference-model");
+const Image = require("../models/Image-model");
 
 
 const { timeAgo } = require("../utils/utils");
@@ -48,6 +55,7 @@ function getKarmaTier(user) {
 
     const accountAgeDays = Math.ceil((new Date() - new Date(user.createdAt)) / (1000 * 86400));
 
+    // see config.js for karma tier thresholds
     if (user.totalKarma < KARMA_TIER_0) karmaTier = "Troller"; // -5 karma
     else if (accountAgeDays < KARMA_NEW) karmaTier = "Newcomer"; // < 30 days
     else if (user.totalKarma < KARMA_TIER_1) karmaTier = "Lurker"; // < 10 karma
@@ -70,8 +78,63 @@ async function getVoteWeight(userId){
 }
 
 
+async function deleteUserById(userId) {
+  try {
+    const userPosts = await Post.find({ userId });
+    const postIds = userPosts.map(p => p._id);
+    
+    // delete posts and posts' dependencies
+    if (postIds.length > 0) {
+      const postComments = await Comment.find({ postId: { $in: postIds } });
+      const commentIds = postComments.map(c => c._id);
+      
+      await Vote.deleteMany({ commentId: { $in: commentIds } });
+      await Comment.deleteMany({ postId: { $in: postIds } });
+      await Vote.deleteMany({ postId: { $in: postIds } });
+      await Bookmark.deleteMany({ postId: { $in: postIds } });
+      await CommentPreference.deleteMany({ postId: { $in: postIds } });
+      
+      const imageIds = userPosts.map(p => p.imageId).filter(id => id);
+      if (imageIds.length > 0) {
+        await Image.deleteMany({ _id: { $in: imageIds } });
+      }
+      await Post.deleteMany({ _id: { $in: postIds } });
+    }
+
+    // delete comments and comments' dependencies
+    const userComments = await Comment.find({ userId });
+    if (userComments.length > 0) {
+      const userCommentIds = userComments.map(c => c._id);
+      await Vote.deleteMany({ commentId: { $in: userCommentIds } });
+
+      const postCommentCounts = {};
+      for (const c of userComments) {
+        if (!postCommentCounts[c.postId]) postCommentCounts[c.postId] = 0;
+        postCommentCounts[c.postId]++;
+      }
+      for (const [postId, count] of Object.entries(postCommentCounts)) {
+        await Post.updateOne({ _id: postId }, { $inc: { comment_count: -count } });
+      }
+      await Comment.deleteMany({ userId });
+    }
+
+    await Vote.deleteMany({ userId });
+    await Bookmark.deleteMany({ userId });
+    await PostPreference.deleteMany({ userId });
+    await CommentPreference.deleteMany({ userId });
+
+    await User.findByIdAndDelete(userId);
+    return true;
+  } catch (error) {
+    console.error("Error deleting user by ID:", error);
+    throw new Error("Failed to delete user");
+  }
+}
+
+
 module.exports = {
   getUserByEmail,
   getUserById,
   getVoteWeight,
+  deleteUserById,
 };

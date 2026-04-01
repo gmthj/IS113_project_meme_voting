@@ -1,6 +1,4 @@
-const POST_SCHEMA = require("../models/Post-model");
-const IMAGE_SCHEMA = require("../models/Image-model");
-const { getPostById } = require("../services/postService");
+const { getPostById, createPost, updatePost } = require("../services/postService");
 
 // Shared helper to validate and parse base64 image
 function parseBase64Image(image_base64) {
@@ -82,20 +80,12 @@ exports.handleUpload = async (req, res) => {
       });
     }
 
-    const savedImage = await IMAGE_SCHEMA.create({
-      data: parsedImage.buffer,
-      mimeType: parsedImage.mimeType,
-      sizeBytes: parsedImage.fileSizeInBytes
-    });
-
-    const newPost = new POST_SCHEMA({
+    const newPost = await createPost({
       userId: sessionUser._id,
-      title: meme_title.trim(),
-      description: description.trim(),
-      imageId: savedImage._id
+      title: meme_title,
+      description: description,
+      parsedImage: parsedImage
     });
-
-    await newPost.save();
 
     return res.render("upload", {
       error: null,
@@ -149,14 +139,8 @@ exports.handleEditPost = async (req, res) => {
   const { meme_title, description, image_base64 } = req.body;
 
   try {
-    const postData = await POST_SCHEMA.findById(postId);
-
-    if (!postData) {
-      return res.redirect("/");
-    }
-    postData.image = postData.imageId ? `/media/images/${postData.imageId}` : postData.image;
-
     if (!meme_title || !description) {
+      const postData = await getPostById(postId, sessionUser);
       return res.render("edit-post", {
         error: "All fields are required",
         success: false,
@@ -166,13 +150,11 @@ exports.handleEditPost = async (req, res) => {
       });
     }
 
-    postData.title = meme_title.trim();
-    postData.description = description.trim();
-
-    // Replace image only when a new file is provided.
+    let parsedImage = null;
     if (image_base64) {
-      const parsedImage = parseBase64Image(image_base64);
+      parsedImage = parseBase64Image(image_base64);
       if (parsedImage.error) {
+        const postData = await getPostById(postId, sessionUser);
         return res.render("edit-post", {
           error: parsedImage.error,
           success: false,
@@ -181,24 +163,14 @@ exports.handleEditPost = async (req, res) => {
           backURL
         });
       }
-
-      const savedImage = await IMAGE_SCHEMA.create({
-        data: parsedImage.buffer,
-        mimeType: parsedImage.mimeType,
-        sizeBytes: parsedImage.fileSizeInBytes
-      });
-
-      if (postData.imageId) {
-        await IMAGE_SCHEMA.findByIdAndDelete(postData.imageId);
-      }
-
-      postData.imageId = savedImage._id;
-      postData.image = null;
     }
 
-    postData.edit_datetime = new Date();
-
-    await postData.save();
+    await updatePost({
+      postId,
+      title: meme_title,
+      description: description,
+      parsedImage: parsedImage
+    });
 
     return res.redirect(`${backURL}#post-${postId}`);
   } catch (err) {
@@ -206,10 +178,7 @@ exports.handleEditPost = async (req, res) => {
 
     let postData = null;
     try {
-      postData = await POST_SCHEMA.findById(postId);
-      if (postData) {
-        postData.image = postData.imageId ? `/media/images/${postData.imageId}` : postData.image;
-      }
+      postData = await getPostById(postId, sessionUser);
     } catch (innerErr) {
       console.error("Failed to reload post data:", innerErr);
     }

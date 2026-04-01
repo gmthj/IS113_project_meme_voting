@@ -1,10 +1,5 @@
-// Import user service
-const User = require('./../services/userService')
-
-// Import post service
+const { getUserById } = require('./../services/userService')
 const { getPosts } = require('../services/postService')
-const PostPreference = require("../models/Post-Preference-model");
-
 const { getPostSortType, createPostSortType, updatePostSortType, deletePostSortType } = require("../services/postPreferenceService");
 
 exports.renderUserProfile = async (req, res) => {
@@ -15,7 +10,7 @@ exports.renderUserProfile = async (req, res) => {
     try {
         // access bookmark query
         const onlyBookmarks = req.query.bookmark === 'true'
-        
+
         // determine sorting type
         let sortType;
 
@@ -24,10 +19,7 @@ exports.renderUserProfile = async (req, res) => {
                 sortType = req.query.sort;
 
                 // save the preference
-                const existing = await PostPreference.findOne({
-                    userId: sessionUser._id,
-                    page: 'user'
-                }).lean();
+                const existing = await getPostSortType(sessionUser._id, 'user');
 
                 if (existing) {
                     await updatePostSortType(sessionUser._id, 'user', sortType);
@@ -43,14 +35,14 @@ exports.renderUserProfile = async (req, res) => {
         }
 
         // get user info
-        const userInfo = await User.getUserById(userId);
+        const userInfo = await getUserById(userId);
 
         // get posts using getPosts
         const userPosts = await getPosts({
-        sessionUser,
-        userId,
-        onlyBookmarks,
-        sortType
+            sessionUser,
+            userId,
+            onlyBookmarks,
+            sortType
         });
 
         // set bookmarkerror
@@ -103,7 +95,7 @@ exports.resetSort = async (req, res) => {
 
     try {
         if (sessionUser && sessionUser._id) {
-            await deletePostSortType(sessionUser._id, 'user'); 
+            await deletePostSortType(sessionUser._id, 'user');
         }
         res.redirect(redirectUrl);
     } catch (error) {
