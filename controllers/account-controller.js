@@ -123,7 +123,7 @@ exports.handleRegister = async (req, res) => {
 
         const errors = [];
 
-        if (!email || !password || !confirmation || !name || !dob) {
+        if (!email || !email.trim() || !password || !confirmation || !name || !name.trim() || !dob) {
             errors.push('Please fill in all required fields.');
         }
 
@@ -234,7 +234,7 @@ exports.handleEdit = async (req, res) => {
     const bio = req.body.bio;
     const formData = { name, bio };
 
-    if (!name) {
+    if (!name || !name.trim()) {
         return res.render('edit-account', { sessionUser, error: 'Name cannot be empty.', formData });
     }
 
@@ -375,7 +375,8 @@ exports.forgetPassword = async (req, res) => {
         if (email && isValidEmail(email.trim())) {
             user = await User.findOne({ email: email.trim().toLowerCase() });
             if (!user) {
-                errors.push("User not found");
+                // errors.push("User not found"); //security issue
+                errors.push("Email and date of birth do not match");
             }
         }
 
