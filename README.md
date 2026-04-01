@@ -31,7 +31,7 @@ npm i
 SECRET=<some super long random string>
 MONGO_URI=<connnection string>
 ```
-> replace `<some super long random string>` with an actual long string of random characters <br>
+> replace `<some super long random string>` with an actual long string of random characters
 replace `<connnection string>` with your actual connection string from MongoDB Atlas. It should look something like this:
 
 ```bash
@@ -44,6 +44,7 @@ mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/<db_name>?re
 
 ```bash
 npm run init-db2
+<enter> to select the latest data-vXX-XXXX.json
 ```
 
 8. Start the application
@@ -55,7 +56,7 @@ npm run dev
 ```
 
 9. Open your browser <br>
-http://localhost:8000
+http://localhost:8000/
 
 ---
 
@@ -138,6 +139,18 @@ totalKarma = (Post Votes * Post Weight * Tier Weight) + (Comment Votes * Comment
 - userId: ObjectId
 - commentId: ObjectId
 - sortType: String (newest, oldest, highest-votes, lowest-votes)
+
+##  AI/LLM Usage Declaration
+| File(s)       | Usage Level           | Explanation |
+|---------------|----------------------|-----------|
+| /public/css/style.css    | Full    | -                 |
+| /data/data-vXX-XXX.json  | Partial | Earlier versions were fully AI generate <br> Later versions were generated with the exportDBtoJSON.js script with some manual adjustments    |
+| /scripts/... (sample data importing/exporting) | Full | scripts for exporting the current state of the database, and loading that data into the database |
+| /views/XXX.ejs        | Partial     | ONLY used for the css styling |
+| /public/img/daily-dank-logo.png <br> /public/img/daily-dank.png <br> /public/img/icon.png | Partial | Mostly generated logo images, some post editing |
+| add ai declaration here | - | - |
+
+
 
 ---
 
@@ -343,12 +356,3 @@ This prevents database logic from being duplicated across scripts and routes.
 | userService.js | getUserByEmail(email) | Finds a user using their email |
 | postService.js | getPostByTitle(title) | Finds a post using its title   |
 
-These helpers can be used in scripts, routes, or controllers.
-
-### Example Usage
-
-```javascript
-const { getUserByEmail } = require("../services/userService");
-
-const user = await getUserByEmail("seed@smu.edu.sg");
-```
