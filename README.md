@@ -32,7 +32,8 @@ SECRET=<some super long random string>
 MONGO_URI=<connnection string>
 ```
 > replace `<some super long random string>` with an actual long string of random characters
-replace `<connnection string>` with your actual connection string from MongoDB Atlas. It should look something like this:
+
+> replace `<connnection string>` with your actual connection string from MongoDB Atlas. It should look something like this:
 
 ```bash
 mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/<db_name>?retryWrites=true&w=majority&appName=Cluster0

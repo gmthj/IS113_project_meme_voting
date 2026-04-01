@@ -92,7 +92,17 @@ async function getPosts({
       const bookmarkedPostIds = bookmarks.map((b) => b.postId);
 
       // If there are no bookmarks, return empty array early
-      if (bookmarkedPostIds.length === 0) return [];
+      if (bookmarkedPostIds.length === 0) {
+        if (returnMeta) {
+          return {
+            posts: [],
+            totalPosts: 0,
+            totalPages: 1,
+            currentPage: 1,
+          };
+        }
+        return [];
+      }
       filter._id = { $in: bookmarkedPostIds };
     }
 
