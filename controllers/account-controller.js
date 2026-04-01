@@ -5,15 +5,15 @@ const bcrypt = require('bcrypt');
 
 const { avatarFor } = require("../utils/utils");
 const {
-    MIN_AGE, 
-    PW_MIN_LENGTH, 
-    PW_REQUIRE_UPPER, 
-    PW_REQUIRE_LOWER, 
-    PW_REQUIRE_NUMBER, 
+    MIN_AGE,
+    PW_MIN_LENGTH,
+    PW_REQUIRE_UPPER,
+    PW_REQUIRE_LOWER,
+    PW_REQUIRE_NUMBER,
     PW_REQUIRE_SPECIAL
 } = require("../config");
- 
- 
+
+
 // Helper: calculate age from a Date
 function getAge(dob) {
     const today = new Date();
@@ -23,8 +23,9 @@ function getAge(dob) {
     return age;
 }
 function isValidPassword(password) {
+    const errors = [];
     if (password.length < PW_MIN_LENGTH) {
-        return `Password must be at least ${PW_MIN_LENGTH} characters.`;
+        errors.push(`Password must be at least ${PW_MIN_LENGTH} characters.`);
     }
 
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -44,12 +45,12 @@ function isValidPassword(password) {
         if (special.includes(char)) hasSpecial = true;
     }
 
-    if (!hasUpper) return 'Password must contain at least one uppercase letter.';
-    if (!hasLower) return 'Password must contain at least one lowercase letter.';
-    if (!hasNumber) return 'Password must contain at least one number.';
-    if (!hasSpecial) return 'Password must contain at least one special character.';
+    if (!hasUpper) errors.push('Password must contain at least one uppercase letter.');
+    if (!hasLower) errors.push('Password must contain at least one lowercase letter.');
+    if (!hasNumber) errors.push('Password must contain at least one number.');
+    if (!hasSpecial) errors.push('Password must contain at least one special character.');
 
-    return null;
+    return errors.length > 0 ? errors : null;
 }
 function isValidEmail(email) {
     const atIndex = email.indexOf('@');
@@ -58,7 +59,7 @@ function isValidEmail(email) {
 
     const domain = email.slice(atIndex + 1);
     const dotIndex = domain.lastIndexOf('.');
-    if (dotIndex <= 0) return false;         
+    if (dotIndex <= 0) return false;
     if (dotIndex === domain.length - 1) return false;
     const tld = domain.slice(dotIndex + 1);
     if (tld.length < 2) return false;
@@ -69,89 +70,100 @@ exports.renderLoginRoot = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     res.render('login', { sessionUser, error: null });
 };
- 
+
 // /account/login
 exports.renderLogin = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     res.render('login', { sessionUser, error: null });
 };
- 
+
 exports.handleLogin = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     const email = req.body.email;
     const password = req.body.password;
- 
+
     if (!email || !password) {
         return res.render('login', { sessionUser, error: 'Please fill in all fields.' });
     }
- 
+
     try {
         const user = await User.findOne({ email: email.trim().toLowerCase() });
- 
+
         if (!user) {
             return res.render('login', { sessionUser, error: 'Invalid email or password.' });
         }
- 
+
         const passwordMatch = await bcrypt.compare(password, user.passwordHash);
- 
+
         if (!passwordMatch) {
             return res.render('login', { sessionUser, error: 'Invalid email or password.' });
         }
- 
+
         req.session.sessionUser = user;
         return res.redirect('/home');
- 
+
     } catch (err) {
         console.error('Login error:', err);
         return res.render('login', { sessionUser, error: 'Something went wrong. Please try again.' });
     }
 };
- 
+
 exports.renderRegister = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     res.render('register', { sessionUser, error: null, formData: {}, MIN_AGE });
 };
- 
+
 // /account/register
 exports.handleRegister = async (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     const { email, password, confirmation, name, dob, bio } = req.body;
     const formData = { email, name, dob, bio };
- 
-    if (!email || !password || !confirmation || !name || !dob) {
-        return res.render('register', { sessionUser, error: 'Please fill in all required fields.', formData, MIN_AGE });
-    }
- 
-    if (password !== confirmation) {
-        return res.render('register', { sessionUser, error: 'Passwords do not match.', formData, MIN_AGE });
-    }
-    if (!isValidEmail(email.trim())) {
-    return res.render('register', { sessionUser, error: 'Please enter a valid email address (e.g. name@example.com).', formData, MIN_AGE });
-    }
-    const passwordError = isValidPassword(password);
-    if (passwordError) {
-        return res.render('register', { sessionUser, error: passwordError, formData, MIN_AGE });
-    }
- 
-    const dobDate = new Date(dob);
-    if (isNaN(dobDate.getTime())) {
-        return res.render('register', { sessionUser, error: 'Invalid date of birth.', formData, MIN_AGE });
-    }
-    if (dobDate > new Date() || getAge(dobDate) > 100) {
-        return res.render('register', { sessionUser, error: `Please enter valid date of birth.`, formData, MIN_AGE });
-    }
-    if (getAge(dobDate) < MIN_AGE) {
-        return res.render('register', { sessionUser, error: `You must be at least ${MIN_AGE} years old to register.`, formData, MIN_AGE });
-    }
- 
+
     try {
-        const existing = await User.findOne({ email: email.trim().toLowerCase() });
-        if (existing) {
-            return res.render('register', { sessionUser, error: 'An account with that email already exists.', formData, MIN_AGE });
+
+        const errors = [];
+
+        if (!email || !password || !confirmation || !name || !dob) {
+            errors.push('Please fill in all required fields.');
         }
- 
+
+        if (password && confirmation && password !== confirmation) {
+            errors.push('Passwords do not match.');
+        }
+        if (email && !isValidEmail(email.trim())) {
+            errors.push('Please enter a valid email address (e.g. name@example.com).');
+        }
+        if (password) {
+            const passwordError = isValidPassword(password);
+            if (passwordError) {
+                errors.push(...passwordError); //extend
+            }
+        }
+
+        if (dob) {
+            const dobDate = new Date(dob);
+            if (isNaN(dobDate.getTime())) {
+                errors.push('Invalid date of birth.');
+            } else if (dobDate > new Date() || getAge(dobDate) > 100) {
+                errors.push('Please enter valid date of birth.');
+            } else if (getAge(dobDate) < MIN_AGE) {
+                errors.push(`You must be at least ${MIN_AGE} years old to register.`);
+            }
+        }
+
+        if (email) {
+            const existing = await User.findOne({ email: email.trim().toLowerCase() });
+            if (existing) {
+                errors.push('An account with that email already exists.');
+            }
+        }
+
+        if (errors.length > 0) {
+            return res.render('register', { sessionUser, error: errors, formData, MIN_AGE });
+        }
+
         const passwordHash = await bcrypt.hash(password, 10);
- 
+
         const newUser = new User({
             email: email.trim().toLowerCase(),
             passwordHash,
@@ -160,7 +172,7 @@ exports.handleRegister = async (req, res) => {
             bio: bio ? bio.trim() : '',
             avatar: avatarFor(email),
         });
- 
+
         await newUser.save();
 
         req.session.sessionUser = newUser;
@@ -171,13 +183,13 @@ exports.handleRegister = async (req, res) => {
             }
             return res.redirect('/home');
         });
- 
+
     } catch (err) {
         console.error('Registration error:', err);
         return res.render('register', { sessionUser, error: 'Something went wrong. Please try again.', formData, MIN_AGE });
     }
 };
- 
+
 // /account/logout
 exports.handleLogout = (req, res) => {
     req.session.destroy(() => {
@@ -204,7 +216,7 @@ exports.handleDeleteAccount = async (req, res) => {
 // /account/edit
 exports.renderEdit = (req, res) => {
     const sessionUser = req.session.sessionUser;
- 
+
     res.render('edit-account', { //prefills the form with current name and bio
         sessionUser,
         error: null,
@@ -214,28 +226,28 @@ exports.renderEdit = (req, res) => {
         }
     });
 };
- 
+
 exports.handleEdit = async (req, res) => {
     const sessionUser = req.session.sessionUser;
- 
+
     const name = req.body.name;
     const bio = req.body.bio;
     const formData = { name, bio };
- 
+
     if (!name) {
         return res.render('edit-account', { sessionUser, error: 'Name cannot be empty.', formData });
     }
- 
+
     try {
         const updatedUser = await User.findByIdAndUpdate(
             sessionUser._id,
             { name: name.trim(), bio: bio ? bio.trim() : '' },
             { new: true }
         );
- 
+
         req.session.sessionUser = updatedUser;
         return res.redirect('/home');
- 
+
     } catch (err) {
         console.error('Edit account error:', err);
         return res.render('edit-account', { sessionUser, error: 'Something went wrong. Please try again.', formData });
@@ -260,50 +272,41 @@ exports.updatePassword = async (req, res) => {
     const sessionUser = req.session.sessionUser;
     const formData = {};
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
-        return res.render("changePassword", {
-            sessionUser,
-            error: "All fields are required",
-            success: null,
-            formData
-        });
-    }
-
-    if (newPassword !== confirmPassword) {
-        return res.render("changePassword", {
-            sessionUser,
-            error: "Passwords do not match",
-            success: null,
-            formData
-        });
-    }
-
-    const passwordError = isValidPassword(newPassword);
-    if (passwordError) {
-        return res.render("changePassword", {
-            sessionUser,
-            error: passwordError,
-            success: null,
-            formData
-        });
-    }
-
     try {
-        const user = await User.findById(sessionUser._id);
-        const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
-        if (!isMatch) {
-            return res.render("changePassword", {
-                sessionUser,
-                error: "Current password incorrect",
-                success: null,
-                formData
-            });
+        const errors = [];
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            errors.push("All fields are required");
         }
 
-        if (currentPassword === newPassword) {
+        if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+            errors.push("Passwords do not match");
+        }
+
+        if (newPassword) {
+            const passwordError = isValidPassword(newPassword);
+            if (passwordError) {
+                errors.push(...passwordError);
+            }
+        }
+
+        let user = null;
+        if (currentPassword) {
+            user = await User.findById(sessionUser._id);
+            const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+            if (!isMatch) {
+                errors.push("Current password incorrect");
+            }
+        }
+
+        if (currentPassword && newPassword && currentPassword === newPassword) {
+            errors.push("New password cannot be the same as current password");
+        }
+
+        if (errors.length > 0) {
             return res.render("changePassword", {
                 sessionUser,
-                error: "New password cannot be the same as current password",
+                error: errors,
                 success: null,
                 formData
             });
@@ -347,72 +350,65 @@ exports.forgetPassword = async (req, res) => {
     try {
         const { email, dob, newPassword, confirmPassword } = req.body;
         const formData = { email, dob };
+        const errors = [];
 
         if (!email || !dob || !newPassword || !confirmPassword) {
-            return res.render("forgetPassword", {
-                sessionUser: {},
-                error: "All fields are required",
-                success: null,
-                formData
-            });
+            errors.push("All fields are required");
         }
 
-        if (newPassword !== confirmPassword) {
-            return res.render("forgetPassword", {
-                sessionUser: {},
-                error: "Passwords do not match",
-                success: null,
-                formData
-            });
+        if (newPassword && confirmPassword && newPassword !== confirmPassword) {
+            errors.push("Passwords do not match");
         }
 
-        if (!isValidEmail(email.trim())) {
-            return res.render("forgetPassword", {
-                sessionUser: {},
-                error: "Please enter a valid email address (e.g. name@example.com).",
-                success: null,
-                formData
-            });
+        if (email && !isValidEmail(email.trim())) {
+            errors.push("Please enter a valid email address (e.g. name@example.com).");
         }
 
-        const passwordError = isValidPassword(newPassword);
-        if (passwordError) {
-            return res.render("forgetPassword", {
-                sessionUser: {},
-                error: passwordError,
-                success: null,
-                formData
-            });
+        if (newPassword) {
+            const passwordError = isValidPassword(newPassword);
+            if (passwordError) {
+                errors.push(...passwordError);
+            }
         }
 
-        const user = await User.findOne({ email: email.trim().toLowerCase() });
-
-        if (!user) {
-            return res.render("forgetPassword", {
-                sessionUser: {},
-                error: "User not found",
-                success: null,
-                formData
-            });
+        let user = null;
+        if (email && isValidEmail(email.trim())) {
+            user = await User.findOne({ email: email.trim().toLowerCase() });
+            if (!user) {
+                errors.push("User not found");
+            }
         }
 
-        const inputDob = new Date(dob).toISOString().split("T")[0];
-        const userDob = new Date(user.dob).toISOString().split("T")[0];
-
-        if (inputDob !== userDob) {
-            return res.render("forgetPassword", {
-                sessionUser: {},
-                error: "Email and date of birth do not match",
-                success: null,
-                formData
-            });
+        let inputDobValid = false;
+        if (dob) {
+            const dobDate = new Date(dob);
+            if (isNaN(dobDate.getTime())) {
+                errors.push("Invalid date of birth format.");
+            } else {
+                inputDobValid = true;
+            }
         }
 
-        const isSameAsOld = await bcrypt.compare(newPassword, user.passwordHash);
-        if (isSameAsOld) {
+        if (inputDobValid && user && user.dob) {
+            const inputDobStr = new Date(dob).toISOString().split("T")[0];
+            const userDobStr = new Date(user.dob).toISOString().split("T")[0];
+
+            if (inputDobStr !== userDobStr) {
+                errors.push("Email and date of birth do not match");
+            }
+        }
+
+        if (newPassword && user) {
+            const isSameAsOld = await bcrypt.compare(newPassword, user.passwordHash);
+            if (isSameAsOld) {
+                errors.push("New password cannot be the same as current password");
+            }
+        }
+
+        if (errors.length > 0) {
             return res.render("forgetPassword", {
                 sessionUser: {},
-                error: "New password cannot be the same as current password",
+                error: errors,
                 success: null,
                 formData
             });
