@@ -5,6 +5,7 @@ const Vote = require('../models/Vote-model');
 const Bookmark = require('../models/Bookmark-model');
 const PostPreference = require('../models/Post-Preference-model');
 const CommentPreference = require('../models/Comment-Preference-model');
+const Image = require('../models/Image-model');
 
 const bcrypt = require('bcrypt');
 
@@ -214,6 +215,9 @@ exports.handleDeleteAccount = async (req, res) => {
         await Vote.deleteMany({ postId: post._id });
         await Bookmark.deleteMany({ postId: post._id });
         await CommentPreference.deleteMany({ postId: post._id });
+        if (post.imageId) {
+            await Image.findByIdAndDelete(post.imageId);
+        }
         await Post.findByIdAndDelete(post._id);
     }
 

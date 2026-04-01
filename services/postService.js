@@ -1,11 +1,11 @@
 const Post = require("../models/Post-model");
+const Image = require("../models/Image-model");
 
 const { getUserById } = require("../services/userService");
 const { getPostVoteValue } = require("../services/voteService");
 const { getBookmarkValue } = require("../services/bookmarkService");
 const { timeAgo } = require("../utils/utils");
 const { getAllBookmarksByUserId } = require("./bookmarkService");
-
 
 // adds the post's author's User obj and other details to each Post obj
 async function expandPosts(posts, sessionUser = {}) {
@@ -14,12 +14,15 @@ async function expandPosts(posts, sessionUser = {}) {
       posts.map(async (post) => {
         const author = await getUserById(post.userId.toString());
         const voteValue = await getPostVoteValue(post._id, sessionUser._id);
-        const bookmarkValue = await getBookmarkValue(post._id, sessionUser._id)
+        const bookmarkValue = await getBookmarkValue(post._id, sessionUser._id);
 
         post.postAge = `${timeAgo(post.upload_datetime)} ago`;
         post.author = author;
         post.voteValue = voteValue;
         post.bookmark = bookmarkValue;
+        post.image = post.imageId
+          ? `/media/images/${post.imageId}`
+          : post.image;
       }),
     );
     return posts;
@@ -53,7 +56,11 @@ async function getAllPosts(sessionUser = {}) {
 
 async function deletePostById(postId) {
   try {
-    await Post.findByIdAndDelete({ _id: postId });
+    const deletedPost = await Post.findByIdAndDelete({ _id: postId });
+
+    if (deletedPost?.imageId) {
+      await Image.findByIdAndDelete(deletedPost.imageId);
+    }
 
     return true;
   } catch {
@@ -66,23 +73,23 @@ async function getPosts({
   sessionUser = {},
   userId = null,
   onlyBookmarks = false,
-  sortType = 'highest-votes',
+  sortType = "highest-votes",
   limit = null,
   page = 1,
-  returnMeta = false
+  returnMeta = false,
 }) {
   try {
     let filter = {};
 
     // Filter by user
     if (userId) {
-      filter.userId = userId
+      filter.userId = userId;
     }
 
     // Filter by bookmarks
     if (onlyBookmarks && sessionUser._id) {
       const bookmarks = await getAllBookmarksByUserId(sessionUser._id);
-      const bookmarkedPostIds = bookmarks.map(b => b.postId);
+      const bookmarkedPostIds = bookmarks.map((b) => b.postId);
 
       // If there are no bookmarks, return empty array early
       if (bookmarkedPostIds.length === 0) return [];
@@ -92,22 +99,22 @@ async function getPosts({
     // Sorting
     let sortOption = {};
     switch (sortType) {
-      case 'highest-votes':
+      case "highest-votes":
         sortOption = { vote_score: -1 };
         break;
-      case 'lowest-votes':
+      case "lowest-votes":
         sortOption = { vote_score: 1 };
         break;
-      case 'newest':
+      case "newest":
         sortOption = { upload_datetime: -1 };
         break;
-      case 'oldest':
+      case "oldest":
         sortOption = { upload_datetime: 1 };
         break;
-      case 'most-comments':
+      case "most-comments":
         sortOption = { comment_count: -1 };
         break;
-      case 'least-comments':
+      case "least-comments":
         sortOption = { comment_count: 1 };
         break;
       default:
@@ -116,7 +123,8 @@ async function getPosts({
 
     const isPaged = Number.isInteger(limit) && limit > 0;
     const parsedPage = parseInt(page, 10);
-    let currentPage = Number.isInteger(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+    let currentPage =
+      Number.isInteger(parsedPage) && parsedPage > 0 ? parsedPage : 1;
     let totalPosts = 0;
     let totalPages = 1;
 
@@ -141,12 +149,11 @@ async function getPosts({
         posts: expandedPosts,
         totalPosts,
         totalPages,
-        currentPage
+        currentPage,
       };
     }
 
     return expandedPosts;
-
   } catch (err) {
     console.log("Error in getPosts:", err);
     if (returnMeta) {
@@ -154,7 +161,7 @@ async function getPosts({
         posts: [],
         totalPosts: 0,
         totalPages: 1,
-        currentPage: 1
+        currentPage: 1,
       };
     }
     return [];

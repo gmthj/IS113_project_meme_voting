@@ -10,7 +10,12 @@ const PostSchema = new mongoose.Schema(
 
     title: { type: String, required: true, trim: true },
     description: { type: String, default: "", trim: true },
-    image: { type: String, required: true, trim: true },
+    image: { type: String, default: null, trim: true }, // legacy base64 field
+    imageId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Image",
+      default: null
+    },
 
     vote_score: { type: Number, default: 0 },
     comment_count: { type: Number, default: 0 },
