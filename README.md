@@ -85,7 +85,7 @@ When a user votes on a post or comment, the following calculations occur:
   `Vote Direction (+1 or -1) * Voter's Tier Weight`
 - **Author's Karma (`totalKarma`)**: The author of the post or comment receives a karma change of:
   `Vote Direction (+1 or -1) * Voter's Tier Weight * Entity Weight`
-  > **Note:** A user cannot gain or lose `totalKarma` by voting on their own posts or comments (self-votes).
+  > Note: A user cannot gain or lose `totalKarma` by voting on their own posts or comments (self-votes).
 
 ### Entity Weights
 | Vote Entity    | Weight |
@@ -95,15 +95,15 @@ When a user votes on a post or comment, the following calculations occur:
 
 ### Karma Tiers & Voter Weights
 
-| Priority | Tier           | Voter Weight | Condition                                    |
-|----------|----------------|--------------|----------------------------------------------|
-| 0        | **Unknown**    |  1           |  -                                           |
-| 1        | **Troller**    |  0           | `totalKarma < KARMA_TIER_0` (default: -5)    |
-| 2        | **Newcomer**   |  1           | Account age < `KARMA_NEW` days (default: 30) |
-| 3        | **Lurker**     |  1           | `totalKarma < KARMA_TIER_1` (default: 10)    |
-| 4        | **Apprentice** |  2           | `totalKarma < KARMA_TIER_2` (default: 50)    |
-| 5        | **Master**     |  3           | `totalKarma < KARMA_TIER_3` (default: 100)   |
-| 6        | **Legend**     |  5           | `KARMA_TIER_3 <= totalKarma`                 |
+| Tier           | Voter Weight | Condition                                    |
+|----------------|--------------|----------------------------------------------|
+| **Troller**    |  0           | `totalKarma < KARMA_TIER_0` (default: -5)    |
+| **Newcomer**   |  1           | Account age < `KARMA_NEW` days (default: 30) |
+| **Lurker**     |  1           | `totalKarma < KARMA_TIER_1` (default: 10)    |
+| **Apprentice** |  2           | `totalKarma < KARMA_TIER_2` (default: 50)    |
+| **Master**     |  3           | `totalKarma < KARMA_TIER_3` (default: 100)   |
+| **Legend**     |  5           | `KARMA_TIER_3 <= totalKarma`                 |
+| **Unknown**    |  1           |  -                                           |
 
 
 
