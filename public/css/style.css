@@ -962,6 +962,10 @@ input:focus, textarea:focus {
     text-transform: uppercase;
 }
 
+.text-upper {
+    text-transform: uppercase;
+}
+
 .neo-input {
     border: var(--border-thick);
     padding: 12px;
