@@ -325,19 +325,22 @@ exports.changepassword = (req, res) => {
     res.render("changePassword", {
         sessionUser,
         error: null,
-        success: null
+        success: null,
+        formData: {}
     });
 };
 
 exports.updatePassword = async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const sessionUser = req.session.sessionUser;
+    const formData = {};
 
     if (!currentPassword || !newPassword || !confirmPassword) {
         return res.render("changePassword", {
             sessionUser,
             error: "All fields are required",
-            success: null
+            success: null,
+            formData
         });
     }
 
@@ -345,30 +348,61 @@ exports.updatePassword = async (req, res) => {
         return res.render("changePassword", {
             sessionUser,
             error: "Passwords do not match",
-            success: null
+            success: null,
+            formData
         });
     }
 
-    const user = await User.findById(sessionUser._id);
-
-    const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
-    if (!isMatch) {
+    const passwordError = isValidPassword(newPassword);
+    if (passwordError) {
         return res.render("changePassword", {
             sessionUser,
-            error: "Current password incorrect",
-            success: null
+            error: passwordError,
+            success: null,
+            formData
         });
     }
 
-    const newHash = await bcrypt.hash(newPassword, 10);
-    user.passwordHash = newHash;
-    await user.save();
+    try {
+        const user = await User.findById(sessionUser._id);
+        const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
+        if (!isMatch) {
+            return res.render("changePassword", {
+                sessionUser,
+                error: "Current password incorrect",
+                success: null,
+                formData
+            });
+        }
 
-    return res.render("changePassword", {
-        sessionUser,
-        error:null,
-        success: "Password updated successfully"
-    });
+        if (currentPassword === newPassword) {
+            return res.render("changePassword", {
+                sessionUser,
+                error: "New password cannot be the same as current password",
+                success: null,
+                formData
+            });
+        }
+
+        const newHash = await bcrypt.hash(newPassword, 10);
+        user.passwordHash = newHash;
+        await user.save();
+
+        return res.render("changePassword", {
+            sessionUser,
+            error: null,
+            success: "Password updated successfully",
+            formData: {}
+        });
+    } catch (error) {
+        console.error("Change password error:", error);
+        return res.render("changePassword", {
+            sessionUser,
+            error: "Something went wrong. Please try again.",
+            success: null,
+            formData
+        });
+    }
 };
 
 
@@ -376,8 +410,10 @@ exports.updatePassword = async (req, res) => {
 exports.forgetPasswordPage = (req, res) => {
 
     res.render("forgetPassword", {
+        sessionUser: {},
         error: null,
-        success: null
+        success: null,
+        formData: {}
     });
 };
 
@@ -385,18 +421,42 @@ exports.forgetPasswordPage = (req, res) => {
 exports.forgetPassword = async (req, res) => {
     try {
         const { email, dob, newPassword, confirmPassword } = req.body;
+        const formData = { email, dob };
 
         if (!email || !dob || !newPassword || !confirmPassword) {
             return res.render("forgetPassword", {
+                sessionUser: {},
                 error: "All fields are required",
-                success: null
+                success: null,
+                formData
             });
         }
 
         if (newPassword !== confirmPassword) {
             return res.render("forgetPassword", {
+                sessionUser: {},
                 error: "Passwords do not match",
-                success: null
+                success: null,
+                formData
+            });
+        }
+
+        if (!isValidEmail(email.trim())) {
+            return res.render("forgetPassword", {
+                sessionUser: {},
+                error: "Please enter a valid email address (e.g. name@example.com).",
+                success: null,
+                formData
+            });
+        }
+
+        const passwordError = isValidPassword(newPassword);
+        if (passwordError) {
+            return res.render("forgetPassword", {
+                sessionUser: {},
+                error: passwordError,
+                success: null,
+                formData
             });
         }
 
@@ -404,8 +464,10 @@ exports.forgetPassword = async (req, res) => {
 
         if (!user) {
             return res.render("forgetPassword", {
+                sessionUser: {},
                 error: "User not found",
-                success: null
+                success: null,
+                formData
             });
         }
 
@@ -414,8 +476,20 @@ exports.forgetPassword = async (req, res) => {
 
         if (inputDob !== userDob) {
             return res.render("forgetPassword", {
+                sessionUser: {},
                 error: "Email and date of birth do not match",
-                success: null
+                success: null,
+                formData
+            });
+        }
+
+        const isSameAsOld = await bcrypt.compare(newPassword, user.passwordHash);
+        if (isSameAsOld) {
+            return res.render("forgetPassword", {
+                sessionUser: {},
+                error: "New password cannot be the same as current password",
+                success: null,
+                formData
             });
         }
 
@@ -424,14 +498,18 @@ exports.forgetPassword = async (req, res) => {
         await user.save();
 
         return res.render("forgetPassword", {
+            sessionUser: {},
             error: null,
-            success: "Password updated successfully. Redirecting to login in 3s"
+            success: "Password updated successfully. Redirecting to login in 3s",
+            formData: {}
         });
     } catch (error) {
         console.error("Forget password error:", error);
         return res.render("forgetPassword", {
+            sessionUser: {},
             error: "Something went wrong. Please try again.",
-            success: null
+            success: null,
+            formData: {}
         });
     }
 };
