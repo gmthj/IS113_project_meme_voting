@@ -1,7 +1,5 @@
 const Bookmark = require("../models/Bookmark-model");
 
-
-
 async function getBookmarkValue(postId, userId) {
   const bookmark = await Bookmark.findOne({userId: userId, postId: postId}).lean();
   // console.log(bookmark)

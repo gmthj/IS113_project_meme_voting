@@ -29,9 +29,6 @@ async function expandPosts(posts, sessionUser = {}) {
   }
 }
 
-
-
-
 async function getPostById(postId, sessionUser = {}) {
   try {
     const post = await Post.findOne({ _id: postId }).lean();
@@ -54,29 +51,6 @@ async function getAllPosts(sessionUser = {}) {
   }
 }
 
-
-async function getAllPostsSorted(sortType = 'highest-votes', sessionUser = {}, filter = {} ) {
-  try {
-    let sortOption = {};
-  
-    if (sortType === 'highest-votes') sortOption = { vote_score: -1 };
-    else if (sortType === 'lowest-votes') sortOption = { vote_score: 1 };
-    else if (sortType === 'newest') sortOption = { upload_datetime: -1 };
-    else if (sortType === 'oldest') sortOption = { upload_datetime: 1 };
-    else if (sortType === 'most-comments') sortOption = { comment_count: -1 };
-    else if (sortType === 'least-comments') sortOption = { comment_count: 1 };
-    else sortOption = { vote_score: -1 }; // fallback default
-  
-    const posts = await Post.find(filter).sort(sortOption).lean();
-    return await expandPosts(posts, sessionUser);
-  } catch {
-    console.log("getAllPostsSorted - no posts received or no sessionUser");
-    return [];
-  }
-}
-
-
-
 async function deletePostById(postId) {
   try {
     await Post.findByIdAndDelete({ _id: postId });
@@ -86,29 +60,6 @@ async function deletePostById(postId) {
     console.log("error: deletePostById - failed to delete post");
     return false;
   }
-}
-
-
-// Get posts by userid
-async function getPostsByUserId(userId, sessionUser) {
-  try {
-    let posts = await Post.find( {userId} ).lean()
-    return await expandPosts(posts, sessionUser)
-  } catch (error) {
-    console.log("Error finding post by userId:", error)
-  }
-}
-
-async function getBookmarkedPosts(sessionUser) {
-    try {
-        const bookmarks = await getAllBookmarksByUserId(sessionUser._id);
-        const postIds = bookmarks.map(b => b.postId);
-        const posts = await Post.find({ _id: { $in: postIds } }).lean();
-        return await expandPosts(posts, sessionUser);
-    } catch (err) {
-        console.log("error: getBookmarkedPosts", err);
-        return [];
-    }
 }
 
 async function getPosts({ sessionUser = {}, userId = null, onlyBookmarks = false, sortType = 'highest-votes' }) {
@@ -158,7 +109,7 @@ async function getPosts({ sessionUser = {}, userId = null, onlyBookmarks = false
     // Fetch posts from DB
     const posts = await Post.find(filter).sort(sortOption).lean();
 
-    // 5️⃣ Expand posts (add vote info, user interactions, etc.)
+    // Expand posts (add vote info, user interactions, etc.)
     return await expandPosts(posts, sessionUser);
 
   } catch (err) {
@@ -171,9 +122,6 @@ module.exports = {
   // expandPosts,
   getPostById,
   getAllPosts,
-  getAllPostsSorted,
   deletePostById,
-  getPostsByUserId,
-  getBookmarkedPosts,
   getPosts,
 };
