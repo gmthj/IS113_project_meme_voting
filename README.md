@@ -58,6 +58,8 @@ npm run dev
 9. Open your browser <br>
 http://localhost:8000/
 
+*host name and port number can be found in `config.js` if you wish to use a different port number*
+
 ---
 
 ## Sample Data Login Credentials
@@ -148,6 +150,7 @@ totalKarma = (Post Votes * Post Weight * Tier Weight) + (Comment Votes * Comment
 | /scripts/... (sample data importing/exporting) | Full | scripts for exporting the current state of the database, and loading that data into the database |
 | /views/XXX.ejs        | Partial     | ONLY used for the css styling |
 | /public/img/daily-dank-logo.png <br> /public/img/daily-dank.png <br> /public/img/icon.png | Partial | Mostly generated logo images, some post editing |
+| /views/partials/backToTop.ejs | Full | just a non-critial frontend / UX feature nothing important |
 | add ai declaration here | - | - |
 
 

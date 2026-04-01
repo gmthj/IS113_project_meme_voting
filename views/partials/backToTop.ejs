@@ -1,0 +1,24 @@
+<button id="backToTop" class="neo-btn neo-btn-yellow back-to-top-btn" title="Back to Top">
+    TOP ↑
+</button>
+
+<script>
+    const topBtn = document.getElementById("backToTop");
+
+    // ANALYZE: Show button when user scrolls down 400px
+    window.onscroll = function() {
+        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            topBtn.style.display = "flex";
+        } else {
+            topBtn.style.display = "none";
+        }
+    };
+
+    // ACTION: Smooth scroll back to the top
+    topBtn.onclick = function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+</script>
