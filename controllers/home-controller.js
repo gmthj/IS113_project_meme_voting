@@ -71,12 +71,13 @@ exports.renderHome = async (req, res) => {
                 currentSort: sortType,
                 sessionUser,
                 isAnnon,
+                isFullPost: false,
                 onlyBookmarks,
                 bookmarkError
             });
         }
 
-        res.render('home', { posts, currentSort: sortType, sessionUser, isAnnon, onlyBookmarks, bookmarkError });
+        res.render('home', { posts, currentSort: sortType, sessionUser, isAnnon, isFullPost: false, onlyBookmarks, bookmarkError });
 
     } catch (error) {
         console.error("Error rendering home:", error);

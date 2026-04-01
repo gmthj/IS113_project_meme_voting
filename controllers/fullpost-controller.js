@@ -16,7 +16,12 @@ const {
 
 exports.renderFullPost = async (req, res) => {
   const sessionUser = req.session.sessionUser || {};
+
   try {
+
+    let isAnnon = req.query.annon == "true" || (sessionUser && sessionUser.annon)
+    if (req.query.annon == "true") req.session.sessionUser = { annon: true };
+
     const postId = req.params.postId;
     if (!postId)
       return res
@@ -51,6 +56,9 @@ exports.renderFullPost = async (req, res) => {
       post,
       comments,
       sessionUser,
+      isAnnon,
+      isFullPost: true,
+      onlyBookmarks: false,
       currentSort: sortType,
       errorMessage
     });

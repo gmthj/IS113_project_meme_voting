@@ -74,6 +74,7 @@ exports.renderUserProfile = async (req, res) => {
                 userInfo,
                 userPosts: [],
                 currentSort: sortType,
+                isFullPost: false,
                 onlyBookmarks,
                 bookmarkError
             });
@@ -84,6 +85,7 @@ exports.renderUserProfile = async (req, res) => {
             userInfo,
             userPosts,
             currentSort: sortType,
+            isFullPost: false,
             onlyBookmarks,
             bookmarkError
         });
