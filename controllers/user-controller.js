@@ -55,7 +55,7 @@ exports.renderUserProfile = async (req, res) => {
 
             // Case 2: Logged in but no bookmarks
             else if (userPosts.length === 0) {
-                bookmarkError = "You have no bookmarked posts.";
+                bookmarkError = `You have no bookmarked posts for ${userInfo.name}.`;
             }
         }
 

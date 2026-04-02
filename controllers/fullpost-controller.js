@@ -1,4 +1,5 @@
 const Comment = require("../models/Comment-model");
+const Post = require("../models/Post-model");
 
 const { getPostById } = require("../services/postService");
 const { getAllCommentsByPostId } = require("../services/commentService");
@@ -67,11 +68,6 @@ exports.handlePostComment = async (req, res) => {
       if (sessionUser && sessionUser._id) {
         return res.redirect(`/fullpost/${postId}?error=empty_comment#comment-section`);
       }
-
-      // TODO: show error in fullpost page (can be trigger by commenting "    " spaces)
-      // return res.status(400).render('error', { sessionUser, error: "Comment text is required." });
-
-      // return res.status(400).send("Comment text is required.");
     }
 
     const newComment = new Comment({

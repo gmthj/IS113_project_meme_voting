@@ -1019,7 +1019,7 @@ input:focus, textarea:focus {
     align-items: center;
     gap: 15px;
     box-shadow: 4px 4px 0px var(--neo-ink);
-    transform: rotate(-1deg); /* Slight tilt for the "sticker" look */
+    transform: rotate(2deg); /* Slight tilt for the "sticker" look */
 }
 
 .neo-error-sticker {
