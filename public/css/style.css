@@ -321,11 +321,6 @@ input:focus, textarea:focus {
     padding: 5px 10px;
     display: inline-block;
     line-height: 0;
-    transition: transform 0.2s ease-out;
-}
-
-.logo-sticker:hover {
-    transform: rotate(360deg);
 }
 
 
@@ -1382,11 +1377,14 @@ input.neo-input, textarea.neo-input {
     margin: 0;
     text-align: center;
     font-weight: 700;
-}
-
-.nav-logo {
+}.nav-logo {
     height: 65px;
     width: auto;
+    transition: transform 0.3s ease-out;
+}
+
+.logo-sticker:hover .nav-logo {
+    transform: rotate(360deg);
 }
 
 .logo-sticker {
