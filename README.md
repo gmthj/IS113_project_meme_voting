@@ -1,4 +1,4 @@
-# IS113 Web Application Development 1 Project
+# IS113 Web Application Development 1 Project : THE DAILY DANK
 ## G5 - Group 6
 
 Meme Gallery / Voting Board
@@ -10,56 +10,28 @@ Meme Gallery / Voting Board
 ## Setup Instructions
 
 1. Install [nodejs & npm](https://nodejs.org/en/download)
-2. Clone this repository
 
+2. Download and unzip the `IS113_project_meme_voting.zip` file
+
+3. Navigate to the `/IS113_project_meme_voting` folder
 ```bash
-git clone https://github.com/gmthj/IS113_project_meme_voting
 cd IS113_project_meme_voting
 ```
 
-3. Install dependencies
-
+4. Install dependencies
 ```bash
-npm i
+npm install
 ```
 
-4. Setup an account on [MongoDB Atlas](https://www.mongodb.com/products/platform/atlas-database)
-5. Create MongoDB database and copy the connection string
-6. Make a `.env` file (yes, literally named `.env`) in `IS113_project_meme_voting/` with the following
-
-```bash
-SECRET=<some super long random string>
-MONGO_URI=<connnection string>
-```
-> replace `<some super long random string>` with an actual long string of random characters
-
-> replace `<connnection string>` with your actual connection string from MongoDB Atlas. It should look something like this:
-
-```bash
-mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/<db_name>?retryWrites=true&w=majority&appName=Cluster0
-```
-
-> note: replace `<db_password>` with the password you created for the user in your mongodb database
-
-7. Initialise database with sample data (optional)
-
-```bash
-npm run init-db2
-<enter> to select the latest data-vXX-XXXX.json
-```
-
-8. Start the application
-
+5. Start the application
 ```bash
 npm start
-# or
-npm run dev
 ```
 
-9. Open your browser <br>
+6. Open your browser <br>
 http://localhost:8000/
 
-*host name and port number can be found in `config.js` if you wish to use a different port number*
+> host name and port number can be found in `config.js` if you wish to use a different port number
 
 ---
 
@@ -74,9 +46,9 @@ http://localhost:8000/
 | ravi.s@smu.edu.sg       | Pas676767!           |
 | sophie.wu@smu.edu.sg    | HelloPass109#        |
 
-## Karma Based Voting
+## Karma Based Voting (Complex Logic)
 
-The Karma system rewards users who submit good content. A user's `totalKarma` determines their Karma Tier, which in turn determines the *weight* of their votes.
+The Karma system rewards users who submit good content. A user's `totalKarma` determines their Karma Tier, which in turn determines the *weight* of their votes
 
 ### Voting Logic
 When a user votes on a post or comment, the following calculations occur:
@@ -85,13 +57,14 @@ When a user votes on a post or comment, the following calculations occur:
   `Vote Direction (+1 or -1) * Voter's Tier Weight`
 - **Author's Karma (`totalKarma`)**: The author of the post or comment receives a karma change of:
   `Vote Direction (+1 or -1) * Voter's Tier Weight * Entity Weight`
-  > Note: A user cannot gain or lose `totalKarma` by voting on their own posts or comments (self-votes).
+  > Note: A user cannot gain or lose `totalKarma` by self-voting on their own posts or comments
+  > Deleting a post/comment does not affect `totalKarma` i.e. a user should not be able to delete a heavily downvoted post/comment to improve their karma
 
 ### Entity Weights
-| Vote Entity    | Weight |
-| -------------- |------- |
-| Post           | 2      |
-| Comment        | 1      |
+| Entity    | Weight |
+| --------- |------- |
+| Post      | 2      |
+| Comment   | 1      |
 
 ### Karma Tiers & Voter Weights
 
@@ -105,7 +78,7 @@ When a user votes on a post or comment, the following calculations occur:
 | **Legend**     |  5           | `KARMA_TIER_3 <= totalKarma`                 |
 | **Unknown**    |  1           |  -                                           |
 
-
+> All weights can be found and adjusted in `config.js`
 
 ## DATABASE
 
@@ -128,7 +101,8 @@ When a user votes on a post or comment, the following calculations occur:
 - userId: ObjectId (author of the post)
 - title: String
 - description: String
-- image: String (URL or base64)
+- image: String (base64) (deprecated/fallback)
+- imageId: ObjectId
 - vote_score: Number (default: 0)
 - comment_count: Number (default: 0)
 - upload_datetime: Date (default: now)
@@ -138,6 +112,7 @@ When a user votes on a post or comment, the following calculations occur:
 - postId: ObjectId
 - userId: ObjectId (author of the comment)
 - text: String
+- vote_score: Number (default: 0)
 - upload_datetime: Date (default: now)
 - edit_datetime: Date
 
@@ -148,19 +123,22 @@ When a user votes on a post or comment, the following calculations occur:
 **POST PREFERENCE** (sorting)
 - userId: ObjectId
 - page: String (home, user)
-- sortType: String (newest, oldest, highest-votes, lowest-votes, most-comments, least-comments, bookmarks)
+- sortType: String (newest, oldest, **highest-votes**, lowest-votes, most-comments, least-comments, bookmarks)
 
 **COMMENT PREFERENCE** (sorting)
 - userId: ObjectId
 - commentId: ObjectId
-- sortType: String (newest, oldest, highest-votes, lowest-votes)
+- sortType: String (**newest**, oldest, highest-votes, lowest-votes)
+
+**IMAGE**
+- data: Buffer
+- mimeType: String
+- sizeBytes: Number
 
 ##  AI/LLM Usage Declaration
 | File(s)       | Usage Level           | Explanation |
 |---------------|----------------------|-----------|
 | /public/css/style.css    | Full    | -                 |
-| /data/data-vXX-XXX.json  | Partial | Earlier versions were fully AI generate <br> Later versions were generated with the exportDBtoJSON.js script with some manual adjustments    |
-| /scripts/... (sample data importing/exporting) | Full | scripts for exporting the current state of the database, and loading that data into the database |
 | /views/XXX.ejs        | Partial     | ONLY used for the css styling |
 | /public/img/daily-dank-logo.png <br> /public/img/daily-dank.png <br> /public/img/icon.png | Partial | Mostly generated logo images, some post editing |
 | /views/partials/backToTop.ejs | Full | just a non-critial frontend / UX feature nothing important |
@@ -334,41 +312,5 @@ When a user votes on a post or comment, the following calculations occur:
 - DELETE
   - Vote (remove - upvote/downvote -> no vote)
 
-=====================================================================
-
 
 _Give us A+ pls_
-
-
-
-## File Structure
-
----
-
-**models/**  
-Contains all Mongoose schemas (database models).
-
-| Model      | Collection | Purpose                      |
-| ---------- | ---------- | ---------------------------- |
-| User.js    | users      | Stores user accounts         |
-| Post.js    | posts      | Stores meme posts            |
-| Comment.js | comments   | Stores comments on posts     |
-| Vote.js    | votes      | Stores upvotes and downvotes |
-
-### Example Relationships
-
-- `users._id → posts.userId`
-- `users._id → comments.userId`
-- `posts._id → comments.postId`
-- `posts._id → votes.postId`
-- `users._id → votes.userId`
-
-**services/**  
-Contains reusable database helper functions.  
-This prevents database logic from being duplicated across scripts and routes.
-
-| File           | Function              | Purpose                        |
-| -------------- | --------------------- | ------------------------------ |
-| userService.js | getUserByEmail(email) | Finds a user using their email |
-| postService.js | getPostByTitle(title) | Finds a post using its title   |
-
