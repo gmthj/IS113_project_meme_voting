@@ -21,7 +21,7 @@
             <div class="error-badge">
                 <%= errorMessage %>
             </div>
-        <% } %> 
+        <% } %>
 
         <section id="comment-section" class="comment-post-section">
             <form action="/fullpost/<%= post._id %>/comment" method="POST" class="comment-post-form">
@@ -34,9 +34,7 @@
         </section>
 
         <%- include('partials/sortTabs', { 
-            baseUrl: '/fullpost/' + post._id, 
-            resetUrl: '/fullpost/reset-sort/' + post._id, 
-            currentSort 
+            baseUrl: '/fullpost/' + post._id
         }) %> 
 
         <section>
