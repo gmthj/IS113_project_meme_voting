@@ -321,11 +321,6 @@ input:focus, textarea:focus {
     padding: 5px 10px;
     display: inline-block;
     line-height: 0;
-    transition: transform 0.2s ease-out;
-}
-
-.logo-sticker:hover {
-    transform: rotate(360deg);
 }
 
 
