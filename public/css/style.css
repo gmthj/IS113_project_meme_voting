@@ -325,7 +325,7 @@ input:focus, textarea:focus {
 }
 
 .logo-sticker:hover {
-    transform: rotate(360deg); /* Fun sticker wiggle */
+    transform: rotate(360deg);
 }
 
 
@@ -1383,3 +1383,31 @@ input.neo-input, textarea.neo-input {
     text-align: center;
     font-weight: 700;
 }
+
+.nav-logo {
+    height: 65px;
+    width: auto;
+}
+
+.logo-sticker {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    color: var(--neo-ink);
+}
+
+.brand-text {
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.stats-row {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+

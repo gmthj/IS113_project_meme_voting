@@ -45,15 +45,26 @@
                             <span class="neo-label-mini">BIRTHDAY</span>
                             <p class="info-value"><%= new Date(userInfo.dob).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase() %></p>
                         </div> -->
-                        <div class="info-item">
-                            <span class="neo-label-mini">AGE</span>
-                            <p class="info-value text-upper"><%= userInfo.age %> OLD</p>
+                        
+                        <div class="stats-row">
+                            <div class="info-item">
+                                <span class="neo-label-mini">AGE</span>
+                                <p class="info-value text-upper"><%= userInfo.age %> OLD</p>
+                            </div>
+                            <div class="info-item">
+                                <span class="neo-label-mini">POSTS</span>
+                                <p class="info-value"><%= userInfo.postCount %></p>
+                            </div>
+                            <div class="info-item">
+                                <span class="neo-label-mini">COMMENTS</span>
+                                <p class="info-value"><%= userInfo.commentCount %></p>
+                            </div>
                         </div>
+
                         <div class="info-item">
                             <span class="neo-label-mini">BIO</span>
                             <p class="info-value italic-bio">"<%= userInfo.bio %>"</p>
                         </div>
-                        <!-- TODO: user stats : post count comment count  -->
                     </div>
                 </div>
             </div>
@@ -62,11 +73,10 @@
         <hr>
         <h1> <%= userInfo.name %>'s Posts </h1>
         
-        <!-- Display sort tabs -->
-        <%- include('partials/sortTabs', { baseUrl: `/user/${userInfo._id}`, resetUrl: `/user/reset-sort`, currentSort }) %>
         
-        <!-- Display Posts -->
         <main class="feed-container">
+            <%- include('partials/sortTabs', { baseUrl: `/user/${userInfo._id}`, resetUrl: `/user/reset-sort`, currentSort }) %>
+
             <% if (userPosts && userPosts.length > 0) { %>
                 <% userPosts.forEach(post => { %>
                     <%- include('partials/post', {post, sessionUser, showControls: true}) %>

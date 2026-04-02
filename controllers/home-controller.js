@@ -31,6 +31,7 @@ exports.renderHome = async (req, res) => {
 
         // Check if there is already a sortPreference
         const existing = await getPostSortType(sessionUser._id, "home");
+        // console.log("existing", existing)
 
         if (existing) {
           await updatePostSortType(sessionUser._id, "home", sortType); // UPDATE the preference

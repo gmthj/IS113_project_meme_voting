@@ -34,8 +34,9 @@ async function getUserById(userId) {
     const user = await User.findById(userId).lean();
     user.karmaTier = getKarmaTier(user);
     user.joined = `${timeAgo(user.createdAt)} ago`;
-    user.age = timeAgo(user.dob)
-    
+    user.age = timeAgo(user.dob);
+    user.postCount = await Post.countDocuments({ userId: userId });
+    user.commentCount = await Comment.countDocuments({ userId: userId });
 
     return user;
   }
