@@ -348,7 +348,7 @@ input:focus, textarea:focus {
 }
 
 .nav-avatar {
-    height: 1.8em;
+    height: 2.1em;
     border: var(--border-thin);
     border-radius: 25%;
     background: var(--neo-bg);
@@ -356,7 +356,7 @@ input:focus, textarea:focus {
 
 .nav-username {
     font-weight: 900;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-transform: uppercase;
     white-space: nowrap; /* Prevents text from scrunching */
 }
@@ -1418,6 +1418,7 @@ input.neo-input, textarea.neo-input {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 4px 4px;
 }
 .nav-karma-indicator {
     font-size: 0.65rem;
