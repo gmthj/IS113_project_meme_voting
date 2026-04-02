@@ -19,26 +19,34 @@ const {
 } = require("../config");
 
 
-async function getUserByEmail(email) {
-  const user = await User.findOne({ email: email });
+async function expandUser(user) {
+  try {
+    user.karmaTier = getKarmaTier(user);
+    user.joined = `${timeAgo(user.createdAt)} ago`;
+    user.age = timeAgo(user.dob);
+    user.postCount = await Post.countDocuments({ userId: user._id });
+    user.commentCount = await Comment.countDocuments({ userId: user._id });
+    return user;
+  }
+  catch(error) {
+    throw new Error(`expandUser - failed to expand user`);
+  }
+}
 
-  if (!user) {
+async function getUserByEmail(email) {
+  try {
+    const user = await User.findOne({ email: email }).lean();
+    return await expandUser(user);
+  }
+  catch(error) {
     throw new Error(`User ${email} not found`);
   }
-
-  return user;
 }
 
 async function getUserById(userId) {
   try {
     const user = await User.findById(userId).lean();
-    user.karmaTier = getKarmaTier(user);
-    user.joined = `${timeAgo(user.createdAt)} ago`;
-    user.age = timeAgo(user.dob);
-    user.postCount = await Post.countDocuments({ userId: userId });
-    user.commentCount = await Comment.countDocuments({ userId: userId });
-
-    return user;
+    return await expandUser(user);
   }
   catch(error) {
     // console.log("Error: getUserById -", error)

@@ -1,5 +1,5 @@
 const User = require('../models/User-model');
-const { deleteUserById } = require('../services/userService');
+const { deleteUserById, getUserByEmail } = require('../services/userService');
 
 const bcrypt = require('bcrypt');
 
@@ -22,6 +22,7 @@ function getAge(dob) {
     if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
     return age;
 }
+
 function isValidPassword(password) {
     const errors = [];
     if (password.length < PW_MIN_LENGTH) {
@@ -52,6 +53,7 @@ function isValidPassword(password) {
 
     return errors.length > 0 ? errors : null;
 }
+
 function isValidEmail(email) {
     const atIndex = email.indexOf('@');
     if (atIndex <= 0) return false;
@@ -66,6 +68,8 @@ function isValidEmail(email) {
 
     return true;
 }
+
+
 exports.renderLoginRoot = (req, res) => {
     const sessionUser = req.session.sessionUser || {};
     res.render('login', { sessionUser, error: null });
@@ -87,7 +91,7 @@ exports.handleLogin = async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ email: email.trim().toLowerCase() });
+        const user = await getUserByEmail(email.trim().toLowerCase());
 
         if (!user) {
             return res.render('login', { sessionUser, error: 'Invalid email or password.' });
@@ -140,8 +144,9 @@ exports.handleRegister = async (req, res) => {
             }
         }
 
+        let dobDate
         if (dob) {
-            const dobDate = new Date(dob);
+            dobDate = new Date(dob);
             if (isNaN(dobDate.getTime())) {
                 errors.push('Invalid date of birth.');
             } else if (dobDate > new Date() || getAge(dobDate) > 100) {
@@ -174,15 +179,17 @@ exports.handleRegister = async (req, res) => {
         });
 
         await newUser.save();
+        return res.redirect('/account/login');
 
-        req.session.sessionUser = newUser;
-        req.session.save((err) => {
-            if (err) {
-                console.error('Session save error:', err);
-                return res.render('register', { sessionUser, error: 'Something went wrong. Please try again.', formData, MIN_AGE });
-            }
-            return res.redirect('/home');
-        });
+        // req.session.sessionUser = newUser;
+
+        // req.session.save((err) => {
+        //     if (err) {
+        //         console.error('Session save error:', err);
+        //         return res.render('register', { sessionUser, error: 'Something went wrong. Please try again.', formData, MIN_AGE });
+        //     }
+        //     return res.redirect('/home');
+        // });
 
     } catch (err) {
         console.error('Registration error:', err);
