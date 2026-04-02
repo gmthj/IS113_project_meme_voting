@@ -26,6 +26,7 @@ const Vote              = require("../models/Vote-model");
 const PostPreference    = require("../models/Post-Preference-model");
 const CommentPreference = require("../models/Comment-Preference-model");
 const Bookmark          = require("../models/Bookmark-model");
+const Image             = require("../models/Image-model");
 
 // ── Data file selection ───────────────────────────────────────────────────
 //
@@ -144,6 +145,7 @@ async function main() {
 
   // Drop all collections (clears indexes too — avoids stale index conflicts)
   try {
+    await mongoose.connection.db.dropCollection("images");
     await mongoose.connection.db.dropCollection("votes");
     await mongoose.connection.db.dropCollection("posts");
     await mongoose.connection.db.dropCollection("users");
@@ -158,6 +160,7 @@ async function main() {
 
   // 2) Ensure indexes
   await User.init();
+  await Image.init();
   await Post.init();
   await Comment.init();
   await Vote.init();
@@ -202,18 +205,39 @@ async function main() {
   }
   console.log(`Users created ✅ (${createdUsers.length})`);
 
+  // 3.5) Create images
+  let createdImages = [];
+  if (seedData.images && seedData.images.length > 0) {
+    const imageDocs = seedData.images.map((img) => ({
+      data: Buffer.from(img.data, "base64"),
+      mimeType: img.mimeType,
+      sizeBytes: img.sizeBytes,
+      ...(img.createdAt && { createdAt: new Date(img.createdAt) }),
+      ...(img.updatedAt && { updatedAt: new Date(img.updatedAt) }),
+    }));
+    createdImages = await Image.insertMany(imageDocs, { timestamps: false });
+    console.log(`Images created ✅ (${createdImages.length})`);
+  }
+
   // 4) Create posts
   const createdPosts = await Promise.all(
-    seedData.posts.map((p) =>
-      Post.create({
-        userId:          createdUsers[p.authorIndex]._id,
+    seedData.posts.map((p, i) => {
+      const author = createdUsers[p.authorIndex];
+      if (!author) {
+        console.warn(`⚠️ Skipping post ${i}: missing author`);
+        return null;
+      }
+      const imageDoc = p.imageId !== null && p.imageId !== undefined ? createdImages[p.imageId] : null;
+      return Post.create({
+        userId:          author._id,
         title:           p.title,
         description:     p.description,
         image:           p.image,
+        imageId:         imageDoc ? imageDoc._id : null,
         upload_datetime: new Date(p.uploadedAt),
         ...(p.editedAt && { edit_datetime: new Date(p.editedAt) }),
-      })
-    )
+      });
+    })
   );
 
   // If snapshot has pre-computed scores (exported from live DB), restore them now
@@ -236,11 +260,18 @@ async function main() {
   // 5) Create comments + tally comment_count per post
   const commentCountMap = {};
   const createdCommentsList = await Promise.all(
-    seedData.comments.map((c) => {
+    seedData.comments.map((c, i) => {
+      const post = createdPosts[c.postIndex];
+      const user = createdUsers[c.authorIndex];
+      if (!post || !user) {
+        // console.log(post, user)
+        console.warn(`⚠️ Skipping comment ${i}: missing post or author \n ${JSON.stringify(c)}`);
+        return null;
+      }
       commentCountMap[c.postIndex] = (commentCountMap[c.postIndex] || 0) + 1;
       return Comment.create({
-        postId:          createdPosts[c.postIndex]._id,
-        userId:          createdUsers[c.authorIndex]._id,
+        postId:          post._id,
+        userId:          user._id,
         text:            c.text,
         upload_datetime: new Date(c.uploadedAt),
         ...(c.editedAt && { edit_datetime: new Date(c.editedAt) }),
@@ -250,12 +281,14 @@ async function main() {
 
   if (hasStoredScores) {
     await Promise.all(
-      seedData.comments.map((c, i) =>
-        Comment.updateOne(
-          { _id: createdCommentsList[i]._id },
+      seedData.comments.map((c, i) => {
+        const commentDoc = createdCommentsList[i];
+        if (!commentDoc) return null;
+        return Comment.updateOne(
+          { _id: commentDoc._id },
           { $set: { vote_score: c.vote_score ?? 0 } }
-        )
-      )
+        );
+      })
     );
   } else {
     await Promise.all(
@@ -273,21 +306,27 @@ async function main() {
   if (hasStoredScores) {
     // Snapshot mode: just insert docs, scores are already set
     await Promise.all(
-      seedData.votes.map((v) =>
-        Vote.create({
-          postId: createdPosts[v.postIndex]._id,
-          userId: createdUsers[v.authorIndex]._id,
+      seedData.votes.map((v, i) => {
+        const post = createdPosts[v.postIndex];
+        const user = createdUsers[v.authorIndex];
+        if (!post || !user) return null;
+        return Vote.create({
+          postId: post._id,
+          userId: user._id,
           value:  v.value,
-        })
-      )
+        });
+      })
     );
   } else {
     // Hand-crafted mode: Recalculate everything
     console.log("Recalculating Post Karma...");
-    for (const v of seedData.votes) {
+    for (let i = 0; i < seedData.votes.length; i++) {
+      const v = seedData.votes[i];
       const voterDoc   = createdUsers[v.authorIndex];
       const postDoc    = createdPosts[v.postIndex];
+      if (!voterDoc || !postDoc) continue;
       const authorDoc  = createdUsers[seedData.posts[v.postIndex].authorIndex];
+      if (!authorDoc) continue;
       const isSelfVote = voterDoc._id.toString() === postDoc.userId.toString();
 
       // Calculate weight based on CURRENT state of the voter in this script run
@@ -320,20 +359,26 @@ async function main() {
   if (seedData.commentVotes?.length) {
     if (hasStoredScores) {
       await Promise.all(
-        seedData.commentVotes.map((v) =>
-          Vote.create({
-            commentId: createdCommentsList[v.commentIndex]._id,
-            userId:    createdUsers[v.authorIndex]._id,
+        seedData.commentVotes.map((v, i) => {
+          const comment = createdCommentsList[v.commentIndex];
+          const user = createdUsers[v.authorIndex];
+          if (!comment || !user) return null;
+          return Vote.create({
+            commentId: comment._id,
+            userId:    user._id,
             value:     v.value,
-          })
-        )
+          });
+        })
       );
     } else {
       console.log("Recalculating Comment Karma...");
-      for (const v of seedData.commentVotes) {
+      for (let i = 0; i < seedData.commentVotes.length; i++) {
+        const v = seedData.commentVotes[i];
         const voterDoc   = createdUsers[v.authorIndex];
         const commentDoc = createdCommentsList[v.commentIndex];
+        if (!voterDoc || !commentDoc) continue;
         const authorDoc  = createdUsers[seedData.comments[v.commentIndex].authorIndex];
+        if (!authorDoc) continue;
         const isSelfVote = voterDoc._id.toString() === commentDoc.userId.toString();
 
         const accountAgeDays = Math.ceil((new Date() - new Date(voterDoc.createdAt)) / 86400000);
@@ -380,13 +425,15 @@ async function main() {
   // 9) Create post preferences
   if (seedData.postPreferences?.length) {
     await Promise.all(
-      seedData.postPreferences.map((pp) =>
-        PostPreference.create({
-          userId:   createdUsers[pp.authorIndex]._id,
+      seedData.postPreferences.map((pp, i) => {
+        const user = createdUsers[pp.authorIndex];
+        if (!user) return null;
+        return PostPreference.create({
+          userId:   user._id,
           page:     pp.page,
           sortType: pp.sortType,
-        })
-      )
+        });
+      })
     );
     console.log(`Post preferences created ✅ (${seedData.postPreferences.length})`);
   }
@@ -394,13 +441,16 @@ async function main() {
   // 10) Create comment preferences
   if (seedData.commentPreferences?.length) {
     await Promise.all(
-      seedData.commentPreferences.map((cp) =>
-        CommentPreference.create({
-          userId:   createdUsers[cp.authorIndex]._id,
-          postId:   createdPosts[cp.postIndex]._id,
+      seedData.commentPreferences.map((cp, i) => {
+        const user = createdUsers[cp.authorIndex];
+        const post = createdPosts[cp.postIndex];
+        if (!user || !post) return null;
+        return CommentPreference.create({
+          userId:   user._id,
+          postId:   post._id,
           sortType: cp.sortType,
-        })
-      )
+        });
+      })
     );
     console.log(`Comment preferences created ✅ (${seedData.commentPreferences.length})`);
   }

@@ -15,6 +15,7 @@ const Vote              = require("../models/Vote-model");
 const Bookmark          = require("../models/Bookmark-model");
 const PostPreference    = require("../models/Post-Preference-model");
 const CommentPreference = require("../models/Comment-Preference-model");
+const Image             = require("../models/Image-model");
 
 const DATA_DIR = path.resolve(__dirname, "../data");
 
@@ -54,6 +55,19 @@ async function main() {
     updatedAt:    u.updatedAt?.toISOString() ?? null,
   }));
 
+  // ── Images ────────────────────────────────────────────────────────────────
+  const images = await Image.find().lean();
+  const imageIndexById = {};
+  images.forEach((img, i) => { imageIndexById[img._id.toString()] = i; });
+
+  const snapshotImages = images.map((img) => ({
+    data: img.data.toString("base64"),
+    mimeType: img.mimeType,
+    sizeBytes: img.sizeBytes,
+    createdAt: img.createdAt?.toISOString() ?? null,
+    updatedAt: img.updatedAt?.toISOString() ?? null,
+  }));
+
   // ── Posts ─────────────────────────────────────────────────────────────────
   const posts = await Post.find().sort({ upload_datetime: 1 }).lean();
   const postIndexById = {};
@@ -65,6 +79,7 @@ async function main() {
       title:         p.title,
       description:   p.description ?? "",
       image:         p.image,
+      imageId:       p.imageId ? imageIndexById[p.imageId.toString()] : null,
       uploadedAt:    p.upload_datetime.toISOString(),
       vote_score:    p.vote_score    ?? 0,
       comment_count: p.comment_count ?? 0,
@@ -138,6 +153,7 @@ async function main() {
   const snapshot = {
     _checkpoint:        new Date().toISOString(),
     _version:           version,
+    images:             snapshotImages,
     users:              snapshotUsers,
     posts:              snapshotPosts,
     comments:           snapshotComments,
@@ -153,6 +169,7 @@ async function main() {
 
   console.log(`\nSnapshot saved ✅`);
   console.log(`  Version:            v${version}`);
+  console.log(`  Images:             ${snapshotImages.length}`);
   console.log(`  Users:              ${snapshotUsers.length}`);
   console.log(`  Posts:              ${snapshotPosts.length}`);
   console.log(`  Comments:           ${snapshotComments.length}`);
