@@ -30,7 +30,7 @@ exports.handleDeletion = async (req, res) => {
 
     if (confirm) {
         const delStatus = postId ? await deletePostById(postId) : await deleteCommentById(commentId)
-        console.log("delete status: ", delStatus)
+        // console.log("delete status: ", delStatus)
 
         if (backURL.includes("fullpost") && postId) {
             return res.redirect("/home")

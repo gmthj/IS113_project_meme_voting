@@ -64,10 +64,9 @@ server.use((req, res) => {
   res.render("error", { error: "Unknown route", sessionUser });
 });
 
+// Adjust HOSTNAME/PORT in config.js
 connectDB().then(() => {
   server.listen(PORT, HOSTNAME, () => {
-    console.log(
-      `Adjust HOSTNAME/PORT in config.js\nServer running at http://${HOSTNAME}:${PORT}`,
-    );
+    console.log(`Server running at http://${HOSTNAME}:${PORT}`);
   });
 });
