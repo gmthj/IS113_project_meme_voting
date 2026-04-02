@@ -321,6 +321,11 @@ input:focus, textarea:focus {
     padding: 5px 10px;
     display: inline-block;
     line-height: 0;
+    transition: transform 0.2s ease-out;
+}
+
+.logo-sticker:hover {
+    transform: rotate(360deg);
 }
 
 
@@ -1407,5 +1412,23 @@ input.neo-input, textarea.neo-input {
     display: flex;
     gap: 40px;
     flex-wrap: wrap;
+}
+
+.nav-user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.nav-karma-indicator {
+    font-size: 0.65rem;
+    font-weight: 900;
+    color: var(--neo-ink);
+    margin-top: 2px;
+    white-space: nowrap;
+}
+.nav-karma-tier {
+    background: var(--neo-yellow);
+    padding: 1px 4px;
+    border: 1px solid var(--neo-ink);
 }
 

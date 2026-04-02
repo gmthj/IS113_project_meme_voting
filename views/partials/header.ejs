@@ -18,7 +18,12 @@
                         <div class="nav-user-badge">
                             <a href="/user/<%= sessionUser._id %>" class="nav-profile-link">
                                 <img src="<%= sessionUser.avatar %>" class="nav-avatar">
-                                <span class="nav-username"><%= sessionUser.name %></span>
+                                <div class="nav-user-info">
+                                    <span class="nav-username"><%= sessionUser.name %></span>
+                                    <span class="nav-karma-indicator">
+                                        <span class="nav-karma-tier"><%= sessionUser.karmaTier %></span> <%= sessionUser.totalKarma %> KR
+                                    </span>
+                                </div>
                             </a>
                             <a href="/account/edit" class="nav-edit-link">EDIT</a>
                             <a href="/account/logout" class="nav-logout-link">LOGOUT</a>
