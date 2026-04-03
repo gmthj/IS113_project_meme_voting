@@ -8,7 +8,7 @@ async function getBookmarkValue(postId, userId) {
 }
 
 async function getAllBookmarksByUserId(userId) {
-  // hello kinyu
+
   const bookmarks = await Bookmark.find({userId: userId}).lean();
 
   return bookmarks;
