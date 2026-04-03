@@ -42,20 +42,20 @@ server.get("/index.html", (req, res) => res.redirect("/home"));
 
 // #################################
 // TODO: comment out before submission - keep for demo
-const { getUserByEmail } = require("./services/userService");
-server.get("/testlogin/:userEmail", async (req, res) => {
-  try {
-    const userEmail = req.params.userEmail;
-    const sessionUser = await getUserByEmail(userEmail);
-    req.session.sessionUser = sessionUser;
-    let backURL = req.get("Referrer") || "/";
-    backURL = backURL.split("?")[0];
-    // console.log(backURL)
-    return res.redirect(`${backURL}`);
-  } catch (error) {
-    return res.render("error", { sessionUser: {}, error });
-  }
-});
+// const { getUserByEmail } = require("./services/userService");
+// server.get("/testlogin/:userEmail", async (req, res) => {
+//   try {
+//     const userEmail = req.params.userEmail;
+//     const sessionUser = await getUserByEmail(userEmail);
+//     req.session.sessionUser = sessionUser;
+//     let backURL = req.get("Referrer") || "/";
+//     backURL = backURL.split("?")[0];
+//     // console.log(backURL)
+//     return res.redirect(`${backURL}`);
+//   } catch (error) {
+//     return res.render("error", { sessionUser: {}, error });
+//   }
+// });
 // #################################
 
 // catch all
