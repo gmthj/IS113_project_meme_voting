@@ -36,15 +36,15 @@ http://localhost:8000/
 ---
 
 ## Sample Data Login Credentials
-| Email                   | Password             |
-| ----------------------- | -------------------- |
-| lkshar@smu.edu.sg       | Pass1234!            |
-| alex.tan@smu.edu.sg     | Alexl0ve5Mei!        |
-| priya.nair@smu.edu.sg   | P0oO0o109k$          |
-| jordan.lim@smu.edu.sg   | Pasdvsds1534!        |
-| mei.chen@gmail.com      | #iubPu#po            |
-| ravi.s@smu.edu.sg       | Pas676767!           |
-| sophie.wu@smu.edu.sg    | HelloPass109#        |
+| Email                   | Password             | DoB (for forgot pw) |
+| ----------------------- | -------------------- | ------------------- |
+| lkshar@smu.edu.sg       | Pass1234!            | 23/03/2000          |
+| alex.tan@smu.edu.sg     | Alexl0ve5Mei!        | 09/11/2004          |
+| priya.nair@smu.edu.sg   | P0oO0o109k$          | 14/11/2000          |
+| jordan.lim@smu.edu.sg   | Pasdvsds1534!        | 09/11/2005          |
+| mei.chen@gmail.com      | #iubPu#po            | 17/01/2002          |
+| ravi.s@smu.edu.sg       | Pas676767!           | 17/01/2002          |
+| sophie.wu@smu.edu.sg    | HelloPass109#        | 17/01/2002          |
 
 ## Karma Based Voting (Complex Logic)
 
@@ -142,6 +142,7 @@ When a user votes on a post or comment, the following calculations occur:
 | /views/XXX.ejs        | Partial     | ONLY used for the css styling |
 | /public/img/daily-dank-logo.png <br> /public/img/daily-dank.png <br> /public/img/icon.png | Partial | Mostly generated logo images, some post editing |
 | /views/partials/backToTop.ejs | Full | just a non-critial frontend / UX feature nothing important |
+| sample data | Partial | some data was ai generated, the rest is active usage by members |
 | add ai declaration here | - | - |
 
 
